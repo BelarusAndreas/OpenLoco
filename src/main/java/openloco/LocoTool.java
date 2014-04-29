@@ -22,12 +22,12 @@ public class LocoTool {
 
         assert bytes[3] == 0x11;
 
-        int objectClass = bytes[0] & 0x7f;
-        //int objectSubClass = ByteBuffer.allocate(4).put((byte)0).put(bytes, 1, 3).getInt();
+        ObjectClass objectClass = ObjectClass.values()[(bytes[0] & 0x7f)];
+        long objectSubClass = readUintLE(bytes, 1, 3);
         String name = new String(bytes, 4, 8, Charset.defaultCharset());
 
         System.out.println("Object class: " + objectClass);
-        //System.out.println("Object subclass: " + objectSubClass);
+        System.out.println("Object subclass: " + objectSubClass);
         System.out.println("Object name: '" + name + "'");
 
         int pointer = 16;
@@ -41,17 +41,58 @@ public class LocoTool {
             pointer += 4;
 
             System.out.println("Start of chunk type " + chunkType + " of length " + length);
-            byte[] chunk = rleDecode(bytes, pointer, length);
-            System.out.println("Read chunk " + (chunkCount++) + " (" + chunk.length + " bytes)");
+            byte[] chunk;
+            if (chunkType == 1) {
+                chunk = rleDecode(bytes, pointer, length);
+                System.out.println("Read chunk " + (chunkCount++) + " (" + chunk.length + " bytes)");
+            }
+            else {
+                System.err.println("Unsupported chunk type: " + chunkType);
+                break;
+            }
+
+            dumpChunk(chunk, objectClass);
+
             pointer += length;
         }
         System.out.println("Done!");
     }
 
+    private static void dumpChunk(byte[] chunk, ObjectClass objectClass) {
+        switch (objectClass) {
+            case VEHICLES:
+                dumpVariables(chunk);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static void dumpVariables(byte[] chunkData) {
+        /*
+        //
+        // definition of an object structure variable
+        //
+        struct s_varinf {
+            int ofs;		// offset counted from the beginning of the structure
+            int size;		// size in bytes, negative for signed variables
+            int num;		// number of entries (for arrays)
+            const char *name;	// name, if known; if empty (*not* NULL!) will use generic field_## name
+            struct s_varinf *structvars;	// if not NULL, sub-structure definition
+            const char **flags;		// if not NULL, bit field definition (pointer to list of *char bit names)
+        };
+        typedef struct s_varinf varinf;
+         */
+    }
+
     private static long readUint32LE(byte[] bytes, int pointer) {
+        return readUintLE(bytes, pointer, 4);
+    }
+
+    private static long readUintLE(byte[] bytes, int pointer, int size) {
         ByteBuffer buffer = ByteBuffer.allocate(8);
-        buffer.put(bytes, pointer, 4);
-        buffer.put(new byte[] {0, 0, 0, 0});
+        buffer.put(bytes, pointer, size);
+        buffer.put(new byte[8-size]);
         buffer.flip();
         return buffer.order(ByteOrder.LITTLE_ENDIAN).getLong();
     }
