@@ -3,13 +3,17 @@ package openloco;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocoTool {
 
     public static void main(String[] args) throws IOException {
-        decode("/Users/tim/Desktop/loco_dat/ObjData/777.dat");
+        final String DATA_DIR = args[0];
+        decode(DATA_DIR + "/ObjData/777.dat");
     }
 
     private static void decode(String datFile) throws IOException {
@@ -26,45 +30,65 @@ public class LocoTool {
         //System.out.println("Object subclass: " + objectSubClass);
         System.out.println("Object name: '" + name + "'");
 
-        int pointer = 0x10;
+        int pointer = 16;
 
-        byte chunkType = bytes[pointer++];
-        int length = 0x0000FFFF & ByteBuffer.wrap(bytes, pointer, 4).getInt();
-        pointer += 4;
+        int chunkCount = 0;
 
-        System.out.println("Start of chunk type " + chunkType + " of length " + Integer.toUnsignedString(length));
-        byte[] chunk = rleDecode(bytes, pointer, length);
-        System.out.println("Read " + chunk.length + "bytes");
+        while (pointer < bytes.length) {
+            System.out.println("Pointer is at " + pointer + "/" + bytes.length);
+            byte chunkType = bytes[pointer++];
+            long length = readUint32LE(bytes, pointer);
+            pointer += 4;
+
+            System.out.println("Start of chunk type " + chunkType + " of length " + length);
+            byte[] chunk = rleDecode(bytes, pointer, length);
+            System.out.println("Read chunk " + (chunkCount++) + " (" + chunk.length + " bytes)");
+            pointer += length;
+        }
         System.out.println("Done!");
     }
 
-    private static byte[] rleDecode(byte[] input, int offset, int length) {
-        //codec.c has some funky management of array sizes - see codec.c:39
-        ByteBuffer buffer = ByteBuffer.allocate(length);
-        //byte[] chunk = new byte[length*2];
-        //int chunkOffset = 0;
+    private static long readUint32LE(byte[] bytes, int pointer) {
+        ByteBuffer buffer = ByteBuffer.allocate(8);
+        buffer.put(bytes, pointer, 4);
+        buffer.put(new byte[] {0, 0, 0, 0});
+        buffer.flip();
+        return buffer.order(ByteOrder.LITTLE_ENDIAN).getLong();
+    }
+
+    private static byte[] rleDecode(byte[] input, int offset, long length) {
+        List<Byte> buffer = new ArrayList<Byte>();
         while (length > 0) {
-            int rle = 0x000000FF & input[offset++];
+            byte rle = input[offset++];
             int run = Math.abs(rle)+1;
+            length--;
 
             if (rle < 0) {
-                length--;
+                //set this run to a particular value
                 byte value = input[offset++];
                 for (int i=0; i<run; i++) {
-                    //chunk[chunkOffset++] = value;
-                    buffer.put(value);
+                    buffer.add(value);
                 }
+                length--;
             }
             else {
+                //copy this run from the input
                 for (int i=0; i<run; i++) {
-                    length--;
                     byte value = input[offset++];
-                    //chunk[chunkOffset++] = value;
-                    buffer.put(value);
+                    buffer.add(value);
                 }
+                length-=run;
             }
         }
-        return buffer.array();
+        return toArray(buffer);
+    }
+
+    private static byte[] toArray(List<Byte> buffer) {
+        byte[] result = new byte[buffer.size()];
+        for (int i=0; i<buffer.size(); i++) {
+            result[i] = buffer.get(i);
+        }
+        return result;
     }
 
 }
