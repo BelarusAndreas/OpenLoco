@@ -1,4 +1,4 @@
-package openloco;
+package openloco.datfiles;
 
 public enum DescriptionType {
     objdata,		// -
