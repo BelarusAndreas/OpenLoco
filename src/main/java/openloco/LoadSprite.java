@@ -17,8 +17,6 @@ public class LoadSprite {
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
 
-    private BufferedImage image;
-
     private Sprite sprite;
 
     private void initLwjglDisplay() {
@@ -39,8 +37,6 @@ public class LoadSprite {
         GL11.glDisable(GL11.GL_TEXTURE_1D);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_FLAT);
-
-
     }
 
     private void initOpenGL() {
@@ -57,7 +53,7 @@ public class LoadSprite {
     }
 
     private void initTexture() throws IOException {
-        image = ImageIO.read(new File("/Users/tim/Desktop/loco_dat/extracted/A4/028.png"));
+        BufferedImage image = ImageIO.read(new File("/Users/tim/Desktop/loco_dat/extracted/A4/028.png"));
 
         int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
@@ -111,9 +107,9 @@ public class LoadSprite {
 
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0, 0); GL11.glVertex2f(left, top);
-        GL11.glTexCoord2f(1, 0); GL11.glVertex2f(left + image.getWidth(), top);
-        GL11.glTexCoord2f(1, 1); GL11.glVertex2f(left + image.getWidth(), top + image.getHeight());
-        GL11.glTexCoord2f(0, 1); GL11.glVertex2f(left, top + image.getHeight());
+        GL11.glTexCoord2f(1, 0); GL11.glVertex2f(left + sprite.getWidth(), top);
+        GL11.glTexCoord2f(1, 1); GL11.glVertex2f(left + sprite.getWidth(), top + sprite.getHeight());
+        GL11.glTexCoord2f(0, 1); GL11.glVertex2f(left, top + sprite.getHeight());
         GL11.glEnd();
     }
 
