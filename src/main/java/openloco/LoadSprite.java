@@ -61,9 +61,6 @@ public class LoadSprite {
         this.sprite = Sprite.createFromPixels(pixels, image.getWidth(), image.getHeight(), -30, -29);
     }
 
-    /**
-     * Draw a quad with the texture on it.
-     */
     private void render() {
         // clear the screen
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
@@ -98,10 +95,8 @@ public class LoadSprite {
     }
 
     private void drawSprite(Sprite sprite, float x, float y) {
-        // bind the texture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, sprite.getTextureId());
 
-        // draw a quad with our texture on it
         float left = x + sprite.getXOffset();
         float top = y + sprite.getYOffset();
 
