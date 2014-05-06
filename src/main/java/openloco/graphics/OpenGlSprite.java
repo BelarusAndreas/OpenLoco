@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
 
-public class Sprite {
+public class OpenGlSprite {
 
     private final int width;
     private final int height;
@@ -14,7 +14,7 @@ public class Sprite {
     private final int yOffset;
     private final int textureId;
 
-    public Sprite(int width, int height, int xOffset, int yOffset, int textureId) {
+    public OpenGlSprite(int width, int height, int xOffset, int yOffset, int textureId) {
         this.width = width;
         this.height = height;
         this.xOffset = xOffset;
@@ -42,7 +42,7 @@ public class Sprite {
         return textureId;
     }
 
-    public static Sprite createFromPixels(int[] pixels, int width, int height, int xOffset, int yOffset) {
+    public static OpenGlSprite createFromPixels(int[] pixels, int width, int height, int xOffset, int yOffset) {
         ByteBuffer buffer = BufferUtils.createByteBuffer(pixels.length * 4);
 
         for(int y = 0; y < height; y++){
@@ -76,9 +76,13 @@ public class Sprite {
         // store it under a textureId
         int textureId = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
-        return new Sprite(width, height, xOffset, yOffset, textureId);
+        return new OpenGlSprite(width, height, xOffset, yOffset, textureId);
     }
 
 

@@ -1,23 +1,30 @@
 package openloco;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import openloco.graphics.Sprite;
+import openloco.datfiles.DatFileLoader;
+import openloco.datfiles.Sprites;
+import openloco.graphics.OpenGlSprite;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-
-import javax.imageio.ImageIO;
 
 public class LoadSprite {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
 
-    private Sprite sprite;
+    private List<OpenGlSprite> sprites = new ArrayList<>();
+
+    private Assets assets;
+    private int spriteIndex = 0;
+
+    public LoadSprite(Assets assets) {
+        this.assets = assets;
+    }
 
     private void initLwjglDisplay() {
         try {
@@ -53,12 +60,12 @@ public class LoadSprite {
     }
 
     private void initTexture() throws IOException {
-        BufferedImage image = ImageIO.read(new File("/Users/tim/Desktop/loco_dat/extracted/A4/028.png"));
-
-        int[] pixels = new int[image.getWidth() * image.getHeight()];
-        image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-
-        this.sprite = Sprite.createFromPixels(pixels, image.getWidth(), image.getHeight(), -30, -29);
+        Vehicle vehicle = assets.getVehicle("A4      ");
+        for (Sprites.RawSprite rawSprite: vehicle.getSprites().getList()) {
+            Sprites.SpriteHeader header = rawSprite.getHeader();
+            this.sprites.add(OpenGlSprite.createFromPixels(rawSprite.getPixels(), header.getWidth(), header.getHeight(),
+                    header.getXOffset(), header.getYOffset()));
+        }
     }
 
     private void render() {
@@ -66,7 +73,7 @@ public class LoadSprite {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
         GL11.glLineWidth(1f);
-        GL11.glColor4f(0.8f, 0.8f, 0.8f, 1.0f);
+        GL11.glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
         GL11.glBegin(GL11.GL_LINES);
         GL11.glVertex2f(SCREEN_WIDTH / 2.0f, 0f);
         GL11.glVertex2f(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT);
@@ -75,26 +82,24 @@ public class LoadSprite {
         GL11.glEnd();
 
         drawSprites();
+
+        GL11.glFlush();
     }
 
     private void drawSprites() {
-        // configure the texture engine
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
         GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
 
+        OpenGlSprite sprite = sprites.get(spriteIndex);
         drawSprite(sprite, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
     }
 
-    private void drawSprite(Sprite sprite, float x, float y) {
+    private void drawSprite(OpenGlSprite sprite, float x, float y) {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, sprite.getTextureId());
 
         float left = x + sprite.getXOffset();
@@ -115,6 +120,7 @@ public class LoadSprite {
 
         while (true) {
             render();
+            spriteIndex = (spriteIndex + 1) % sprites.size();
 
             Display.update();
             Display.sync(20);
@@ -126,7 +132,10 @@ public class LoadSprite {
         }
     }
 
-    public static void main(String[] argv) throws IOException {
-        new LoadSprite().run();
+    public static void main(String[] args) throws IOException {
+        final String DATA_DIR = args[0];
+        Assets assets = new Assets();
+        new DatFileLoader(assets, DATA_DIR).loadFiles();
+        new LoadSprite(assets).run();
     }
 }

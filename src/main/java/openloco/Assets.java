@@ -15,4 +15,8 @@ public class Assets {
         vehicles.put(vehicle.getName(), vehicle);
     }
 
+    public Vehicle getVehicle(String name) {
+        return vehicles.get(name);
+    }
+
 }

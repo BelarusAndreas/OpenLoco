@@ -1,7 +1,9 @@
 package openloco.datfiles;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 public class VehicleVars {
 
@@ -28,6 +30,7 @@ public class VehicleVars {
     private short runCostFact;
     private byte colourType;
     private byte numCompat;
+    private List<VehicleSpriteVar> vehSprites;
     private int power;
     private int speed;
     private int rackSpeed;
@@ -57,14 +60,16 @@ public class VehicleVars {
             numCompat = in.readByte();
             in.skipBytes(20);
             in.skipBytes(24); //vehunk
-            in.skipBytes(120); //vehsprites
+            vehSprites = new ArrayList<>();
+            for (int i=0; i<4; i++) {
+                vehSprites.add(new VehicleSpriteVar(in));
+            }
             in.skipBytes(36);
             power = in.readUShort();
             speed = in.readUShort();
             rackSpeed = in.readUShort();
             weight = in.readUShort();
             vehicleFlags = in.readBitField(2, VehicleFlag.class);
-            in.skipBytes(2); //vehflags
             in.skipBytes(44);
             visFxHeight = in.readByte();
             visFxType = in.readByte();
@@ -84,4 +89,95 @@ public class VehicleVars {
         }
     }
 
+    public byte getVehicleClass() {
+        return vehicleClass;
+    }
+
+    public byte getVehicleType() {
+        return vehicleType;
+    }
+
+    public byte getNumMods() {
+        return numMods;
+    }
+
+    public byte getCostInd() {
+        return costInd;
+    }
+
+    public short getCostFact() {
+        return costFact;
+    }
+
+    public byte getReliability() {
+        return reliability;
+    }
+
+    public byte getRunCostInd() {
+        return runCostInd;
+    }
+
+    public short getRunCostFact() {
+        return runCostFact;
+    }
+
+    public byte getColourType() {
+        return colourType;
+    }
+
+    public byte getNumCompat() {
+        return numCompat;
+    }
+
+    public List<VehicleSpriteVar> getVehSprites() {
+        return vehSprites;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public int getRackSpeed() {
+        return rackSpeed;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public EnumSet<VehicleFlag> getVehicleFlags() {
+        return vehicleFlags;
+    }
+
+    public byte getVisFxHeight() {
+        return visFxHeight;
+    }
+
+    public byte getVisFxType() {
+        return visFxType;
+    }
+
+    public byte getWakeFxType() {
+        return wakeFxType;
+    }
+
+    public int getDesigned() {
+        return designed;
+    }
+
+    public int getObsolete() {
+        return obsolete;
+    }
+
+    public byte getStartsndtype() {
+        return startsndtype;
+    }
+
+    public byte getNumSnd() {
+        return numSnd;
+    }
 }

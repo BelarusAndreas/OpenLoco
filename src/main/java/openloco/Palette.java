@@ -3,7 +3,7 @@ package openloco;
 public class Palette {
 
     // see palette and explanation here: http://www.tt-wiki.net/wiki/Sprite_Palette
-    private static final int[] COLOUR = {
+    public static final int[] COLOUR = {
             0xFF0000FF, // 00 - background transparency?
             0xFFFF00FF, // Transparent
             0xFFFF00FF,

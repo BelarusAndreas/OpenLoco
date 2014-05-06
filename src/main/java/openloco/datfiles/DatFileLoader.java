@@ -29,7 +29,8 @@ public class DatFileLoader {
     }
 
     public void loadFiles() throws IOException {
-        Files.list(new File(DATA_DIR).toPath()).forEach(this::load);
+        Files.list(new File(DATA_DIR).toPath())
+                .forEach(this::load);
     }
 
     private void load(Path path) {
