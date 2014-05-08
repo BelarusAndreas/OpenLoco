@@ -6,6 +6,7 @@ import java.util.List;
 
 import openloco.datfiles.DatFileLoader;
 import openloco.datfiles.Sprites;
+import openloco.datfiles.VehicleSpriteVar;
 import openloco.graphics.OpenGlSprite;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -63,7 +64,7 @@ public class LoadSprite {
     }
 
     private void initTexture() throws IOException {
-        vehicle = assets.getVehicle("A4      ");
+        vehicle = assets.getVehicle("HST     ");
         for (Sprites.RawSprite rawSprite: vehicle.getSprites().getList()) {
             Sprites.SpriteHeader header = rawSprite.getHeader();
             this.sprites.add(OpenGlSprite.createFromPixels(rawSprite.getPixels(), header.getWidth(), header.getHeight(),
@@ -131,7 +132,10 @@ public class LoadSprite {
             }
 
             if (rotating) {
-                spriteIndex = (spriteIndex + 1) % (vehicle.getVars().getVehSprites().get(0).getLevelSpriteCount());
+                VehicleSpriteVar spriteVar = vehicle.getVars().getVehSprites().get(0);
+                int frameOffset = spriteVar.getFrames() > 1 ? spriteVar.getFrames()+spriteVar.getTiltCount() : spriteVar.getTiltCount();
+                int spriteCount = spriteVar.getLevelSpriteCount() * spriteVar.getFrames() * spriteVar.getTiltCount();
+                spriteIndex = (spriteIndex + frameOffset) % spriteCount;
             }
 
             Display.update();

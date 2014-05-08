@@ -10,6 +10,7 @@ public class VehicleSpriteVar {
     private final byte frames;
     private final byte vehType;
     private final byte numUnits;
+    private final byte tiltCount;
     private final byte bogeyPos;
     private final EnumSet<VehicleSpriteFlag> flags;
     private final byte spriteNum;
@@ -21,7 +22,7 @@ public class VehicleSpriteVar {
             frames = in.readByte();
             vehType = in.readByte();
             numUnits = in.readByte();
-            in.skipBytes(1);
+            tiltCount = in.readByte();
             bogeyPos = in.readByte();
             flags = in.readBitField(1, VehicleSpriteFlag.class);
             in.skipBytes(6);
@@ -51,6 +52,10 @@ public class VehicleSpriteVar {
 
     public byte getNumUnits() {
         return numUnits;
+    }
+
+    public byte getTiltCount() {
+        return tiltCount;
     }
 
     public byte getBogeyPos() {
