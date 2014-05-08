@@ -1,19 +1,21 @@
 package openloco;
 
+import java.util.Arrays;
+
 public class Palette {
 
     // see palette and explanation here: http://www.tt-wiki.net/wiki/Sprite_Palette
     public static final int[] COLOUR = {
-            0xFF0000FF, // 00 - background transparency?
-            0xFFFF00FF, // Transparent
             0xFFFF00FF,
-            0xFFFF00FF,
-            0xFFFF00FF,
-            0xFFFF00FF,
-            0xFFFF00FF,
-            0xFFFF00FF,
-            0xFFFF00FF,
-            0xFFFF00FF,  // End Transparent/Reserved
+            0xFF00FF00,
+            0xFF00FF00,
+            0xFF00FF00,
+            0xFF00FF00,
+            0xFF00FF00,
+            0xFF00FF00,
+            0xFF00FF00,
+            0xFF00FE00,
+            0xFF00FD00,
             0xFF172323,
             0xFF233333,
             0xFF2F4343,
@@ -158,7 +160,7 @@ public class Palette {
             0xFF93C7A7,
             0xFFAFDBC3,
             0xFFCFF3DF,
-            0xFF3F005F, // 154-165 company primary start
+            0xFF3F005F,
             0xFF4B0773,
             0xFF530F7F,
             0xFF5F1F8F,
@@ -169,7 +171,7 @@ public class Palette {
             0xFFAB7FD7,
             0xFFBF9BE7,
             0xFFD7C3F3,
-            0xFFF3EBFF, // 165 - company primary end
+            0xFFF3EBFF,
             0xFF3F0000,
             0xFF570000,
             0xFF730000,
@@ -248,27 +250,37 @@ public class Palette {
             0xFF536B6B,
             0xFF637B7B,
             0xFFFFE499,
-            0xFF002797,
-            0xFF0733A7,
-            0xFF0F43BB,  //
-            0xFF1B53CB,
-            0xFF2B67DF,
-            0xFF4387E3,
-            0xFF5BA3E7,
-            0xFF77BBEF,
-            0xFF8FD3F3,
-            0xFFAFE7FB,
-            0xFFD7F7FF,
-            0xFF0B2B0F};
+            0xFFFFF2CC,
+            0xFF00FF00,
+            0xFF00FC00,
+            0xFF00FB00,
+            0xFF00FA00,
+            0xFF00F900,
+            0xFF00F800,
+            0xFF00F700,
+            0xFF00F600,
+            0xFF00F500,
+            0xFF00F400,
+            0xFF0000FF,
+    };
+
+    private final static int[] PRIMARY_COLOURS;
+
+    static {
+        int[] primaryIndices = {7, 8, 9, 246, 247, 248, 249, 250, 251, 252, 253, 254};
+        PRIMARY_COLOURS = new int[primaryIndices.length];
+
+        for (int i=0; i<primaryIndices.length; i++) {
+            PRIMARY_COLOURS[i] = COLOUR[primaryIndices[i]];
+        }
+    }
 
     public static final int BACKGROUND = COLOUR[0];
-    public static final int PRIMARY_START = 154;
-    public static final int PRIMARY_END = 165;
     public static final int SECONDARY_START = 202;
     public static final int SECONDARY_END = 213;
 
     public static boolean isCompanyPrimary(int pixel) {
-        return isInRange(pixel, PRIMARY_START, PRIMARY_END);
+        return colourIndexInRange(pixel, PRIMARY_COLOURS) != -1;
     }
 
     public static boolean isCompanySecondary(int pixel) {
@@ -285,34 +297,36 @@ public class Palette {
     }
 
     private static int colourIndexInRange(int pixel, int start, int end) {
-        for (int i=start; i<=end; i++) {
-            if (COLOUR[i] == pixel) {
-                return i-start;
+        return colourIndexInRange(pixel, Arrays.copyOfRange(COLOUR, start, end));
+    }
+
+    private static int colourIndexInRange(int pixel, int[] colours) {
+        for (int i=0; i<colours.length; i++) {
+            if (colours[i] == pixel) {
+                return i;
             }
         }
         return -1;
     }
 
     public static int primaryShade(int pixel, int primary) {
-        return shade(pixel, primary, PRIMARY_START, PRIMARY_END);
+        return shade(pixel, primary, colourIndexInRange(pixel, PRIMARY_COLOURS), PRIMARY_COLOURS.length);
     }
 
     public static int secondaryShade(int pixel, int secondary) {
-        return shade(pixel, secondary, SECONDARY_START, SECONDARY_END);
+        return shade(pixel, secondary, colourIndexInRange(pixel, SECONDARY_START, SECONDARY_END), SECONDARY_END-SECONDARY_START);
     }
 
-    private static int shade(int pixel, int primary, int start, int end) {
-        int index = colourIndexInRange(pixel, start, end);
+    private static int shade(int pixel, int colour, int index, int range) {
         if (index == -1) {
             return pixel;
         }
         else {
-            int range = end-start;
             double fraction = (double)(index+1)/(double)(range+2);
 
-            int r = 0xFF & (primary >> 16);
-            int g = 0xFF & (primary >> 8);
-            int b = 0xFF & (primary);
+            int r = 0xFF & (colour >> 16);
+            int g = 0xFF & (colour >> 8);
+            int b = 0xFF & (colour);
 
             if (fraction < 0.5) {
                 //darken
