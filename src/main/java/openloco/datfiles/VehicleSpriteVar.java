@@ -5,7 +5,9 @@ import java.util.EnumSet;
 
 public class VehicleSpriteVar {
 
-    private final byte numDir;
+    private final byte levelSpriteCount;
+    private final byte upDownSpriteCount;
+    private final byte frames;
     private final byte vehType;
     private final byte numUnits;
     private final byte bogeyPos;
@@ -14,8 +16,9 @@ public class VehicleSpriteVar {
 
     public VehicleSpriteVar(DatFileInputStream in) {
         try {
-            numDir = in.readByte();
-            in.skipBytes(2);
+            levelSpriteCount = in.readByte();
+            upDownSpriteCount = in.readByte();
+            frames = in.readByte();
             vehType = in.readByte();
             numUnits = in.readByte();
             in.skipBytes(1);
@@ -30,8 +33,16 @@ public class VehicleSpriteVar {
         }
     }
 
-    public byte getNumDir() {
-        return numDir;
+    public byte getLevelSpriteCount() {
+        return levelSpriteCount;
+    }
+
+    public byte getUpDownSpriteCount() {
+        return upDownSpriteCount;
+    }
+
+    public byte getFrames() {
+        return frames;
     }
 
     public byte getVehType() {
