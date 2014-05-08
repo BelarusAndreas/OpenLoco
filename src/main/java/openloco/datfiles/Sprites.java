@@ -14,7 +14,7 @@ public class Sprites {
     public Sprites(DatFileInputStream in) {
         try {
             long num = in.readUnsignedInt();
-            long size = in.readUnsignedInt();
+            in.skipBytes(4); // size
 
             List<SpriteHeader> spriteHeaders = new ArrayList<>();
             for (int i = 0; i < num; i++) {
@@ -22,15 +22,22 @@ public class Sprites {
             }
 
             for (SpriteHeader header : spriteHeaders) {
-                in.skipBytes(2*header.getHeight());
+                boolean isChunked = header.flags.contains(SpriteFlag.CHUNKED);
+
+                if (isChunked) {
+                    in.skipBytes(2*header.getHeight());
+                }
+
                 int[] pixels = new int[header.getWidth() * header.getHeight()];
-                if (header.flags.contains(SpriteFlag.CHUNKED)) {
-                    for (int row=0; row<header.getHeight(); row++) {
-                        int rowOffset = row * header.getWidth();
+                for (int row=0; row<header.getHeight(); row++) {
+                    int rowOffset = row * header.getWidth();
+
+                    if (isChunked) {
                         for (int col=0; col<header.getWidth(); col++) {
                             pixels[rowOffset + col] = Palette.BACKGROUND;
                         }
-                        boolean last = false;
+
+                        boolean last;
                         do {
                             int lenLast = 0xFF & in.readByte();
                             last = (0xFF & (lenLast & 0x80)) != 0;
@@ -42,9 +49,11 @@ public class Sprites {
                         }
                         while (!last);
                     }
-                }
-                else {
-                    //just copy it
+                    else {
+                        for (int col=0; col<header.getWidth(); col++) {
+                            pixels[rowOffset + col] = Palette.COLOUR[0xFF & in.readByte()];
+                        }
+                    }
                 }
 
                 sprites.add(new RawSprite(header, pixels));
