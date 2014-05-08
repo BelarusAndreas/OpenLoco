@@ -8,6 +8,7 @@ import openloco.datfiles.DatFileLoader;
 import openloco.datfiles.Sprites;
 import openloco.graphics.OpenGlSprite;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -21,6 +22,8 @@ public class LoadSprite {
 
     private Assets assets;
     private int spriteIndex = 0;
+    private Vehicle vehicle;
+    private boolean rotating = true;
 
     public LoadSprite(Assets assets) {
         this.assets = assets;
@@ -60,7 +63,7 @@ public class LoadSprite {
     }
 
     private void initTexture() throws IOException {
-        Vehicle vehicle = assets.getVehicle("A4      ");
+        vehicle = assets.getVehicle("A4      ");
         for (Sprites.RawSprite rawSprite: vehicle.getSprites().getList()) {
             Sprites.SpriteHeader header = rawSprite.getHeader();
             this.sprites.add(OpenGlSprite.createFromPixels(rawSprite.getPixels(), header.getWidth(), header.getHeight(),
@@ -120,7 +123,16 @@ public class LoadSprite {
 
         while (true) {
             render();
-            spriteIndex = (spriteIndex + 1) % sprites.size();
+
+            while (Keyboard.next()) {
+                if (Keyboard.getEventKey() == Keyboard.KEY_SPACE && Keyboard.getEventKeyState()) {
+                    rotating = !rotating;
+                }
+            }
+
+            if (rotating) {
+                spriteIndex = (spriteIndex + 1) % (vehicle.getVars().getVehSprites().get(0).getLevelSpriteCount());
+            }
 
             Display.update();
             Display.sync(20);

@@ -41,6 +41,10 @@ public class Vehicle {
         return name;
     }
 
+    public VehicleVars getVars() {
+        return vars;
+    }
+
     public Sprites getSprites() {
         return sprites;
     }
