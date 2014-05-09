@@ -1,6 +1,7 @@
 package openloco.datfiles;
 
 import openloco.Assets;
+import openloco.Ground;
 import openloco.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +30,10 @@ public class DatFileLoader {
     }
 
     public void loadFiles() throws IOException {
+        logger.info("Loading assets from {}...", DATA_DIR);
         Files.list(new File(DATA_DIR).toPath())
                 .forEach(this::load);
+        logger.info("Finished loading assets.");
     }
 
     private void load(Path path) {
@@ -49,36 +52,25 @@ public class DatFileLoader {
         long objectSubClass = readUintLE(bytes, 1, 3);
         String name = new String(bytes, 4, 8, Charset.defaultCharset());
 
-        logger.debug("Object class: {}", objectClass);
-        logger.debug("Object subclass: {}", objectSubClass);
-        logger.debug("Object name: '{}'", name);
-
         int pointer = 16;
 
-        int chunkCount = 0;
-
         while (pointer < bytes.length) {
-            logger.debug("Pointer is at " + pointer + "/" + bytes.length);
             byte chunkType = bytes[pointer++];
             long length = readUint32LE(bytes, pointer);
             pointer += 4;
 
-            logger.debug("Start of chunk type " + chunkType + " of length " + length);
             byte[] chunk;
             if (chunkType == 1) {
                 chunk = rleDecode(bytes, pointer, length);
-                logger.debug("Read chunk " + (chunkCount++) + " (" + chunk.length + " bytes)");
             }
             else {
-                logger.error("Unsupported chunk type: " + chunkType);
+                logger.error("Unsupported chunk type for {} ({}): {} ", path, objectClass, chunkType);
                 break;
             }
 
             decodeObject(name, chunk, objectClass);
-
             pointer += length;
         }
-        logger.debug("Done!");
     }
 
     private void decodeObject(String name, byte[] chunk, ObjectClass objectClass) {
@@ -89,6 +81,11 @@ public class DatFileLoader {
                 Vehicle v = Vehicle.load(name, dataInputStream);
                 assets.add(v);
                 break;
+
+            case GROUND:
+                Ground ground = Ground.load(name, dataInputStream);
+                assets.add(ground);
+
             default:
                 break;
         }

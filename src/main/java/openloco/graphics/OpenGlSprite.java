@@ -1,6 +1,7 @@
 package openloco.graphics;
 
 import openloco.Palette;
+import openloco.datfiles.Sprites;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -42,6 +43,12 @@ public class OpenGlSprite {
         return textureId;
     }
 
+    public static OpenGlSprite createFromRawSprite(Sprites.RawSprite rawSprite) {
+        Sprites.SpriteHeader header = rawSprite.getHeader();
+        return OpenGlSprite.createFromPixels(rawSprite.getPixels(), header.getWidth(), header.getHeight(),
+                header.getXOffset(), header.getYOffset());
+    }
+
     public static OpenGlSprite createFromPixels(int[] pixels, int width, int height, int xOffset, int yOffset) {
         ByteBuffer buffer = BufferUtils.createByteBuffer(pixels.length * 4);
 
@@ -53,10 +60,10 @@ public class OpenGlSprite {
                     pixel &= 0x00FFFFFF;
                 }
                 else if (Palette.isCompanyPrimary(pixel)) {
-                    pixel = Palette.primaryShade(pixel, 0xFF990000);
+                    pixel = Palette.primaryShade(pixel, 0xFF193B50);
                 }
                 else if (Palette.isCompanySecondary(pixel)) {
-                    pixel = Palette.secondaryShade(pixel, 0xFF00CC00);
+                    pixel = Palette.secondaryShade(pixel, 0xFFDDDDDD);
                 }
 
                 byte a = (byte) ((pixel >> 24) & 0xFF);

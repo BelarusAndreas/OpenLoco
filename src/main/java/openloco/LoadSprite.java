@@ -21,6 +21,8 @@ public class LoadSprite {
 
     private List<OpenGlSprite> sprites = new ArrayList<>();
 
+    private OpenGlSprite grassSprite;
+
     private Assets assets;
     private int spriteIndex = 0;
     private Vehicle vehicle;
@@ -65,10 +67,14 @@ public class LoadSprite {
 
     private void initTexture() throws IOException {
         vehicle = assets.getVehicle("HST     ");
+        
+        Ground ground = assets.getGround("GRASS1  ");
+        Sprites.RawSprite sprite = ground.getSprites().get(360);
+        grassSprite = OpenGlSprite.createFromRawSprite(sprite);
+
         for (Sprites.RawSprite rawSprite: vehicle.getSprites().getList()) {
-            Sprites.SpriteHeader header = rawSprite.getHeader();
-            this.sprites.add(OpenGlSprite.createFromPixels(rawSprite.getPixels(), header.getWidth(), header.getHeight(),
-                    header.getXOffset(), header.getYOffset()));
+            OpenGlSprite openGlSprite = OpenGlSprite.createFromRawSprite(rawSprite);
+            this.sprites.add(openGlSprite);
         }
     }
 
@@ -76,18 +82,60 @@ public class LoadSprite {
         // clear the screen
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-        GL11.glLineWidth(1f);
-        GL11.glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
-        GL11.glBegin(GL11.GL_LINES);
-        GL11.glVertex2f(SCREEN_WIDTH / 2.0f, 0f);
-        GL11.glVertex2f(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT);
-        GL11.glVertex2f(0, SCREEN_HEIGHT/2.0f);
-        GL11.glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT/2.0f);
-        GL11.glEnd();
-
+        drawGrid();
         drawSprites();
 
         GL11.glFlush();
+    }
+
+    private void drawGrid() {
+        GL11.glPushMatrix();
+        GL11.glTranslatef(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f, 0f);
+
+        int gridWidth = 32;
+        int cellCount = 9;
+
+        GL11.glTranslatef(-isoX(gridWidth*cellCount/2, gridWidth*cellCount/2), -isoY(gridWidth*cellCount/2, gridWidth*cellCount/2), 0f);
+
+        GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+
+        GL11.glPushMatrix();
+        for (int i=0; i<cellCount; i++) {
+            for (int j=0; j<cellCount; j++) {
+                drawSprite(grassSprite, isoX(i*gridWidth, j*gridWidth), isoY(i*gridWidth, j*gridWidth));
+            }
+        }
+        GL11.glPopMatrix();
+
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+
+        GL11.glLineWidth(1f);
+        GL11.glColor4f(0.7f, 0.7f, 0.7f, 0.1f);
+        GL11.glBegin(GL11.GL_LINES);
+
+        for (int i=0; i<=cellCount; i++) {
+            int a = 0;
+            int b = i * gridWidth;
+            int c = cellCount * gridWidth;
+
+            GL11.glVertex2f(isoX(a, b), isoY(a, b)); GL11.glVertex2f(isoX(c, b), isoY(c, b));
+            GL11.glVertex2f(isoX(b, a), isoY(b, a)); GL11.glVertex2f(isoX(b, c), isoY(b, c));
+        }
+
+        GL11.glEnd();
+        GL11.glPopMatrix();
+    }
+
+    private int isoX(int cartX, int cartY) {
+        return cartX - cartY;
+    }
+
+    private int isoY(int cartX, int cartY) {
+        return (cartX + cartY) / 2;
     }
 
     private void drawSprites() {
@@ -129,14 +177,24 @@ public class LoadSprite {
                 if (Keyboard.getEventKey() == Keyboard.KEY_SPACE && Keyboard.getEventKeyState()) {
                     rotating = !rotating;
                 }
+                if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
+                    spriteIndex++;
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_LEFT && Keyboard.getEventKeyState()) {
+                    spriteIndex--;
+                }
             }
 
+            VehicleSpriteVar spriteVar = vehicle.getVars().getVehSprites().get(0);
+            int frameOffset = 0;
             if (rotating) {
-                VehicleSpriteVar spriteVar = vehicle.getVars().getVehSprites().get(0);
-                int frameOffset = spriteVar.getFrames() > 1 ? spriteVar.getFrames()+spriteVar.getTiltCount() : spriteVar.getTiltCount();
-                int spriteCount = spriteVar.getLevelSpriteCount() * spriteVar.getFrames() * spriteVar.getTiltCount();
-                spriteIndex = (spriteIndex + frameOffset) % spriteCount;
+                frameOffset = spriteVar.getFrames() > 1 ? spriteVar.getFrames() + spriteVar.getTiltCount() : spriteVar.getTiltCount();
             }
+            int spriteCount = spriteVar.getLevelSpriteCount() * spriteVar.getFrames() * spriteVar.getTiltCount();
+            if (spriteIndex < 0) {
+                spriteIndex += spriteCount;
+            }
+            spriteIndex = (spriteIndex + frameOffset) % spriteCount;
 
             Display.update();
             Display.sync(20);
