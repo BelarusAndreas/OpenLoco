@@ -43,13 +43,8 @@ public class LoadSprite extends BaseDemo {
 
     @Override
     protected void render() {
-        // clear the screen
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
         drawGrid();
         drawSprites();
-
-        GL11.glFlush();
     }
 
     private void drawGrid() {
@@ -59,7 +54,7 @@ public class LoadSprite extends BaseDemo {
         int gridWidth = 32;
         int cellCount = 9;
 
-        GL11.glTranslatef(-isoX(gridWidth*cellCount/2, gridWidth*cellCount/2), -isoY(gridWidth*cellCount/2, gridWidth*cellCount/2), 0f);
+        GL11.glTranslatef(-isoX(gridWidth * cellCount / 2, gridWidth * cellCount / 2, 0), -isoY(gridWidth * cellCount / 2, gridWidth * cellCount / 2, 0), 0f);
 
         GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -69,7 +64,7 @@ public class LoadSprite extends BaseDemo {
         GL11.glPushMatrix();
         for (int i=0; i<cellCount; i++) {
             for (int j=0; j<cellCount; j++) {
-                grassSprite.draw(isoX(i * gridWidth, j * gridWidth), isoY(i * gridWidth, j * gridWidth));
+                grassSprite.draw(isoX(i * gridWidth, j * gridWidth, 0), isoY(i * gridWidth, j * gridWidth, 0));
             }
         }
         GL11.glPopMatrix();
@@ -86,8 +81,10 @@ public class LoadSprite extends BaseDemo {
             int b = i * gridWidth;
             int c = cellCount * gridWidth;
 
-            GL11.glVertex2f(isoX(a, b), isoY(a, b)); GL11.glVertex2f(isoX(c, b), isoY(c, b));
-            GL11.glVertex2f(isoX(b, a), isoY(b, a)); GL11.glVertex2f(isoX(b, c), isoY(b, c));
+            GL11.glVertex2f(isoX(a, b, 0), isoY(a, b, 0));
+            GL11.glVertex2f(isoX(c, b, 0), isoY(c, b, 0));
+            GL11.glVertex2f(isoX(b, a, 0), isoY(b, a, 0));
+            GL11.glVertex2f(isoX(b, c, 0), isoY(b, c, 0));
         }
 
         GL11.glEnd();

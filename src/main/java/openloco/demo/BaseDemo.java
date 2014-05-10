@@ -54,12 +54,12 @@ public abstract class BaseDemo {
         return SCREEN_HEIGHT;
     }
 
-    protected int isoX(int cartX, int cartY) {
+    protected int isoX(int cartX, int cartY, int cartZ) {
         return cartX - cartY;
     }
 
-    protected int isoY(int cartX, int cartY) {
-        return (cartX + cartY) / 2;
+    protected int isoY(int cartX, int cartY, int cartZ) {
+        return (cartX + cartY) / 2 - cartZ;
     }
 
     protected void initDisplay() {
@@ -73,7 +73,7 @@ public abstract class BaseDemo {
 
         while (true) {
             update();
-            render();
+            renderInternal();
 
             Display.update();
             Display.sync(20);
@@ -85,7 +85,16 @@ public abstract class BaseDemo {
         }
     }
 
+    private void renderInternal() {
+        // clear the screen
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        render();
+        GL11.glFlush();
+    }
+
     protected abstract void init();
-    protected abstract void update();
+
+    protected void update() { }
+
     protected abstract void render();
 }
