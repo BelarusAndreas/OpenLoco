@@ -7,17 +7,12 @@ import java.util.List;
 import openloco.datfiles.DatFileLoader;
 import openloco.datfiles.Sprites;
 import openloco.datfiles.VehicleSpriteVar;
+import openloco.demo.BaseDemo;
 import openloco.graphics.OpenGlSprite;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-public class LoadSprite {
-
-    private static final int SCREEN_WIDTH = 800;
-    private static final int SCREEN_HEIGHT = 600;
+public class LoadSprite extends BaseDemo {
 
     private List<OpenGlSprite> sprites = new ArrayList<>();
 
@@ -32,44 +27,12 @@ public class LoadSprite {
         this.assets = assets;
     }
 
-    private void initLwjglDisplay() {
-        try {
-            Display.setDisplayMode(new DisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT));
-            Display.create();
-            Display.setVSyncEnabled(true);
-        } catch (LWJGLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void resetOpenGl() {
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_DITHER);
-        GL11.glDisable(GL11.GL_FOG);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_TEXTURE_1D);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glShadeModel(GL11.GL_FLAT);
-    }
-
-    private void initOpenGL() {
-        resetOpenGl();
-
-        GL11.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-
-        GL11.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 1, -1);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-    }
-
-    private void initTexture() throws IOException {
+    @Override
+    protected void init() {
         vehicle = assets.getVehicle("HST     ");
         
         Ground ground = assets.getGround("GRASS1  ");
-        Sprites.RawSprite sprite = ground.getSprites().get(360);
+        Sprites.RawSprite sprite = ground.getSprites().get(385);
         grassSprite = OpenGlSprite.createFromRawSprite(sprite);
 
         for (Sprites.RawSprite rawSprite: vehicle.getSprites().getList()) {
@@ -78,7 +41,8 @@ public class LoadSprite {
         }
     }
 
-    private void render() {
+    @Override
+    protected void render() {
         // clear the screen
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
@@ -90,7 +54,7 @@ public class LoadSprite {
 
     private void drawGrid() {
         GL11.glPushMatrix();
-        GL11.glTranslatef(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f, 0f);
+        GL11.glTranslatef(getScreenWidth()/2.0f, getScreenHeight()/2.0f, 0f);
 
         int gridWidth = 32;
         int cellCount = 9;
@@ -105,7 +69,7 @@ public class LoadSprite {
         GL11.glPushMatrix();
         for (int i=0; i<cellCount; i++) {
             for (int j=0; j<cellCount; j++) {
-                drawSprite(grassSprite, isoX(i*gridWidth, j*gridWidth), isoY(i*gridWidth, j*gridWidth));
+                grassSprite.draw(isoX(i * gridWidth, j * gridWidth), isoY(i * gridWidth, j * gridWidth));
             }
         }
         GL11.glPopMatrix();
@@ -130,14 +94,6 @@ public class LoadSprite {
         GL11.glPopMatrix();
     }
 
-    private int isoX(int cartX, int cartY) {
-        return cartX - cartY;
-    }
-
-    private int isoY(int cartX, int cartY) {
-        return (cartX + cartY) / 2;
-    }
-
     private void drawSprites() {
         GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -145,65 +101,36 @@ public class LoadSprite {
         GL11.glEnable(GL11.GL_BLEND);
 
         OpenGlSprite sprite = sprites.get(spriteIndex);
-        drawSprite(sprite, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f);
+        sprite.draw(getScreenWidth() / 2.0f, getScreenHeight() / 2.0f);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
     }
 
-    private void drawSprite(OpenGlSprite sprite, float x, float y) {
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, sprite.getTextureId());
-
-        float left = x + sprite.getXOffset();
-        float top = y + sprite.getYOffset();
-
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glTexCoord2f(0, 0); GL11.glVertex2f(left, top);
-        GL11.glTexCoord2f(1, 0); GL11.glVertex2f(left + sprite.getWidth(), top);
-        GL11.glTexCoord2f(1, 1); GL11.glVertex2f(left + sprite.getWidth(), top + sprite.getHeight());
-        GL11.glTexCoord2f(0, 1); GL11.glVertex2f(left, top + sprite.getHeight());
-        GL11.glEnd();
-    }
-
-    private void run() throws IOException {
-        initLwjglDisplay();
-        initOpenGL();
-        initTexture();
-
-        while (true) {
-            render();
-
-            while (Keyboard.next()) {
-                if (Keyboard.getEventKey() == Keyboard.KEY_SPACE && Keyboard.getEventKeyState()) {
-                    rotating = !rotating;
-                }
-                if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
-                    spriteIndex++;
-                }
-                if (Keyboard.getEventKey() == Keyboard.KEY_LEFT && Keyboard.getEventKeyState()) {
-                    spriteIndex--;
-                }
+    @Override
+    protected void update() {
+        while (Keyboard.next()) {
+            if (Keyboard.getEventKey() == Keyboard.KEY_SPACE && Keyboard.getEventKeyState()) {
+                rotating = !rotating;
             }
-
-            VehicleSpriteVar spriteVar = vehicle.getVars().getVehSprites().get(0);
-            int frameOffset = 0;
-            if (rotating) {
-                frameOffset = spriteVar.getFrames() > 1 ? spriteVar.getFrames() + spriteVar.getTiltCount() : spriteVar.getTiltCount();
+            if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
+                spriteIndex++;
             }
-            int spriteCount = spriteVar.getLevelSpriteCount() * spriteVar.getFrames() * spriteVar.getTiltCount();
-            if (spriteIndex < 0) {
-                spriteIndex += spriteCount;
-            }
-            spriteIndex = (spriteIndex + frameOffset) % spriteCount;
-
-            Display.update();
-            Display.sync(20);
-
-            if (Display.isCloseRequested()) {
-                Display.destroy();
-                break;
+            if (Keyboard.getEventKey() == Keyboard.KEY_LEFT && Keyboard.getEventKeyState()) {
+                spriteIndex--;
             }
         }
+
+        VehicleSpriteVar spriteVar = vehicle.getVars().getVehSprites().get(0);
+        int frameOffset = 0;
+        if (rotating) {
+            frameOffset = spriteVar.getFrames() > 1 ? spriteVar.getFrames() + spriteVar.getTiltCount() : spriteVar.getTiltCount();
+        }
+        int spriteCount = spriteVar.getLevelSpriteCount() * spriteVar.getFrames() * spriteVar.getTiltCount();
+        if (spriteIndex < 0) {
+            spriteIndex += spriteCount;
+        }
+        spriteIndex = (spriteIndex + frameOffset) % spriteCount;
     }
 
     public static void main(String[] args) throws IOException {

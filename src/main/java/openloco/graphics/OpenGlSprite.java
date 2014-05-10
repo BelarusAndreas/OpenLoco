@@ -39,10 +39,6 @@ public class OpenGlSprite {
         return yOffset;
     }
 
-    public int getTextureId() {
-        return textureId;
-    }
-
     public static OpenGlSprite createFromRawSprite(Sprites.RawSprite rawSprite) {
         Sprites.SpriteHeader header = rawSprite.getHeader();
         return OpenGlSprite.createFromPixels(rawSprite.getPixels(), header.getWidth(), header.getHeight(),
@@ -93,4 +89,17 @@ public class OpenGlSprite {
     }
 
 
+    public void draw(float x, float y) {
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+
+        float left = x + getXOffset();
+        float top = y + getYOffset();
+
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0); GL11.glVertex2f(left, top);
+        GL11.glTexCoord2f(1, 0); GL11.glVertex2f(left + getWidth(), top);
+        GL11.glTexCoord2f(1, 1); GL11.glVertex2f(left + getWidth(), top + getHeight());
+        GL11.glTexCoord2f(0, 1); GL11.glVertex2f(left, top + getHeight());
+        GL11.glEnd();
+    }
 }
