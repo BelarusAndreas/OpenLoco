@@ -1,8 +1,6 @@
 package openloco.datfiles;
 
-import openloco.Assets;
-import openloco.Ground;
-import openloco.Vehicle;
+import openloco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,8 +58,21 @@ public class DatFileLoader {
             pointer += 4;
 
             byte[] chunk;
-            if (chunkType == 1) {
+            if (chunkType == 0) {
+                //no encoding
+                chunk = bytes;
+            }
+            else if (chunkType == 1) {
                 chunk = rleDecode(bytes, pointer, length);
+            }
+            else if (chunkType == 2) {
+                //decompress doesn't seem to work...
+                //chunk = rleDecode(bytes, pointer, length);
+                //chunk = decompress(chunk);
+                break;
+            }
+            else if (chunkType == 3) {
+                chunk = descramble(bytes, pointer, length);
             }
             else {
                 logger.error("Unsupported chunk type for {} ({}): {} ", path, objectClass, chunkType);
@@ -73,18 +84,48 @@ public class DatFileLoader {
         }
     }
 
+    private byte[] decompress(byte[] chunk) {
+        List<Byte> buffer = new ArrayList<>();
+        int i=0;
+        while (i < chunk.length) {
+            byte code = chunk[i++];
+            if (code == (byte)0xFF) {
+                buffer.add(chunk[i++]);
+            }
+            else {
+                int len = (code & 7)+1;
+                int ofs = 32 - (code >> 3);
+
+                int start = buffer.size()-ofs;
+                int end = start+len;
+
+                for (int j=start; j<end; j++) {
+                    buffer.add(buffer.get(start));
+                }
+            }
+        }
+        return toArray(buffer);
+    }
+
     private void decodeObject(String name, byte[] chunk, ObjectClass objectClass) {
         chunk = ByteBuffer.wrap(chunk).order(ByteOrder.LITTLE_ENDIAN).array();
         DatFileInputStream dataInputStream = new DatFileInputStream(new ByteArrayInputStream(chunk));
         switch (objectClass) {
-            case VEHICLES:
-                Vehicle v = Vehicle.load(name, dataInputStream);
-                assets.add(v);
+
+            case COMPANIES:
+                Company company = Company.load(name, dataInputStream);
+                assets.add(company);
                 break;
 
             case GROUND:
                 Ground ground = Ground.load(name, dataInputStream);
                 assets.add(ground);
+                break;
+
+            case VEHICLES:
+                Vehicle v = Vehicle.load(name, dataInputStream);
+                assets.add(v);
+                break;
 
             default:
                 break;
@@ -128,6 +169,20 @@ public class DatFileLoader {
             }
         }
         return toArray(buffer);
+    }
+
+    private byte[] descramble(byte[] input, int pointer, long length) {
+        byte[] result = new byte[(int)length];
+        byte bits = 1;
+        for (int ofs=pointer; ofs<pointer+length; ofs++) {
+            result[ofs-pointer] = rotr8(input[ofs], bits);
+            bits = (byte)((bits+2)&7);
+        }
+        return result;
+    }
+
+    private byte rotr8(byte a, byte n) {
+        return (byte)(0xFF & (((a)>>(n))|((a)<<(8-n))));
     }
 
     private byte[] toArray(List<Byte> buffer) {

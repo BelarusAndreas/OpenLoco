@@ -5,13 +5,9 @@ import java.util.Map;
 
 public class Assets {
 
-    private final Map<String, Vehicle> vehicles;
-    private final Map<String, Ground> grounds;
-
-    public Assets() {
-        this.vehicles = new HashMap<>();
-        this.grounds = new HashMap<>();
-    }
+    private final Map<String, Vehicle> vehicles = new HashMap<>();
+    private final Map<String, Ground> grounds = new HashMap<>();
+    private final Map<String, Company> companies = new HashMap<>();
 
     public void add(Vehicle vehicle) {
         vehicles.put(vehicle.getName(), vehicle);
@@ -28,4 +24,9 @@ public class Assets {
     public Ground getGround(String name) {
         return grounds.get(name);
     }
+
+    public void add(Company company) {
+        companies.put(company.getName(), company);
+    }
+
 }
