@@ -1,13 +1,15 @@
-package openloco;
+package openloco.demo;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import openloco.Assets;
+import openloco.Ground;
+import openloco.Vehicle;
 import openloco.datfiles.DatFileLoader;
 import openloco.datfiles.Sprites;
 import openloco.datfiles.VehicleSpriteVar;
-import openloco.demo.BaseDemo;
 import openloco.graphics.OpenGlSprite;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
