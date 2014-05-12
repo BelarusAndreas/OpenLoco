@@ -1,9 +1,9 @@
 package openloco.demo;
 
 import openloco.Assets;
-import openloco.Ground;
+import openloco.entities.Ground;
 import openloco.datfiles.DatFileLoader;
-import openloco.datfiles.Sprites;
+import openloco.entities.Sprites;
 import openloco.graphics.OpenGlSprite;
 import org.lwjgl.opengl.GL11;
 

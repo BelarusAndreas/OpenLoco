@@ -1,6 +1,4 @@
-package openloco;
-
-import openloco.datfiles.*;
+package openloco.entities;
 
 import java.util.List;
 

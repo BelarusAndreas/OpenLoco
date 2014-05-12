@@ -1,6 +1,4 @@
-package openloco;
-
-import openloco.datfiles.*;
+package openloco.entities;
 
 public class Ground {
     private final String name;

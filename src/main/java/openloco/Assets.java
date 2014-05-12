@@ -1,5 +1,9 @@
 package openloco;
 
+import openloco.entities.Company;
+import openloco.entities.Ground;
+import openloco.entities.Vehicle;
+
 import java.util.HashMap;
 import java.util.Map;
 

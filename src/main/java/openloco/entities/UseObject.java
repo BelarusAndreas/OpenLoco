@@ -1,4 +1,4 @@
-package openloco.datfiles;
+package openloco.entities;
 
 public class UseObject {
 

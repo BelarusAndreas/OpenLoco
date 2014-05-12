@@ -1,6 +1,7 @@
 package openloco.datfiles;
 
 import openloco.*;
+import openloco.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

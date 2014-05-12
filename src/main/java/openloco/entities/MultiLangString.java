@@ -1,4 +1,4 @@
-package openloco.datfiles;
+package openloco.entities;
 
 import java.util.HashMap;
 import java.util.Map;

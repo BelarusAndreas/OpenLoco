@@ -1,7 +1,4 @@
-package openloco;
-
-import openloco.datfiles.MultiLangString;
-import openloco.datfiles.Sprites;
+package openloco.entities;
 
 public class Company {
 

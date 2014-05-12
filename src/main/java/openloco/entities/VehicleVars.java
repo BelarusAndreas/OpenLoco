@@ -1,4 +1,4 @@
-package openloco.datfiles;
+package openloco.entities;
 
 import java.util.EnumSet;
 import java.util.List;
