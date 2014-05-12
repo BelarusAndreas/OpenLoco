@@ -1,10 +1,7 @@
 package openloco;
 
-import openloco.datfiles.DatFileInputStream;
 import openloco.datfiles.MultiLangString;
 import openloco.datfiles.Sprites;
-
-import java.io.IOException;
 
 public class Company {
 
@@ -42,31 +39,15 @@ public class Company {
         return sprites;
     }
 
-    public static Company load(String name, DatFileInputStream dataInputStream) {
-        CompanyVars companyVars = new CompanyVars(dataInputStream);
-        MultiLangString ceoName = new MultiLangString(dataInputStream);
-        MultiLangString companyName = new MultiLangString(dataInputStream);
-        Sprites sprites = new Sprites(dataInputStream);
-        return new Company(name, companyVars, ceoName, companyName, sprites);
-    }
-
     public static class CompanyVars {
         private byte intelligence;
         private byte aggressiveness;
         private byte competitiveness;
 
-        public CompanyVars(DatFileInputStream in) {
-            try {
-                in.skipBytes(12);
-                in.skipBytes(2); //spritesets
-                in.skipBytes(38);
-                intelligence = in.readByte();
-                aggressiveness = in.readByte();
-                competitiveness = in.readByte();
-            }
-            catch (IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
+        public CompanyVars(byte intelligence, byte aggressiveness, byte competitiveness) {
+            this.intelligence = intelligence;
+            this.aggressiveness = aggressiveness;
+            this.competitiveness = competitiveness;
         }
 
         public byte getIntelligence() {

@@ -2,8 +2,6 @@ package openloco;
 
 import openloco.datfiles.*;
 
-import java.util.EnumSet;
-
 public class Ground {
     private final String name;
     private final GroundVars groundVars;
@@ -17,14 +15,6 @@ public class Ground {
         this.desc = desc;
         this.cliff = cliff;
         this.sprites = sprites;
-    }
-
-    public static Ground load(String name, DatFileInputStream dataInputStream) {
-        GroundVars groundVars = new GroundVars(dataInputStream);
-        MultiLangString desc = new MultiLangString(dataInputStream);
-        UseObject cliff = new UseObject(dataInputStream, EnumSet.of(ObjectClass.CLIFF_FACES));
-        Sprites sprites = new Sprites(dataInputStream);
-        return new Ground(name, groundVars, desc, cliff, sprites);
     }
 
     public String getName() {

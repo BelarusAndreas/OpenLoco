@@ -1,6 +1,5 @@
 package openloco.datfiles;
 
-import java.io.IOException;
 import java.util.EnumSet;
 
 public class VehicleSpriteVar {
@@ -15,23 +14,17 @@ public class VehicleSpriteVar {
     private final EnumSet<VehicleSpriteFlag> flags;
     private final byte spriteNum;
 
-    public VehicleSpriteVar(DatFileInputStream in) {
-        try {
-            levelSpriteCount = in.readByte();
-            upDownSpriteCount = in.readByte();
-            frames = in.readByte();
-            vehType = in.readByte();
-            numUnits = in.readByte();
-            tiltCount = in.readByte();
-            bogeyPos = in.readByte();
-            flags = in.readBitField(1, VehicleSpriteFlag.class);
-            in.skipBytes(6);
-            spriteNum = in.readByte();
-            in.skipBytes(15);
-        }
-        catch (IOException ioe) {
-            throw new RuntimeException("Unable to parse vehicle sprite vars", ioe);
-        }
+    public VehicleSpriteVar(byte levelSpriteCount, byte upDownSpriteCount, byte frames, byte vehType, byte numUnits,
+                            byte tiltCount, byte bogeyPos, EnumSet<VehicleSpriteFlag> flags, byte spriteNum) {
+        this.levelSpriteCount = levelSpriteCount;
+        this.upDownSpriteCount = upDownSpriteCount;
+        this.frames = frames;
+        this.vehType = vehType;
+        this.numUnits = numUnits;
+        this.tiltCount = tiltCount;
+        this.bogeyPos = bogeyPos;
+        this.flags = flags;
+        this.spriteNum = spriteNum;
     }
 
     public byte getLevelSpriteCount() {

@@ -1,8 +1,5 @@
 package openloco.datfiles;
 
-import openloco.Palette;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -11,56 +8,8 @@ public class Sprites {
 
     private List<RawSprite> sprites = new ArrayList<>();
 
-    public Sprites(DatFileInputStream in) {
-        try {
-            long num = in.readUnsignedInt();
-            in.skipBytes(4); // size
-
-            List<SpriteHeader> spriteHeaders = new ArrayList<>();
-            for (int i = 0; i < num; i++) {
-                spriteHeaders.add(new SpriteHeader(in));
-            }
-
-            for (SpriteHeader header : spriteHeaders) {
-                boolean isChunked = header.flags.contains(SpriteFlag.CHUNKED);
-
-                if (isChunked) {
-                    in.skipBytes(2*header.getHeight());
-                }
-
-                int[] pixels = new int[header.getWidth() * header.getHeight()];
-                for (int row=0; row<header.getHeight(); row++) {
-                    int rowOffset = row * header.getWidth();
-
-                    if (isChunked) {
-                        for (int col=0; col<header.getWidth(); col++) {
-                            pixels[rowOffset + col] = Palette.BACKGROUND;
-                        }
-
-                        boolean last;
-                        do {
-                            int lenLast = 0xFF & in.readByte();
-                            last = (0xFF & (lenLast & 0x80)) != 0;
-                            int len = 0x7f & lenLast;
-                            int offset = 0xFF & in.readByte();
-                            for (int col = offset; col < offset + len; col++) {
-                                pixels[rowOffset + col] = Palette.COLOUR[0xFF & in.readByte()];
-                            }
-                        }
-                        while (!last);
-                    }
-                    else {
-                        for (int col=0; col<header.getWidth(); col++) {
-                            pixels[rowOffset + col] = Palette.COLOUR[0xFF & in.readByte()];
-                        }
-                    }
-                }
-
-                sprites.add(new RawSprite(header, pixels));
-            }
-        } catch (IOException ioe) {
-            throw new RuntimeException("Could not parse sprite", ioe);
-        }
+    public Sprites(List<RawSprite> sprites) {
+        this.sprites = sprites;
     }
 
     public RawSprite get(int index) {
@@ -71,7 +20,7 @@ public class Sprites {
         return sprites;
     }
 
-    public class SpriteHeader {
+    public static class SpriteHeader {
         private long offset;
         private int width;
         private int height;
@@ -79,13 +28,13 @@ public class Sprites {
         private int xOffset;
         private int yOffset;
 
-        public SpriteHeader(DatFileInputStream in) throws IOException {
-            offset = in.readUnsignedInt();
-            width = in.readUShort();
-            height = in.readUShort();
-            xOffset = in.readSShort();
-            yOffset = in.readSShort();
-            flags = in.readBitField(4, SpriteFlag.class);
+        public SpriteHeader(long offset, int width, int height, int xOffset, int yOffset, EnumSet<SpriteFlag> flags) {
+            this.offset = offset;
+            this.width = width;
+            this.height = height;
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
+            this.flags = flags;
         }
 
         public int getWidth() {
@@ -103,9 +52,13 @@ public class Sprites {
         public int getYOffset() {
             return yOffset;
         }
+
+        public EnumSet<SpriteFlag> getFlags() {
+            return flags;
+        }
     }
 
-    public class RawSprite {
+    public static class RawSprite {
         private final SpriteHeader header;
         private final int[] pixels;
 

@@ -1,7 +1,5 @@
 package openloco.datfiles;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -44,49 +42,35 @@ public class VehicleVars {
     private byte startsndtype;
     private byte numSnd;
 
-    public VehicleVars(DatFileInputStream in) {
-        try {
-            in.skipBytes(2);
-            vehicleClass = in.readByte();
-            vehicleType = in.readByte();
-            in.skipBytes(2);
-            numMods = in.readByte();
-            costInd = in.readByte();
-            costFact = in.readSShort();
-            reliability = in.readByte();
-            runCostInd = in.readByte();
-            runCostFact = in.readSShort();
-            colourType = in.readByte();
-            numCompat = in.readByte();
-            in.skipBytes(20);
-            in.skipBytes(24); //vehunk
-            vehSprites = new ArrayList<>();
-            for (int i=0; i<4; i++) {
-                vehSprites.add(new VehicleSpriteVar(in));
-            }
-            in.skipBytes(36);
-            power = in.readUShort();
-            speed = in.readUShort();
-            rackSpeed = in.readUShort();
-            weight = in.readUShort();
-            vehicleFlags = in.readBitField(2, VehicleFlag.class);
-            in.skipBytes(44);
-            visFxHeight = in.readByte();
-            visFxType = in.readByte();
-            in.skipBytes(2);
-            wakeFxType = in.readByte();
-            in.skipBytes(1);
-            designed = in.readUShort();
-            obsolete = in.readUShort();
-            in.skipBytes(1);
-            startsndtype = in.readByte();
-            in.skipBytes(64);
-            numSnd = in.readByte();
-            in.skipBytes(3);
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Unable to parse vehicle vars", e);
-        }
+    public VehicleVars(byte vehicleClass, byte vehicleType, byte numMods, byte costInd, short costFact,
+                       byte reliability, byte runCostInd, short runCostFact, byte colourType, byte numCompat,
+                       List<VehicleSpriteVar> vehSprites, int power, int speed, int rackSpeed, int weight,
+                       EnumSet<VehicleFlag> vehicleFlags, byte visFxHeight, byte visFxType, byte wakeFxType,
+                       int designed, int obsolete, byte startsndtype, byte numSnd) {
+
+        this.vehicleClass = vehicleClass;
+        this.vehicleType = vehicleType;
+        this.numMods = numMods;
+        this.costInd = costInd;
+        this.costFact = costFact;
+        this.reliability = reliability;
+        this.runCostInd = runCostInd;
+        this.runCostFact = runCostFact;
+        this.colourType = colourType;
+        this.numCompat = numCompat;
+        this.vehSprites = vehSprites;
+        this.power = power;
+        this.speed = speed;
+        this.rackSpeed = rackSpeed;
+        this.weight = weight;
+        this.vehicleFlags = vehicleFlags;
+        this.visFxHeight = visFxHeight;
+        this.visFxType = visFxType;
+        this.wakeFxType = wakeFxType;
+        this.designed = designed;
+        this.obsolete = obsolete;
+        this.startsndtype = startsndtype;
+        this.numSnd = numSnd;
     }
 
     public byte getVehicleClass() {
