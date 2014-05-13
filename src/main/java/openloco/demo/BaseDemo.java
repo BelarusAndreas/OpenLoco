@@ -12,9 +12,15 @@ public abstract class BaseDemo {
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
 
+    private int frameCount = 0;
+    private long renderTime = 0;
+
+    private String title;
+
     private void initLwjglDisplay() {
         try {
-            Display.setTitle("OpenLoco demo :: " + getClass().getSimpleName());
+            title = "OpenLoco demo :: " + getClass().getSimpleName();
+            Display.setTitle(title);
             Display.setDisplayMode(new DisplayMode(getScreenWidth(), getScreenHeight()));
             Display.create();
             Display.setVSyncEnabled(true);
@@ -76,7 +82,7 @@ public abstract class BaseDemo {
             renderInternal();
 
             Display.update();
-            Display.sync(20);
+            Display.sync(50);
 
             if (Display.isCloseRequested()) {
                 Display.destroy();
@@ -87,9 +93,20 @@ public abstract class BaseDemo {
 
     private void renderInternal() {
         // clear the screen
+        long start = System.nanoTime();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         render();
         GL11.glFlush();
+        renderTime += System.nanoTime()-start;
+
+        if (frameCount == 100) {
+            Display.setTitle(title + " [" + ((double)renderTime/(frameCount*1000000.0)) + "ms/frame]");
+            renderTime = 0;
+            frameCount = 0;
+        }
+        else {
+            frameCount++;
+        }
     }
 
     protected abstract void init();
