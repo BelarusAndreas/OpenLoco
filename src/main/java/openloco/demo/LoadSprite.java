@@ -10,6 +10,7 @@ import openloco.entities.Vehicle;
 import openloco.datfiles.DatFileLoader;
 import openloco.entities.Sprites;
 import openloco.entities.VehicleSpriteVar;
+import openloco.graphics.IsoUtil;
 import openloco.graphics.OpenGlSprite;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -56,7 +57,7 @@ public class LoadSprite extends BaseDemo {
         int gridWidth = 32;
         int cellCount = 9;
 
-        GL11.glTranslatef(-isoX(gridWidth * cellCount / 2, gridWidth * cellCount / 2, 0), -isoY(gridWidth * cellCount / 2, gridWidth * cellCount / 2, 0), 0f);
+        GL11.glTranslatef(-IsoUtil.isoX(gridWidth * cellCount / 2, gridWidth * cellCount / 2, 0), -IsoUtil.isoY(gridWidth * cellCount / 2, gridWidth * cellCount / 2, 0), 0f);
 
         GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -66,7 +67,7 @@ public class LoadSprite extends BaseDemo {
         GL11.glPushMatrix();
         for (int i=0; i<cellCount; i++) {
             for (int j=0; j<cellCount; j++) {
-                grassSprite.draw(isoX(i * gridWidth, j * gridWidth, 0), isoY(i * gridWidth, j * gridWidth, 0));
+                grassSprite.draw(IsoUtil.isoX(i * gridWidth, j * gridWidth, 0), IsoUtil.isoY(i * gridWidth, j * gridWidth, 0));
             }
         }
         GL11.glPopMatrix();
@@ -83,10 +84,10 @@ public class LoadSprite extends BaseDemo {
             int b = i * gridWidth;
             int c = cellCount * gridWidth;
 
-            GL11.glVertex2f(isoX(a, b, 0), isoY(a, b, 0));
-            GL11.glVertex2f(isoX(c, b, 0), isoY(c, b, 0));
-            GL11.glVertex2f(isoX(b, a, 0), isoY(b, a, 0));
-            GL11.glVertex2f(isoX(b, c, 0), isoY(b, c, 0));
+            GL11.glVertex2f(IsoUtil.isoX(a, b, 0), IsoUtil.isoY(a, b, 0));
+            GL11.glVertex2f(IsoUtil.isoX(c, b, 0), IsoUtil.isoY(c, b, 0));
+            GL11.glVertex2f(IsoUtil.isoX(b, a, 0), IsoUtil.isoY(b, a, 0));
+            GL11.glVertex2f(IsoUtil.isoX(b, c, 0), IsoUtil.isoY(b, c, 0));
         }
 
         GL11.glEnd();

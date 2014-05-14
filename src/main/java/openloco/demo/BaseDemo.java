@@ -60,14 +60,6 @@ public abstract class BaseDemo {
         return SCREEN_HEIGHT;
     }
 
-    protected int isoX(int cartX, int cartY, int cartZ) {
-        return cartX - cartY;
-    }
-
-    protected int isoY(int cartX, int cartY, int cartZ) {
-        return (cartX + cartY) / 2 - cartZ;
-    }
-
     protected void initDisplay() {
         initLwjglDisplay();
         initOpenGL();
