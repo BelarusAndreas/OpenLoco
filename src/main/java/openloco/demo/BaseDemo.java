@@ -1,11 +1,14 @@
 package openloco.demo;
 
+import openloco.graphics.SpriteInstance;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class BaseDemo {
 
@@ -105,5 +108,41 @@ public abstract class BaseDemo {
 
     protected void update() { }
 
-    protected abstract void render();
+    protected void render() {
+        drawSprites();
+    }
+
+    private void drawSprites() {
+        GL11.glPushMatrix();
+        GL11.glTranslatef(getScreenWidth()/2.0f, getScreenHeight()/2.0f, 0f);
+
+        GL11.glTranslatef(getXOffset(), getYOffset(), 0f);
+
+        GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+
+        List<SpriteInstance> sprites = getSprites();
+
+        Collections.sort(sprites, (SpriteInstance s, SpriteInstance t) -> t.getScreenY() - s.getScreenY());
+
+        for (SpriteInstance sprite: sprites) {
+            sprite.getSprite().draw(sprite.getScreenX(), sprite.getScreenY());
+        }
+
+        GL11.glPopMatrix();
+    }
+
+    protected List<SpriteInstance> getSprites() {
+        return Collections.emptyList();
+    }
+
+    protected float getXOffset() {
+        return 0.0f;
+    }
+
+    protected float getYOffset() {
+        return 0.0f;
+    }
 }

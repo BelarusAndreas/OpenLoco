@@ -6,7 +6,6 @@ import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
 import openloco.terrain.Terrain;
 import openloco.terrain.TerrainRenderer;
-import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,26 +34,18 @@ public class TerrainDemo extends BaseDemo {
     }
 
     @Override
-    protected void render() {
-        drawTiles();
+    protected List<SpriteInstance> getSprites() {
+        return spriteInstances;
     }
 
-    private void drawTiles() {
-        GL11.glPushMatrix();
-        GL11.glTranslatef(getScreenWidth()/2.0f, getScreenHeight()/2.0f, 0f);
+    @Override
+    protected float getXOffset() {
+        return -IsoUtil.isoX(cellWidth * width / 2, cellWidth * height / 2, 0);
+    }
 
-        GL11.glTranslatef(-IsoUtil.isoX(cellWidth * width / 2, cellWidth * height / 2, 0), -IsoUtil.isoY(cellWidth * width / 2, cellWidth * height / 2, 0), 0f);
-
-        GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-
-        for (SpriteInstance sprite: spriteInstances) {
-            sprite.getSprite().draw(sprite.getScreenX(), sprite.getScreenY());
-        }
-
-        GL11.glPopMatrix();
+    @Override
+    protected float getYOffset() {
+        return -IsoUtil.isoY(cellWidth * width / 2, cellWidth * height / 2, 0);
     }
 
     public static void main(String[] args) throws IOException {
