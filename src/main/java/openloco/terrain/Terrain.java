@@ -34,6 +34,7 @@ public class Terrain {
     private int heightStep = 16;
 
     public Terrain() {
+        computeEdgeHeights();
     }
 
     private int cellIndex(int i, int j) {
