@@ -2,38 +2,22 @@ package openloco.terrain;
 
 public class Terrain {
 
-    private int[] tileHeights = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 1, 1, 1, 0, 0, 0,
-            0, 0, 0, 1, 2, 1, 0, 0, 0,
-            0, 0, 0, 1, 1, 1, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-    };
+    private int[] tileHeights;
 
-    private int[] tileTypes = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 2, 3, 3, 3, 1, 0, 0,
-            0, 0, 6, 2, 3, 1, 9, 0, 0,
-            0, 0, 6, 6, 0, 9, 9, 0, 0,
-            0, 0, 6, 4,12, 8, 9, 0, 0,
-            0, 0, 4,12,12,12, 8, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-    };
+    private int[] tileTypes;
 
     private int[] edgeHeights;
 
-    private int width = 9;
-    private int height = 9;
+    private int width;
+    private int height;
     private int cellWidth = 32;
     private int heightStep = 16;
 
-    public Terrain() {
+    public Terrain(int width, int height) {
+        this.width = width;
+        this.height = height;
+        tileHeights = new int[width*height];
+        tileTypes = new int[width*height];
         computeEdgeHeights();
     }
 
