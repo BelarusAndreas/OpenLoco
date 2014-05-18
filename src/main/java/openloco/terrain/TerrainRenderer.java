@@ -30,8 +30,8 @@ public class TerrainRenderer {
                 int cartX = i * terrain.getCellWidth();
                 int cartY = j * terrain.getCellWidth();
                 int cartZ = terrain.getHeightStep()*terrain.getTileHeight(i, j);
-                int isoX = IsoUtil.isoX(cartX, cartY, cartZ);
-                int isoY = IsoUtil.isoY(cartX, cartY, cartZ);
+                int isoX = Math.round(IsoUtil.isoX(cartX, cartY, cartZ));
+                int isoY = Math.round(IsoUtil.isoY(cartX, cartY, cartZ));
                 spriteInstances.add(new SpriteInstance(sprite, isoX, isoY));
             }
         }
