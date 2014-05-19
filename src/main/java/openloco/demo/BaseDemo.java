@@ -116,7 +116,7 @@ public abstract class BaseDemo {
         GL11.glPushMatrix();
         GL11.glTranslatef(getScreenWidth()/2.0f, getScreenHeight()/2.0f, 0f);
 
-        GL11.glTranslatef(getXOffset(), getYOffset(), 0f);
+        //GL11.glTranslatef(getXOffset(), getYOffset(), 0f);
 
         GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
