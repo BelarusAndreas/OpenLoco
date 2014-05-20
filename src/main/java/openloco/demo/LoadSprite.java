@@ -134,7 +134,7 @@ public class LoadSprite extends BaseDemo {
     }
 
     public static void main(String[] args) throws IOException {
-        final String DATA_DIR = args[0];
+        final String DATA_DIR = System.getProperty("openloco.dataDir");
         Assets assets = new Assets();
         new DatFileLoader(assets, DATA_DIR).loadFiles();
         new LoadSprite(assets).run();
