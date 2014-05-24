@@ -38,7 +38,7 @@ public class TerrainDemo extends BaseDemo {
     @Override
     protected void init() {
         renderer = new TerrainRenderer(assets);
-        terrain = new Terrain(1, 1);
+        terrain = new Terrain(10, 10);
         spriteInstances = renderer.render(terrain);
     }
 
@@ -61,8 +61,8 @@ public class TerrainDemo extends BaseDemo {
     protected void update() {
         while (Mouse.next()) {
             if (Mouse.getEventButton() == 0) {
-                float x = Mouse.getEventX() - 0.5f*getScreenWidth();
-                float y = 0.5f*getScreenHeight() - (Mouse.getEventY());
+                float x = Mouse.getEventX() - (0.5f*getScreenWidth() + getXOffset());
+                float y = (0.5f*getScreenHeight() - getYOffset()) - (Mouse.getEventY());
                 logger.debug("Click: ({}, {})", x, y);
 
                 int tileX = (int)Math.floor(IsoUtil.cartX(x, y)/cellWidth);
@@ -91,7 +91,7 @@ public class TerrainDemo extends BaseDemo {
         GL11.glPushMatrix();
 
         GL11.glTranslatef(getScreenWidth()/2.0f, getScreenHeight()/2.0f, 0f);
-
+        GL11.glTranslatef(getXOffset(), getYOffset(), 0.0f);
 
         GL11.glBegin(GL11.GL_LINE_LOOP);
         GL11.glVertex2f(IsoUtil.isoX(clickX, clickY, 0), IsoUtil.isoY(clickX, clickY, 0));
@@ -102,13 +102,6 @@ public class TerrainDemo extends BaseDemo {
 
         GL11.glPopMatrix();
 
-    }
-
-    public static void main(String[] args) throws IOException {
-        final String DATA_DIR = System.getProperty("openloco.dataDir");
-        Assets assets = new Assets();
-        new DatFileLoader(assets, DATA_DIR).loadFiles();
-        new TerrainDemo(assets).run();
     }
 
 }
