@@ -38,7 +38,7 @@ public class TerrainDemo extends BaseDemo {
     @Override
     protected void init() {
         renderer = new TerrainRenderer(assets);
-        terrain = new Terrain(10, 10);
+        terrain = new Terrain(width, height);
         spriteInstances = renderer.render(terrain);
     }
 
