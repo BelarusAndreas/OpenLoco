@@ -81,7 +81,10 @@ public class TerrainDemo extends BaseDemo {
     @Override
     protected void render() {
         super.render();
+        //drawHighlightedTile();
+    }
 
+    private void drawHighlightedTile() {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
 
@@ -101,7 +104,6 @@ public class TerrainDemo extends BaseDemo {
         GL11.glEnd();
 
         GL11.glPopMatrix();
-
     }
 
 }

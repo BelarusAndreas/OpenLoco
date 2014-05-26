@@ -3,11 +3,18 @@ package openloco.entities;
 public class UseObject {
 
     private final ObjectClass objectClass;
-    private String objectReference;
+    private final String objectReference;
 
     public UseObject(ObjectClass objectClass, String objectReference) {
         this.objectClass = objectClass;
         this.objectReference = objectReference;
     }
 
+    public ObjectClass getObjectClass() {
+        return objectClass;
+    }
+
+    public String getObjectReference() {
+        return objectReference;
+    }
 }
