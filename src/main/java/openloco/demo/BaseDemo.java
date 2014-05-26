@@ -125,7 +125,7 @@ public abstract class BaseDemo {
 
         List<SpriteInstance> sprites = getSprites();
 
-        Collections.sort(sprites, (SpriteInstance s, SpriteInstance t) -> t.getScreenY() - s.getScreenY());
+        Collections.sort(sprites, (SpriteInstance s, SpriteInstance t) -> s.getScreenY() - t.getScreenY());
 
         for (SpriteInstance sprite: sprites) {
             sprite.getSprite().draw(sprite.getScreenX(), sprite.getScreenY());
