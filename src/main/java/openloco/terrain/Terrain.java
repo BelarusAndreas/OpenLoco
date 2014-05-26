@@ -10,8 +10,8 @@ public class Terrain {
 
     private int width;
     private int height;
-    private int cellWidth = 32;
-    private int heightStep = 16;
+    public static final int CELL_WIDTH = 32;
+    public static final int HEIGHT_STEP = 16;
 
     public static final int W = 0;
     public static final int S = 1;
@@ -54,14 +54,6 @@ public class Terrain {
 
     public int getHeight() {
         return height;
-    }
-
-    public int getCellWidth() {
-        return cellWidth;
-    }
-
-    public int getHeightStep() {
-        return heightStep;
     }
 
     public int getTileType(int i, int j) {

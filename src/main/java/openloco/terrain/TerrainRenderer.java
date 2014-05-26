@@ -17,6 +17,9 @@ public class TerrainRenderer {
     private final List<OpenGlSprite> cliffSpritesSw = new ArrayList<>();
     private final List<OpenGlSprite> cliffSpritesSe = new ArrayList<>();
 
+    private static final int w = Terrain.CELL_WIDTH;
+    private static final int h = Terrain.HEIGHT_STEP;
+
     public TerrainRenderer(Assets assets) {
         Ground ground = assets.getGround("GRASS1  ");
         for (int i=385; i<400; i++) {
@@ -38,8 +41,6 @@ public class TerrainRenderer {
 
     public List<SpriteInstance> render(Terrain terrain) {
         List<SpriteInstance> spriteInstances = new ArrayList<>();
-        int w = terrain.getCellWidth();
-        int h = terrain.getHeightStep();
 
         for (int i=0; i<terrain.getWidth(); i++) {
             for (int j = 0; j < terrain.getHeight(); j++) {
@@ -61,11 +62,7 @@ public class TerrainRenderer {
                         int fromZ = h * Math.max(bN, bE);
                         int toZ = h * Math.min(aW, aS);
 
-                        for (int z=fromZ; z<toZ; z+= h) {
-                            int x = Math.round(IsoUtil.isoX(i * w, (j + 1) * w, z)) + 2;
-                            int y = Math.round(IsoUtil.isoY(i * w, (j + 1) * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSw.get(0), x, y));
-                        }
+                        fillInCliffs(spriteInstances, fromZ, toZ, i, j+1, cliffSpritesSw, +2);
                     }
                 }
 
@@ -74,20 +71,23 @@ public class TerrainRenderer {
                     int bW = terrain.getCornerHeight(i + 1, j, Terrain.W);
                     int bN = terrain.getCornerHeight(i + 1, j, Terrain.N);
                     if (aS > bW || aE > bN) {
-
                         int fromZ = h * Math.max(bW, bN);
                         int toZ = h * Math.min(aS, aE);
 
-                        for (int z=fromZ; z<toZ; z+=h) {
-                            int x = Math.round(IsoUtil.isoX((i + 1) * w, j * w, z)) - 2;
-                            int y = Math.round(IsoUtil.isoY((i + 1) * w, j * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSe.get(0), x, y));
-                        }
+                        fillInCliffs(spriteInstances, fromZ, toZ, i+1, j, cliffSpritesSe, -2);
                     }
                 }
             }
         }
         return spriteInstances;
+    }
+
+    private void fillInCliffs(List<SpriteInstance> spriteInstances, int fromZ, int toZ, int xIndex, int yIndex, List<OpenGlSprite> cliffSprites, int offset) {
+        for (int z=fromZ; z<toZ; z+=h) {
+            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+            spriteInstances.add(new SpriteInstance(cliffSprites.get(0), x, y));
+        }
     }
 
 }
