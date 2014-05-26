@@ -1,5 +1,6 @@
 package openloco;
 
+import openloco.entities.CliffFace;
 import openloco.entities.Company;
 import openloco.entities.Ground;
 import openloco.entities.Vehicle;
@@ -12,6 +13,7 @@ public class Assets {
     private final Map<String, Vehicle> vehicles = new HashMap<>();
     private final Map<String, Ground> grounds = new HashMap<>();
     private final Map<String, Company> companies = new HashMap<>();
+    private final Map<String, CliffFace> cliffFaces = new HashMap<>();
 
     public void add(Vehicle vehicle) {
         vehicles.put(vehicle.getName(), vehicle);
@@ -33,4 +35,11 @@ public class Assets {
         companies.put(company.getName(), company);
     }
 
+    public void add(CliffFace cf) {
+        cliffFaces.put(cf.getName(), cf);
+    }
+
+    public CliffFace getCliffFace(String name) {
+        return cliffFaces.get(name);
+    }
 }

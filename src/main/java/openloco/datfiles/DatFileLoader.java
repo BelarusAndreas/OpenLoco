@@ -106,6 +106,10 @@ public class DatFileLoader {
                     assets.add(v);
                     break;
 
+                case CLIFF_FACES:
+                    CliffFace cf = loadCliffFace(name, dataInputStream);
+                    assets.add(cf);
+
                 default:
                     break;
             }
@@ -229,6 +233,13 @@ public class DatFileLoader {
         UseObject cliff = loadUseObject(dataInputStream, EnumSet.of(ObjectClass.CLIFF_FACES));
         Sprites sprites = loadSprites(dataInputStream);
         return new Ground(name, groundVars, desc, cliff, sprites);
+    }
+
+    public static CliffFace loadCliffFace(String name, DatFileInputStream dataInputStream) throws IOException {
+        dataInputStream.skipBytes(6);
+        MultiLangString description = loadMultiLangString(dataInputStream);
+        Sprites sprites = loadSprites(dataInputStream);
+        return new CliffFace(name, description, sprites);
     }
 
     public static Sprites loadSprites(DatFileInputStream in) throws IOException {
