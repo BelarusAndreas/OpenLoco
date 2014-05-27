@@ -42,8 +42,8 @@ public class TerrainRenderer {
     public List<SpriteInstance> render(Terrain terrain) {
         List<SpriteInstance> spriteInstances = new ArrayList<>();
 
-        for (int i=0; i<terrain.getWidth(); i++) {
-            for (int j = 0; j < terrain.getHeight(); j++) {
+        for (int i=0; i<terrain.getXMax(); i++) {
+            for (int j = 0; j < terrain.getYMax(); j++) {
                 OpenGlSprite sprite = tiles.get(terrain.getTileType(i, j));
                 int cartX = i * w;
                 int cartY = j * w;
@@ -54,7 +54,7 @@ public class TerrainRenderer {
 
                 int aS = terrain.getCornerHeight(i, j, Terrain.S);
 
-                if (j < terrain.getHeight()-1) {
+                if (j < terrain.getYMax()-1) {
                     int aW = terrain.getCornerHeight(i, j, Terrain.W);
                     int bN = terrain.getCornerHeight(i, j + 1, Terrain.N);
                     int bE = terrain.getCornerHeight(i, j + 1, Terrain.E);
@@ -66,7 +66,7 @@ public class TerrainRenderer {
                     }
                 }
 
-                if (i < terrain.getWidth()-1) {
+                if (i < terrain.getXMax()-1) {
                     int aE = terrain.getCornerHeight(i, j, Terrain.E);
                     int bW = terrain.getCornerHeight(i + 1, j, Terrain.W);
                     int bN = terrain.getCornerHeight(i + 1, j, Terrain.N);

@@ -8,8 +8,8 @@ public class Terrain {
 
     private int[] cornerHeight;
 
-    private int width;
-    private int height;
+    private int xMax;
+    private int yMax;
     public static final int CELL_WIDTH = 32;
     public static final int HEIGHT_STEP = 16;
 
@@ -18,24 +18,24 @@ public class Terrain {
     public static final int E = 2;
     public static final int N = 3;
 
-    public Terrain(int width, int height) {
-        this.width = width;
-        this.height = height;
-        tileHeights = new int[width*height];
-        tileTypes = new int[width*height];
-        tileHeights[(height/2)*width+width/2] = 2;
+    public Terrain(int xMax, int yMax) {
+        this.xMax = xMax;
+        this.yMax = yMax;
+        tileHeights = new int[xMax*yMax];
+        tileTypes = new int[xMax*yMax];
+        tileHeights[(yMax/2)*xMax+xMax/2] = 2;
         computeCornerHeights();
     }
 
     private int cellIndex(int i, int j) {
-        return i + j*width;
+        return i + j* xMax;
     }
 
     private void computeCornerHeights() {
-        cornerHeight = new int[4 * width * height];
+        cornerHeight = new int[4 * xMax * yMax];
 
-        for (int i=0; i<width; i++) {
-            for (int j=0; j<height; j++) {
+        for (int i=0; i< xMax; i++) {
+            for (int j=0; j< yMax; j++) {
                 int cell = cellIndex(i, j);
                 int tileHeight = tileHeights[cell];
                 int tileType = tileTypes[cell];
@@ -48,12 +48,12 @@ public class Terrain {
         }
     }
 
-    public int getWidth() {
-        return width;
+    public int getXMax() {
+        return xMax;
     }
 
-    public int getHeight() {
-        return height;
+    public int getYMax() {
+        return yMax;
     }
 
     public int getTileType(int i, int j) {
