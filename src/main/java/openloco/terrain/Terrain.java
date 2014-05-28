@@ -23,6 +23,9 @@ public class Terrain {
         this.yMax = yMax;
         tileHeights = new int[xMax*yMax];
         tileTypes = new int[xMax*yMax];
+        tileTypes[(yMax/2)*xMax+xMax/2] = 5;
+        tileTypes[(yMax/2)*xMax+3*xMax/2] = 10;
+        tileTypes[(yMax/2)*xMax+xMax/2+1] = 10;
         tileHeights[(yMax/2)*xMax+xMax/2] = 2;
         computeCornerHeights();
     }

@@ -1,6 +1,7 @@
 package openloco.terrain;
 
 import openloco.Assets;
+import openloco.Palette;
 import openloco.entities.CliffFace;
 import openloco.entities.Ground;
 import openloco.entities.Sprites;
@@ -9,13 +10,22 @@ import openloco.graphics.OpenGlSprite;
 import openloco.graphics.SpriteInstance;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TerrainRenderer {
 
     private final List<OpenGlSprite> tiles = new ArrayList<>();
     private final List<OpenGlSprite> cliffSpritesSw = new ArrayList<>();
+    private final List<OpenGlSprite> cliffSpritesSwLhTop = new ArrayList<>();
+    private final List<OpenGlSprite> cliffSpritesSwHlTop = new ArrayList<>();
+    private final List<OpenGlSprite> cliffSpritesSwLhBottom = new ArrayList<>();
+    private final List<OpenGlSprite> cliffSpritesSwHlBottom = new ArrayList<>();
     private final List<OpenGlSprite> cliffSpritesSe = new ArrayList<>();
+    private final List<OpenGlSprite> cliffSpritesSeLhTop = new ArrayList<>();
+    private final List<OpenGlSprite> cliffSpritesSeHlTop = new ArrayList<>();
+    private final List<OpenGlSprite> cliffSpritesSeLhBottom = new ArrayList<>();
+    private final List<OpenGlSprite> cliffSpritesSeHlBottom = new ArrayList<>();
 
     private static final int w = Terrain.CELL_WIDTH;
     private static final int h = Terrain.HEIGHT_STEP;
@@ -32,11 +42,39 @@ public class TerrainRenderer {
             OpenGlSprite openGlSprite = OpenGlSprite.createFromRawSprite(sprite);
             if (i < 16) {
                 cliffSpritesSw.add(openGlSprite);
+                cliffSpritesSwHlTop.add(openGlSprite); // mask diag nw-se top
+                cliffSpritesSwLhTop.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
+                cliffSpritesSwHlBottom.add(openGlSprite); // mask diag nw-se bottom
+                cliffSpritesSwLhBottom.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
             }
             else {
                 cliffSpritesSe.add(openGlSprite);
+                cliffSpritesSeLhTop.add(openGlSprite); // mask diag sw-ne
+                cliffSpritesSeHlTop.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
+                cliffSpritesSeLhBottom.add(openGlSprite); // mask diag sw-ne
+                cliffSpritesSeHlBottom.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
             }
         }
+    }
+
+    private Sprites.RawSprite maskTop(Sprites.RawSprite sprite) {
+        int from = 0;
+        int middle = sprite.getHeader().getHeight()/2;
+        int to = middle * sprite.getHeader().getWidth();
+        return maskRange(sprite, from, to);
+    }
+
+    private Sprites.RawSprite maskBottom(Sprites.RawSprite sprite) {
+        int middle = sprite.getHeader().getHeight()/2;
+        int from = middle * sprite.getHeader().getWidth();
+        int to = sprite.getPixels().length;
+        return maskRange(sprite, from, to);
+    }
+
+    private Sprites.RawSprite maskRange(Sprites.RawSprite sprite, int from, int to) {
+        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
+        Arrays.fill(maskedPixels, from, to, Palette.BACKGROUND);
+        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
     }
 
     public List<SpriteInstance> render(Terrain terrain) {
@@ -55,26 +93,83 @@ public class TerrainRenderer {
                 int aS = terrain.getCornerHeight(i, j, Terrain.S);
 
                 if (j < terrain.getYMax()-1) {
-                    int aW = terrain.getCornerHeight(i, j, Terrain.W);
-                    int bN = terrain.getCornerHeight(i, j + 1, Terrain.N);
-                    int bE = terrain.getCornerHeight(i, j + 1, Terrain.E);
+                    int xIndex = i;
+                    int yIndex = j + 1;
+                    int aW = terrain.getCornerHeight(xIndex, yIndex-1, Terrain.W);
+                    int bN = terrain.getCornerHeight(xIndex, yIndex, Terrain.N);
+                    int bE = terrain.getCornerHeight(xIndex, yIndex, Terrain.E);
                     if (aW > bN || aS > bE) {
                         int fromZ = h * Math.max(bN, bE);
                         int toZ = h * Math.min(aW, aS);
+                        int offset = +2;
+                        fillInCliffs(spriteInstances, fromZ, toZ, i, yIndex, cliffSpritesSw, offset);
 
-                        fillInCliffs(spriteInstances, fromZ, toZ, i, j+1, cliffSpritesSw, +2);
+                        if (aW < aS) {
+                            int z = h * aW;
+                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+                            spriteInstances.add(new SpriteInstance(cliffSpritesSwLhTop.get(0), x, y));
+                        }
+                        else if (aS < aW) {
+                            int z = h * aS;
+                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+                            spriteInstances.add(new SpriteInstance(cliffSpritesSwHlTop.get(0), x, y));
+                        }
+
+                        if (bN < bE) {
+                            int z = h * bN;
+                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+                            spriteInstances.add(new SpriteInstance(cliffSpritesSwLhBottom.get(0), x, y));
+                        }
+                        else if (bE < bN) {
+                            int z = h * bE;
+                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+                            spriteInstances.add(new SpriteInstance(cliffSpritesSwHlBottom.get(0), x, y));
+                        }
                     }
                 }
 
                 if (i < terrain.getXMax()-1) {
-                    int aE = terrain.getCornerHeight(i, j, Terrain.E);
-                    int bW = terrain.getCornerHeight(i + 1, j, Terrain.W);
-                    int bN = terrain.getCornerHeight(i + 1, j, Terrain.N);
+                    int xIndex = i + 1;
+                    int yIndex = j;
+                    int aE = terrain.getCornerHeight(xIndex-1, yIndex, Terrain.E);
+                    int bW = terrain.getCornerHeight(xIndex, yIndex, Terrain.W);
+                    int bN = terrain.getCornerHeight(xIndex, yIndex, Terrain.N);
                     if (aS > bW || aE > bN) {
                         int fromZ = h * Math.max(bW, bN);
                         int toZ = h * Math.min(aS, aE);
 
-                        fillInCliffs(spriteInstances, fromZ, toZ, i+1, j, cliffSpritesSe, -2);
+                        int offset = -2;
+                        fillInCliffs(spriteInstances, fromZ, toZ, xIndex, j, cliffSpritesSe, offset);
+
+                        if (aS < aE) {
+                            int z = h * aS;
+                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+                            spriteInstances.add(new SpriteInstance(cliffSpritesSeLhTop.get(0), x, y));
+                        }
+                        else if (aE < aS) {
+                            int z = h * aE;
+                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+                            spriteInstances.add(new SpriteInstance(cliffSpritesSeHlTop.get(0), x, y));
+                        }
+
+                        if (bW < bN) {
+                            int z = h * bW;
+                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+                            spriteInstances.add(new SpriteInstance(cliffSpritesSeLhBottom.get(0), x, y));
+                        }
+                        else if (bN < bW) {
+                            int z = h * bN;
+                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+                            spriteInstances.add(new SpriteInstance(cliffSpritesSeHlBottom.get(0), x, y));
+                        }
                     }
                 }
             }
