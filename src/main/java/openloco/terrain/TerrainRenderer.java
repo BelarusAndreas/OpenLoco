@@ -42,16 +42,16 @@ public class TerrainRenderer {
             OpenGlSprite openGlSprite = OpenGlSprite.createFromRawSprite(sprite);
             if (i < 16) {
                 cliffSpritesSw.add(openGlSprite);
-                cliffSpritesSwHlTop.add(openGlSprite); // mask diag nw-se top
+                cliffSpritesSwHlTop.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeTop(sprite)));
                 cliffSpritesSwLhTop.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
-                cliffSpritesSwHlBottom.add(openGlSprite); // mask diag nw-se bottom
+                cliffSpritesSwHlBottom.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeBottom(sprite)));
                 cliffSpritesSwLhBottom.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
             }
             else {
                 cliffSpritesSe.add(openGlSprite);
-                cliffSpritesSeLhTop.add(openGlSprite); // mask diag sw-ne
+                cliffSpritesSeLhTop.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeTop(sprite)));
                 cliffSpritesSeHlTop.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
-                cliffSpritesSeLhBottom.add(openGlSprite); // mask diag sw-ne
+                cliffSpritesSeLhBottom.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeBottom(sprite)));
                 cliffSpritesSeHlBottom.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
             }
         }
@@ -69,6 +69,46 @@ public class TerrainRenderer {
         int from = middle * sprite.getHeader().getWidth();
         int to = sprite.getPixels().length;
         return maskRange(sprite, from, to);
+    }
+
+    private Sprites.RawSprite maskDiagonalNwSeTop(Sprites.RawSprite sprite) {
+        Sprites.SpriteHeader header = sprite.getHeader();
+        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
+        for (int i=0; i<header.getHeight(); i++) {
+            int offset = i*header.getWidth();
+            Arrays.fill(maskedPixels, offset+i+1, offset+header.getWidth(), Palette.BACKGROUND);
+        }
+        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
+    }
+
+    private Sprites.RawSprite maskDiagonalNwSeBottom(Sprites.RawSprite sprite) {
+        Sprites.SpriteHeader header = sprite.getHeader();
+        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
+        for (int i=0; i<header.getHeight(); i++) {
+            int offset = i*header.getWidth();
+            Arrays.fill(maskedPixels, offset, offset+i, Palette.BACKGROUND);
+        }
+        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
+    }
+
+    private Sprites.RawSprite maskDiagonalSwNeTop(Sprites.RawSprite sprite) {
+        Sprites.SpriteHeader header = sprite.getHeader();
+        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
+        for (int i=0; i<header.getHeight(); i++) {
+            int offset = i*header.getWidth();
+            Arrays.fill(maskedPixels, offset, offset+header.getWidth()-i-1, Palette.BACKGROUND);
+        }
+        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
+    }
+
+    private Sprites.RawSprite maskDiagonalSwNeBottom(Sprites.RawSprite sprite) {
+        Sprites.SpriteHeader header = sprite.getHeader();
+        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
+        for (int i=0; i<header.getHeight(); i++) {
+            int offset = i*header.getWidth();
+            Arrays.fill(maskedPixels, offset+header.getWidth()-i, offset+header.getWidth(), Palette.BACKGROUND);
+        }
+        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
     }
 
     private Sprites.RawSprite maskRange(Sprites.RawSprite sprite, int from, int to) {
