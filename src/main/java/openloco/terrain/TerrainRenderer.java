@@ -37,10 +37,10 @@ public class TerrainRenderer {
             tiles.add(OpenGlSprite.createFromRawSprite(sprite));
         }
         CliffFace cliffFace = assets.getCliffFace(ground.getCliff().getObjectReference());
-        for (int i=0; i<32; i++) {
+        for (int i=0; i<64; i++) {
             Sprites.RawSprite sprite = cliffFace.getSprites().get(i);
             OpenGlSprite openGlSprite = OpenGlSprite.createFromRawSprite(sprite);
-            if (i < 16) {
+            if ((i%32) < 16) {
                 cliffSpritesSw.add(openGlSprite);
                 cliffSpritesSwHlTop.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeTop(sprite)));
                 cliffSpritesSwLhTop.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
