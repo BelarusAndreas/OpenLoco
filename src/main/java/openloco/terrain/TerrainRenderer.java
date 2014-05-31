@@ -36,6 +36,7 @@ public class TerrainRenderer {
             Sprites.RawSprite sprite = ground.getSprites().get(i);
             tiles.add(OpenGlSprite.createFromRawSprite(sprite));
         }
+
         CliffFace cliffFace = assets.getCliffFace(ground.getCliff().getObjectReference());
         for (int i=0; i<64; i++) {
             Sprites.RawSprite sprite = cliffFace.getSprites().get(i);
@@ -58,7 +59,7 @@ public class TerrainRenderer {
     }
 
     private OpenGlSprite getCliffSprite(List<OpenGlSprite> sprites, int index, CliffSpriteType spriteType) {
-        return sprites.get(index*CliffSpriteType.values().length + spriteType.ordinal());
+        return sprites.get(index * CliffSpriteType.values().length + spriteType.ordinal());
     }
 
     private Sprites.RawSprite maskTop(Sprites.RawSprite sprite) {
@@ -134,91 +135,53 @@ public class TerrainRenderer {
                 int isoY = Math.round(IsoUtil.isoY(cartX, cartY, cartZ));
                 spriteInstances.add(new SpriteInstance(sprite, isoX, isoY));
 
-                int aS = terrain.getCornerHeight(i, j, Terrain.S);
-
                 if (j < terrain.getYMax()-1) {
-                    int xIndex = i;
-                    int yIndex = j + 1;
-                    int aW = terrain.getCornerHeight(xIndex, yIndex-1, Terrain.W);
-                    int bN = terrain.getCornerHeight(xIndex, yIndex, Terrain.N);
-                    int bE = terrain.getCornerHeight(xIndex, yIndex, Terrain.E);
-                    if (aW > bN || aS > bE) {
-                        int fromZ = h * Math.max(bN, bE);
-                        int toZ = h * Math.min(aW, aS);
-                        int offset = +2;
-                        fillInCliffs(spriteInstances, fromZ, toZ, i, yIndex, cliffSpritesSw, offset);
+                    int aW = terrain.getCornerHeight(i, j, Terrain.W);
+                    int aS = terrain.getCornerHeight(i, j, Terrain.S);
+                    int bN = terrain.getCornerHeight(i, j + 1, Terrain.N);
+                    int bE = terrain.getCornerHeight(i, j + 1, Terrain.E);
 
-                        if (aW < aS) {
-                            int z = h * aW;
-                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSw, 0, CliffSpriteType.LH_TOP), x, y));
-                        }
-                        else if (aS < aW) {
-                            int z = h * aS;
-                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSw, 0, CliffSpriteType.HL_TOP), x, y));
-                        }
-
-                        if (bN < bE) {
-                            int z = h * bN;
-                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSw, 0, CliffSpriteType.LH_BOTTOM), x, y));
-                        }
-                        else if (bE < bN) {
-                            int z = h * bE;
-                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSw, 0, CliffSpriteType.HL_BOTTOM), x, y));
-                        }
-                    }
+                    renderCliffs(spriteInstances, i, j + 1, aW, aS, bN, bE, 2, cliffSpritesSw);
                 }
 
                 if (i < terrain.getXMax()-1) {
-                    int xIndex = i + 1;
-                    int yIndex = j;
-                    int aE = terrain.getCornerHeight(xIndex-1, yIndex, Terrain.E);
-                    int bW = terrain.getCornerHeight(xIndex, yIndex, Terrain.W);
-                    int bN = terrain.getCornerHeight(xIndex, yIndex, Terrain.N);
-                    if (aS > bW || aE > bN) {
-                        int fromZ = h * Math.max(bW, bN);
-                        int toZ = h * Math.min(aS, aE);
+                    int aS = terrain.getCornerHeight(i, j, Terrain.S);
+                    int aE = terrain.getCornerHeight(i, j, Terrain.E);
+                    int bW = terrain.getCornerHeight(i + 1, j, Terrain.W);
+                    int bN = terrain.getCornerHeight(i + 1, j, Terrain.N);
 
-                        int offset = -2;
-                        fillInCliffs(spriteInstances, fromZ, toZ, xIndex, j, cliffSpritesSe, offset);
-
-                        if (aS < aE) {
-                            int z = h * aS;
-                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSe, 0, CliffSpriteType.LH_TOP), x, y));
-                        }
-                        else if (aE < aS) {
-                            int z = h * aE;
-                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSe, 0, CliffSpriteType.HL_TOP), x, y));
-                        }
-
-                        if (bW < bN) {
-                            int z = h * bW;
-                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSe, 0, CliffSpriteType.LH_BOTTOM), x, y));
-                        }
-                        else if (bN < bW) {
-                            int z = h * bN;
-                            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-                            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSe, 0, CliffSpriteType.HL_BOTTOM), x, y));
-                        }
-                    }
+                    renderCliffs(spriteInstances, i + 1, j, aS, aE, bW, bN, -2, cliffSpritesSe);
                 }
             }
         }
         return spriteInstances;
+    }
+
+    private void renderCliffs(List<SpriteInstance> spriteInstances, int xIndex, int yIndex, int a, int b, int c, int d, int offset, List<OpenGlSprite> cliffSprites) {
+        if (a > c || b > d) {
+            int fromZ = h * Math.max(c, d);
+            int toZ = h * Math.min(a, b);
+
+            fillInCliffs(spriteInstances, fromZ, toZ, xIndex, yIndex, cliffSprites, offset);
+
+            renderDiagonalCliff(spriteInstances, xIndex, yIndex, a, b, offset, cliffSprites, CliffSpriteType.LH_TOP, CliffSpriteType.HL_TOP);
+            renderDiagonalCliff(spriteInstances, xIndex, yIndex, c, d, offset, cliffSprites, CliffSpriteType.LH_BOTTOM, CliffSpriteType.HL_BOTTOM);
+        }
+    }
+
+    private void renderDiagonalCliff(List<SpriteInstance> spriteInstances, int xIndex, int yIndex, int a, int b, int offset, List<OpenGlSprite> cliffSprites, CliffSpriteType lhSpriteType, CliffSpriteType hlSpriteType) {
+        if (a < b) {
+            int z = h * a;
+            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, lhSpriteType), x, y));
+        }
+        else if (b < a) {
+            int z = h * b;
+            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
+            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
+            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, hlSpriteType), x, y));
+        }
     }
 
     private void fillInCliffs(List<SpriteInstance> spriteInstances, int fromZ, int toZ, int xIndex, int yIndex, List<OpenGlSprite> cliffSprites, int offset) {
