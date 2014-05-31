@@ -17,18 +17,18 @@ public class TerrainRenderer {
 
     private final List<OpenGlSprite> tiles = new ArrayList<>();
     private final List<OpenGlSprite> cliffSpritesSw = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSwLhTop = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSwHlTop = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSwLhBottom = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSwHlBottom = new ArrayList<>();
     private final List<OpenGlSprite> cliffSpritesSe = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSeLhTop = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSeHlTop = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSeLhBottom = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSeHlBottom = new ArrayList<>();
 
     private static final int w = Terrain.CELL_WIDTH;
     private static final int h = Terrain.HEIGHT_STEP;
+
+    private enum CliffSpriteType {
+        UNCLIPPED,
+        HL_TOP,
+        LH_TOP,
+        HL_BOTTOM,
+        LH_BOTTOM
+    };
 
     public TerrainRenderer(Assets assets) {
         Ground ground = assets.getGround("GRASS1  ");
@@ -42,19 +42,23 @@ public class TerrainRenderer {
             OpenGlSprite openGlSprite = OpenGlSprite.createFromRawSprite(sprite);
             if ((i%32) < 16) {
                 cliffSpritesSw.add(openGlSprite);
-                cliffSpritesSwHlTop.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeTop(sprite)));
-                cliffSpritesSwLhTop.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
-                cliffSpritesSwHlBottom.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeBottom(sprite)));
-                cliffSpritesSwLhBottom.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
+                cliffSpritesSw.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeTop(sprite)));
+                cliffSpritesSw.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
+                cliffSpritesSw.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeBottom(sprite)));
+                cliffSpritesSw.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
             }
             else {
                 cliffSpritesSe.add(openGlSprite);
-                cliffSpritesSeLhTop.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeTop(sprite)));
-                cliffSpritesSeHlTop.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
-                cliffSpritesSeLhBottom.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeBottom(sprite)));
-                cliffSpritesSeHlBottom.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
+                cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
+                cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeTop(sprite)));
+                cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
+                cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeBottom(sprite)));
             }
         }
+    }
+
+    private OpenGlSprite getCliffSprite(List<OpenGlSprite> sprites, int index, CliffSpriteType spriteType) {
+        return sprites.get(index*CliffSpriteType.values().length + spriteType.ordinal());
     }
 
     private Sprites.RawSprite maskTop(Sprites.RawSprite sprite) {
@@ -148,26 +152,26 @@ public class TerrainRenderer {
                             int z = h * aW;
                             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
                             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSwLhTop.get(0), x, y));
+                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSw, 0, CliffSpriteType.LH_TOP), x, y));
                         }
                         else if (aS < aW) {
                             int z = h * aS;
                             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
                             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSwHlTop.get(0), x, y));
+                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSw, 0, CliffSpriteType.HL_TOP), x, y));
                         }
 
                         if (bN < bE) {
                             int z = h * bN;
                             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
                             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSwLhBottom.get(0), x, y));
+                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSw, 0, CliffSpriteType.LH_BOTTOM), x, y));
                         }
                         else if (bE < bN) {
                             int z = h * bE;
                             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
                             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSwHlBottom.get(0), x, y));
+                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSw, 0, CliffSpriteType.HL_BOTTOM), x, y));
                         }
                     }
                 }
@@ -189,26 +193,26 @@ public class TerrainRenderer {
                             int z = h * aS;
                             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
                             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSeLhTop.get(0), x, y));
+                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSe, 0, CliffSpriteType.LH_TOP), x, y));
                         }
                         else if (aE < aS) {
                             int z = h * aE;
                             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
                             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSeHlTop.get(0), x, y));
+                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSe, 0, CliffSpriteType.HL_TOP), x, y));
                         }
 
                         if (bW < bN) {
                             int z = h * bW;
                             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
                             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSeLhBottom.get(0), x, y));
+                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSe, 0, CliffSpriteType.LH_BOTTOM), x, y));
                         }
                         else if (bN < bW) {
                             int z = h * bN;
                             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
                             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-                            spriteInstances.add(new SpriteInstance(cliffSpritesSeHlBottom.get(0), x, y));
+                            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSpritesSe, 0, CliffSpriteType.HL_BOTTOM), x, y));
                         }
                     }
                 }
