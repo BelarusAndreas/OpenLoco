@@ -154,7 +154,7 @@ public class DatFileLoader {
             rackRail = inputStream.readUseObject(EnumSet.of(ObjectClass.TRACK_MODIFICATIONS));
         }
 
-        List<UseObject> numCompats = inputStream.readUseObjectList(vars.getNumCompat(), ObjectClass.VEHICLES);
+        List<UseObject> compatibleVehicles = inputStream.readUseObjectList(vars.getNumCompat(), ObjectClass.VEHICLES);
 
         UseObject startSnd = null;
         if (vars.getStartsndtype() != 0) {
@@ -164,9 +164,9 @@ public class DatFileLoader {
         int soundCount = vars.getNumSnd() & 0x7f;
         List<UseObject> sounds = inputStream.readUseObjectList(soundCount, ObjectClass.SOUND_EFFECTS);
 
-        Sprites s = loadSprites(inputStream);
+        Sprites sprites = loadSprites(inputStream);
 
-        return new Vehicle(name, description, vars, trackType, cargoCapacities, visualFx, wakeFx, rackRail, startSnd, sounds, s);
+        return new Vehicle(name, description, vars, trackType, cargoCapacities, visualFx, wakeFx, rackRail, startSnd, compatibleVehicles, sounds, sprites);
     }
 
     public static CargoCapacity loadCargoCapacity(DatFileInputStream in) throws IOException {

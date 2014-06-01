@@ -13,12 +13,13 @@ public class Vehicle {
     private final UseObject wakeFx;
     private final UseObject rackRail;
     private final UseObject startSound;
+    private final List<UseObject> compatibleVehicles;
     private final List<UseObject> sounds;
     private final Sprites sprites;
 
     public Vehicle(String name, MultiLangString description, VehicleVars vars, UseObject trackType,
                    List<CargoCapacity> cargoCapacities, UseObject visualFx, UseObject wakeFx, UseObject rackRail,
-                   UseObject startSound, List<UseObject> sounds, Sprites sprites) {
+                   UseObject startSound, List<UseObject> compatibleVehicles, List<UseObject> sounds, Sprites sprites) {
 
         this.name = name;
         this.description = description;
@@ -29,6 +30,7 @@ public class Vehicle {
         this.wakeFx = wakeFx;
         this.rackRail = rackRail;
         this.startSound = startSound;
+        this.compatibleVehicles = compatibleVehicles;
         this.sounds = sounds;
         this.sprites = sprites;
     }
