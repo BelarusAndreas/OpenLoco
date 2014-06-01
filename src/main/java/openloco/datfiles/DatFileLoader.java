@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -127,16 +126,13 @@ public class DatFileLoader {
 
     private static Vehicle loadVehicle(String name, DatFileInputStream inputStream) throws IOException {
         VehicleVars vars = loadVehicleVars(inputStream);
-        MultiLangString description = loadMultiLangString(inputStream);
+        MultiLangString description = inputStream.readMultiLangString();
         UseObject trackType = null;
         if (vars.getVehicleClass() < 2 && !vars.getVehicleFlags().contains(VehicleVars.VehicleFlag.ANYTRACK)) {
-            trackType = loadUseObject(inputStream, EnumSet.of(ObjectClass.TRACKS, ObjectClass.ROADS));
+            trackType = inputStream.readUseObject(EnumSet.of(ObjectClass.TRACKS, ObjectClass.ROADS));
         }
         //optional reference to track/road modification?
-        List<UseObject> trackModifications = new ArrayList<>();
-        for (int i=0; i<vars.getNumMods(); i++) {
-            trackModifications.add(loadUseObject(inputStream, EnumSet.of(ObjectClass.TRACK_MODIFICATIONS, ObjectClass.ROAD_MODIFICATIONS)));
-        }
+        List<UseObject> trackModifications = inputStream.readUseObjectList(vars.getNumMods(), ObjectClass.TRACK_MODIFICATIONS, ObjectClass.ROAD_MODIFICATIONS);
 
         List<CargoCapacity> cargoCapacities = new ArrayList<>();
         for (int i=0; i<2; i++) {
@@ -145,53 +141,32 @@ public class DatFileLoader {
 
         UseObject visualFx = null;
         if (vars.getVisFxType() != 0) {
-            visualFx = loadUseObject(inputStream, EnumSet.of(ObjectClass.EXHAUST_EFFECTS));
+            visualFx = inputStream.readUseObject(EnumSet.of(ObjectClass.EXHAUST_EFFECTS));
         }
 
         UseObject wakeFx = null;
         if (vars.getWakeFxType() != 0) {
-            wakeFx = loadUseObject(inputStream, EnumSet.of(ObjectClass.EXHAUST_EFFECTS));
+            wakeFx = inputStream.readUseObject(EnumSet.of(ObjectClass.EXHAUST_EFFECTS));
         }
 
         UseObject rackRail = null;
         if (vars.getVehicleClass() < 2 && vars.getVehicleFlags().contains(VehicleVars.VehicleFlag.RACKRAIL)) {
-            rackRail = loadUseObject(inputStream, EnumSet.of(ObjectClass.TRACK_MODIFICATIONS));
+            rackRail = inputStream.readUseObject(EnumSet.of(ObjectClass.TRACK_MODIFICATIONS));
         }
 
-        int numCompat = vars.getNumCompat();
-        List<UseObject> numCompats = new ArrayList<>();
-        for (int i=0; i<numCompat; i++) {
-            numCompats.add(loadUseObject(inputStream, EnumSet.of(ObjectClass.VEHICLES)));
-        }
+        List<UseObject> numCompats = inputStream.readUseObjectList(vars.getNumCompat(), ObjectClass.VEHICLES);
 
         UseObject startSnd = null;
         if (vars.getStartsndtype() != 0) {
-            startSnd = loadUseObject(inputStream, EnumSet.of(ObjectClass.SOUND_EFFECTS));
+            startSnd = inputStream.readUseObject(EnumSet.of(ObjectClass.SOUND_EFFECTS));
         }
 
-        List<UseObject> sounds = new ArrayList<>();
         int soundCount = vars.getNumSnd() & 0x7f;
-        for (int i=0; i<soundCount; i++) {
-            sounds.add(loadUseObject(inputStream, EnumSet.of(ObjectClass.SOUND_EFFECTS)));
-        }
+        List<UseObject> sounds = inputStream.readUseObjectList(soundCount, ObjectClass.SOUND_EFFECTS);
 
         Sprites s = loadSprites(inputStream);
 
         return new Vehicle(name, description, vars, trackType, cargoCapacities, visualFx, wakeFx, rackRail, startSnd, sounds, s);
-    }
-
-    private static UseObject loadUseObject(DatFileInputStream inputStream, EnumSet<ObjectClass> objectClasses) throws IOException {
-        byte objectClassId = inputStream.readByte();
-        ObjectClass objectClass = ObjectClass.values()[objectClassId];
-        if (!objectClasses.contains(objectClass)) {
-            throw new RuntimeException("Invalid object reference");
-        }
-        inputStream.skipBytes(3);
-        byte[] ref = new byte[8];
-        inputStream.readFully(ref);
-        String objectReference = new String(ref);
-        inputStream.skipBytes(4);
-        return new UseObject(objectClass, objectReference);
     }
 
     public static CargoCapacity loadCargoCapacity(DatFileInputStream in) throws IOException {
@@ -215,35 +190,20 @@ public class DatFileLoader {
         in.skipBytes(5);
         short costFactor = in.readSShort();
         in.skipBytes(20);
-
         return new GroundVars(costInd, costFactor);
-    }
-
-    public static MultiLangString loadMultiLangString(DataInputStream in) throws IOException {
-        Map<Integer, String> strings = new HashMap<>();
-        byte language;
-        while ((language = in.readByte()) != (byte)0xFF){
-            StringBuffer sb = new StringBuffer();
-            char ch;
-            while ((ch = (char)in.readByte()) != (byte)0x00) {
-                sb.append(ch);
-            }
-            strings.put((int)language, sb.toString());
-        }
-        return new MultiLangString(strings);
     }
 
     public static Ground loadGround(String name, DatFileInputStream dataInputStream) throws IOException {
         GroundVars groundVars = loadGroundVars(dataInputStream);
-        MultiLangString desc = loadMultiLangString(dataInputStream);
-        UseObject cliff = loadUseObject(dataInputStream, EnumSet.of(ObjectClass.CLIFF_FACES));
+        MultiLangString desc = dataInputStream.readMultiLangString();
+        UseObject cliff = dataInputStream.readUseObject(EnumSet.of(ObjectClass.CLIFF_FACES));
         Sprites sprites = loadSprites(dataInputStream);
         return new Ground(name, groundVars, desc, cliff, sprites);
     }
 
     public static CliffFace loadCliffFace(String name, DatFileInputStream dataInputStream) throws IOException {
         dataInputStream.skipBytes(6);
-        MultiLangString description = loadMultiLangString(dataInputStream);
+        MultiLangString description = dataInputStream.readMultiLangString();
         Sprites sprites = loadSprites(dataInputStream);
         return new CliffFace(name, description, sprites);
     }
@@ -312,8 +272,8 @@ public class DatFileLoader {
 
     public static Company loadCompany(String name, DatFileInputStream dataInputStream) throws IOException {
         Company.CompanyVars companyVars = loadCompanyVars(dataInputStream);
-        MultiLangString ceoName = loadMultiLangString(dataInputStream);
-        MultiLangString companyName = loadMultiLangString(dataInputStream);
+        MultiLangString ceoName = dataInputStream.readMultiLangString();
+        MultiLangString companyName = dataInputStream.readMultiLangString();
         Sprites sprites = loadSprites(dataInputStream);
         return new Company(name, companyVars, ceoName, companyName, sprites);
     }
@@ -390,24 +350,16 @@ public class DatFileLoader {
 
     public static Track loadTrack(String name, DatFileInputStream in) throws IOException {
         Track.TrackVars trackVars = loadTrackVars(in);
-        MultiLangString description = loadMultiLangString(in);
-        List<UseObject> compatibleTracks = loadUseObjectList(in, trackVars.getNumCompat(), ObjectClass.TRACKS, ObjectClass.ROADS);
-        List<UseObject> modifications = loadUseObjectList(in, trackVars.getNumMods(), ObjectClass.TRACK_MODIFICATIONS);
-        List<UseObject> signals = loadUseObjectList(in, trackVars.getNumSignals(), ObjectClass.SIGNALS);
-        UseObject tunnel = loadUseObject(in, EnumSet.of(ObjectClass.TUNNELS));
-        List<UseObject> bridges = loadUseObjectList(in, trackVars.getNumBridges(), ObjectClass.BRIDGES);
-        List<UseObject> stations = loadUseObjectList(in, trackVars.getNumStations(), ObjectClass.TRAIN_STATIONS);
+        MultiLangString description = in.readMultiLangString();
+        List<UseObject> compatibleTracks = in.readUseObjectList(trackVars.getNumCompat(), ObjectClass.TRACKS, ObjectClass.ROADS);
+        List<UseObject> modifications = in.readUseObjectList(trackVars.getNumMods(), ObjectClass.TRACK_MODIFICATIONS);
+        List<UseObject> signals = in.readUseObjectList(trackVars.getNumSignals(), ObjectClass.SIGNALS);
+        UseObject tunnel = in.readUseObject(EnumSet.of(ObjectClass.TUNNELS));
+        List<UseObject> bridges = in.readUseObjectList(trackVars.getNumBridges(), ObjectClass.BRIDGES);
+        List<UseObject> stations = in.readUseObjectList(trackVars.getNumStations(), ObjectClass.TRAIN_STATIONS);
         Sprites sprites = loadSprites(in);
 
         return new Track(name, trackVars, description, compatibleTracks, modifications, signals, tunnel, bridges, stations, sprites);
-    }
-
-    private static List<UseObject> loadUseObjectList(DatFileInputStream in, int count, ObjectClass... validObjects) throws IOException {
-        List<UseObject> references = new ArrayList<>();
-        for (int i=0; i<count; i++) {
-            references.add(loadUseObject(in, EnumSet.copyOf(Arrays.asList(validObjects))));
-        }
-        return references;
     }
 
     private static Track.TrackVars loadTrackVars(DatFileInputStream in) throws IOException {
