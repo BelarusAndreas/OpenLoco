@@ -39,6 +39,14 @@ public class TerrainDemo extends BaseDemo {
     protected void init() {
         renderer = new TerrainRenderer(assets);
         terrain = new Terrain(width, height);
+
+        terrain.setTileType(width/2, height/2, 5);
+        terrain.setTileType(width/2, height/2+1, 5);
+        terrain.setTileType(width/2+1, height/2, 5);
+        terrain.setTileType(width/2+2, height/2, 12);
+        terrain.setTileType(width/2+3, height/2, 8);
+        terrain.setTileHeights(width/2, height/2, 2);
+
         spriteInstances = renderer.render(terrain);
     }
 
