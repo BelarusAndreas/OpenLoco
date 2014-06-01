@@ -109,6 +109,12 @@ public class DatFileLoader {
                 case CLIFF_FACES:
                     CliffFace cf = loadCliffFace(name, dataInputStream);
                     assets.add(cf);
+                    break;
+
+                case TRACKS:
+                    Track track = loadTrack(name, dataInputStream);
+                    assets.add(track);
+                    break;
 
                 default:
                     break;
@@ -381,5 +387,56 @@ public class DatFileLoader {
 
         return new Company.CompanyVars(intelligence, aggressiveness, competitiveness);
     }
+
+    public static Track loadTrack(String name, DatFileInputStream in) throws IOException {
+        Track.TrackVars trackVars = loadTrackVars(in);
+        MultiLangString description = loadMultiLangString(in);
+        List<UseObject> compatibleTracks = loadUseObjectList(in, trackVars.getNumCompat(), ObjectClass.TRACKS, ObjectClass.ROADS);
+        List<UseObject> modifications = loadUseObjectList(in, trackVars.getNumMods(), ObjectClass.TRACK_MODIFICATIONS);
+        List<UseObject> signals = loadUseObjectList(in, trackVars.getNumSignals(), ObjectClass.SIGNALS);
+        UseObject tunnel = loadUseObject(in, EnumSet.of(ObjectClass.TUNNELS));
+        List<UseObject> bridges = loadUseObjectList(in, trackVars.getNumBridges(), ObjectClass.BRIDGES);
+        List<UseObject> stations = loadUseObjectList(in, trackVars.getNumStations(), ObjectClass.TRAIN_STATIONS);
+        Sprites sprites = loadSprites(in);
+
+        return new Track(name, trackVars, description, compatibleTracks, modifications, signals, tunnel, bridges, stations, sprites);
+    }
+
+    private static List<UseObject> loadUseObjectList(DatFileInputStream in, int count, ObjectClass... validObjects) throws IOException {
+        List<UseObject> references = new ArrayList<>();
+        for (int i=0; i<count; i++) {
+            references.add(loadUseObject(in, EnumSet.copyOf(Arrays.asList(validObjects))));
+        }
+        return references;
+    }
+
+    private static Track.TrackVars loadTrackVars(DatFileInputStream in) throws IOException {
+        in.skipBytes(2);
+        EnumSet<Track.TrackPiece> trackPieces = in.readBitField(2, Track.TrackPiece.class);
+        EnumSet<Track.TrackPiece> stationTrackPieces = in.readBitField(2, Track.TrackPiece.class);
+        in.skipBytes(1);
+        int numCompat = in.readUnsignedByte();
+        int numMods = in.readUnsignedByte();
+        int numSignals = in.readUnsignedByte();
+        in.skipBytes(10);
+        short buildCostFact = in.readSShort();
+        short sellCostFact = in.readSShort();
+        short tunnelCostFact = in.readSShort();
+        int costInd = in.readUnsignedByte();
+        in.skipBytes(1);
+        int curveSpeed = in.readUShort();
+        in.skipBytes(6);
+        int numBridges = in.readUnsignedByte();
+        in.skipBytes(7);
+        int numStations = in.readUnsignedByte();
+        in.skipBytes(7);
+        int displayOffset = in.readUnsignedByte();
+        in.skipBytes(1);
+
+        return new Track.TrackVars(trackPieces, stationTrackPieces, numCompat, numMods, numSignals, buildCostFact,
+                                  sellCostFact, tunnelCostFact, costInd, curveSpeed, numBridges, numStations,
+                                  displayOffset);
+    }
+
 
 }

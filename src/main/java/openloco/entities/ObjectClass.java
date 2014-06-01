@@ -1,7 +1,7 @@
 package openloco.entities;
 
 public enum ObjectClass {
-    INTERFACES,
+    INTERFACES,                 // 0x00
     SOUND_EFFECTS,
     CURRENCIES,
     EXHAUST_EFFECTS,
@@ -17,7 +17,7 @@ public enum ObjectClass {
     TUNNELS,
     BRIDGES,
     TRAIN_STATIONS,
-    TRACK_MODIFICATIONS,
+    TRACK_MODIFICATIONS,        // 0x10
     TRACKS,
     ROAD_STATIONS,
     ROAD_MODIFICATIONS,
@@ -33,6 +33,6 @@ public enum ObjectClass {
     SCAFFOLDING,
     INDUSTRIES,
     REGIONS,
-    COMPANIES,
+    COMPANIES,                  // 0x20
     TEXTS;
 }
