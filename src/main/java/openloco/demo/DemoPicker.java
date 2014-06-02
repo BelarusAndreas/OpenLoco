@@ -15,7 +15,7 @@ public class DemoPicker {
     private static final Map<String, Class<? extends BaseDemo>> demoClasses = mapifyClasses();
 
     private static Map<String, Class<? extends BaseDemo>> mapifyClasses() {
-        return Arrays.asList(LoadSprite.class, TerrainDemo.class)
+        return Arrays.asList(LoadSprite.class, TerrainDemo.class, TrackDemo.class)
                 .stream()
                 .collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
     }

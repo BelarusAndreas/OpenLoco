@@ -44,4 +44,8 @@ public class Assets {
     public void add(Track track) {
         tracks.put(track.getName(), track);
     }
+
+    public Track getTrack(String name) {
+        return tracks.get(name);
+    }
 }

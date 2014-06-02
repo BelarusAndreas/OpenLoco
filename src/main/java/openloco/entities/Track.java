@@ -104,4 +104,8 @@ public class Track {
     public String getName() {
         return name;
     }
+
+    public Sprites getSprites() {
+        return sprites;
+    }
 }
