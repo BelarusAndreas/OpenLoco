@@ -7,13 +7,14 @@ import openloco.entities.Ground;
 import openloco.entities.Sprites;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.OpenGlSprite;
+import openloco.graphics.Renderer;
 import openloco.graphics.SpriteInstance;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TerrainRenderer {
+public class TerrainRenderer implements Renderer<Terrain> {
 
     private final List<OpenGlSprite> tiles = new ArrayList<>();
     private final List<OpenGlSprite> cliffSpritesSw = new ArrayList<>();
@@ -122,6 +123,7 @@ public class TerrainRenderer {
         return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
     }
 
+    @Override
     public List<SpriteInstance> render(Terrain terrain) {
         List<SpriteInstance> spriteInstances = new ArrayList<>();
 
