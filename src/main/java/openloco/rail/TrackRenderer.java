@@ -2,10 +2,7 @@ package openloco.rail;
 
 import openloco.Assets;
 import openloco.entities.Track;
-import openloco.graphics.IsoUtil;
-import openloco.graphics.OpenGlSprite;
-import openloco.graphics.Renderer;
-import openloco.graphics.SpriteInstance;
+import openloco.graphics.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +29,9 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             int screenX = Math.round(IsoUtil.isoX(node.getX(), node.getY(), node.getZ()));
             int screenY = Math.round(IsoUtil.isoY(node.getX(), node.getY(), node.getZ()));
 
-            sprites.add(new SpriteInstance(ballastSprite, screenX, screenY));
-            sprites.add(new SpriteInstance(sleeperSprite, screenX, screenY));
-            sprites.add(new SpriteInstance(railSprite, screenX, screenY));
+            sprites.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST));
+            sprites.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS));
+            sprites.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS));
         }
 
         return sprites;

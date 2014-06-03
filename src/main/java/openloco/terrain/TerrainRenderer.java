@@ -5,10 +5,7 @@ import openloco.Palette;
 import openloco.entities.CliffFace;
 import openloco.entities.Ground;
 import openloco.entities.Sprites;
-import openloco.graphics.IsoUtil;
-import openloco.graphics.OpenGlSprite;
-import openloco.graphics.Renderer;
-import openloco.graphics.SpriteInstance;
+import openloco.graphics.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,7 +132,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
                 int cartZ = h *terrain.getTileHeight(i, j);
                 int isoX = Math.round(IsoUtil.isoX(cartX, cartY, cartZ));
                 int isoY = Math.round(IsoUtil.isoY(cartX, cartY, cartZ));
-                spriteInstances.add(new SpriteInstance(sprite, isoX, isoY));
+                spriteInstances.add(new SpriteInstance(sprite, isoX, isoY, SpriteLayer.TERRAIN));
 
                 if (j < terrain.getYMax()-1) {
                     int aW = terrain.getCornerHeight(i, j, Terrain.W);
@@ -176,13 +173,13 @@ public class TerrainRenderer implements Renderer<Terrain> {
             int z = h * a;
             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, lhSpriteType), x, y));
+            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, lhSpriteType), x, y, SpriteLayer.TERRAIN));
         }
         else if (b < a) {
             int z = h * b;
             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, hlSpriteType), x, y));
+            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, hlSpriteType), x, y, SpriteLayer.TERRAIN));
         }
     }
 
@@ -190,7 +187,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
         for (int z=fromZ; z<toZ; z+=h) {
             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-            spriteInstances.add(new SpriteInstance(cliffSprites.get(0), x, y));
+            spriteInstances.add(new SpriteInstance(cliffSprites.get(0), x, y, SpriteLayer.TERRAIN));
         }
     }
 

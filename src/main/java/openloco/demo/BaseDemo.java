@@ -8,12 +8,21 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public abstract class BaseDemo {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
+    public static final Comparator<SpriteInstance> SPRITE_DEPTH_COMPARATOR = (SpriteInstance s, SpriteInstance t) -> {
+        if (s.getScreenY() != t.getScreenY()) {
+            return s.getScreenY() - t.getScreenY();
+        }
+        else {
+            return s.getSpriteLayer().compareTo(t.getSpriteLayer());
+        }
+    };
 
     private int frameCount = 0;
     private long renderTime = 0;
@@ -125,7 +134,7 @@ public abstract class BaseDemo {
 
         List<SpriteInstance> sprites = getSprites();
 
-        Collections.sort(sprites, (SpriteInstance s, SpriteInstance t) -> s.getScreenY() - t.getScreenY());
+        Collections.sort(sprites, SPRITE_DEPTH_COMPARATOR);
 
         for (SpriteInstance sprite: sprites) {
             sprite.getSprite().draw(sprite.getScreenX(), sprite.getScreenY());
