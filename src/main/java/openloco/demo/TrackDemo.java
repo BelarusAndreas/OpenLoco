@@ -3,7 +3,9 @@ package openloco.demo;
 import openloco.Assets;
 import openloco.entities.Track;
 import openloco.graphics.IsoUtil;
+import openloco.graphics.OpenGlSprite;
 import openloco.graphics.SpriteInstance;
+import openloco.graphics.SpriteLayer;
 import openloco.rail.TrackNetwork;
 import openloco.rail.TrackNode;
 import openloco.rail.TrackRenderer;
@@ -39,7 +41,43 @@ public class TrackDemo extends BaseDemo {
         }
 
         TrackRenderer trackRenderer = new TrackRenderer(assets);
+
+        draw90Curve(18, 18, 0);
+        draw90Curve(20, 17, 2);
+        draw90Curve(20, 15, 1);
+        draw90Curve(18, 14, 3);
+
         spriteInstances.addAll(trackRenderer.render(network));
+    }
+
+    private void draw90Curve(int x, int y, int rotation) {
+        Track track = assets.getTrack("TRACKST ");
+
+        TrackNode node = new TrackNode(x * cellWidth, y * cellWidth, 0);
+
+        int ballastIndex = 24 + 4 * rotation;
+        int sleeperIndex = 40 + 4 * rotation;
+        int railIndex = 56 + 4 * rotation;
+
+        final int[][] allOffsets = new int[][]{
+            {0, 1, 2, 3}, {1, 3, 0, 2}, {3, 2, 1, 0}, {2, 0, 3, 1}
+        };
+
+        int[] offsets = allOffsets[rotation];
+
+        int[] xDeltas = {0, cellWidth, 0, cellWidth};
+        int[] yDeltas = {0, 0, -cellWidth, -cellWidth};
+
+        for (int i = 0; i<4; i++) {
+            OpenGlSprite ballastSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(ballastIndex + offsets[i]));
+            OpenGlSprite sleeperSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(sleeperIndex + offsets[i]));
+            OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(railIndex + offsets[i]));
+            int screenX = Math.round(IsoUtil.isoX(node.getX() + xDeltas[i], node.getY() + yDeltas[i], node.getZ()));
+            int screenY = Math.round(IsoUtil.isoY(node.getX() + xDeltas[i], node.getY() + yDeltas[i], node.getZ()));
+            spriteInstances.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST));
+            spriteInstances.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS));
+            spriteInstances.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS));
+        }
     }
 
     @Override
