@@ -68,7 +68,8 @@ public class Track {
         STEEPSLOPE(40),
         UNKNOWN(80),
         SLOPEDCURVE(100),
-        SBEND(200);
+        SBEND(200),
+        STRAIGHT(0);
 
         private final int id;
 
