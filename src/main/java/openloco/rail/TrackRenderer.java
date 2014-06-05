@@ -38,9 +38,16 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
     }
 
     private void drawStraight(Track track, List<SpriteInstance> sprites, TrackNode node) {
-        OpenGlSprite ballastSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(18));
-        OpenGlSprite sleeperSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(20));
-        OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(22));
+        int spritesPerTile = 1;
+        int maxRotation = 2;
+        int rotation = node.getRotation() % maxRotation;
+        int ballastIndex = 18 + spritesPerTile * rotation;
+        int sleeperIndex = 20 + spritesPerTile * rotation;
+        int railIndex = 22 + spritesPerTile * rotation;
+
+        OpenGlSprite ballastSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(ballastIndex));
+        OpenGlSprite sleeperSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(sleeperIndex));
+        OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(railIndex));
 
         int screenX = Math.round(IsoUtil.isoX(node.getX(), node.getY(), node.getZ()));
         int screenY = Math.round(IsoUtil.isoY(node.getX(), node.getY(), node.getZ()));
@@ -51,10 +58,12 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
     }
 
     private void drawMediumCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
-        int rotation = node.getRotation() % 4;
-        int ballastIndex = 24 + 4 * rotation;
-        int sleeperIndex = 40 + 4 * rotation;
-        int railIndex = 56 + 4 * rotation;
+        int spritesPerTile = 4;
+        int maxRotation = 4;
+        int rotation = node.getRotation() % maxRotation;
+        int ballastIndex = 24 + spritesPerTile * rotation;
+        int sleeperIndex = 40 + spritesPerTile * rotation;
+        int railIndex = 56 + spritesPerTile * rotation;
 
         final int[][] allOffsets = new int[][]{
                 {0, 1, 2, 3}, {1, 3, 0, 2}, {3, 2, 1, 0}, {2, 0, 3, 1}
