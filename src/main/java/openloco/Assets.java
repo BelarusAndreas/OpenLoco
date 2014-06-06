@@ -12,6 +12,7 @@ public class Assets {
     private final Map<String, Company> companies = new HashMap<>();
     private final Map<String, CliffFace> cliffFaces = new HashMap<>();
     private final Map<String, Track> tracks = new HashMap<>();
+    private final Map<String, Tree> trees = new HashMap<>();
 
     public void add(Vehicle vehicle) {
         vehicles.put(vehicle.getName(), vehicle);
@@ -47,5 +48,9 @@ public class Assets {
 
     public Track getTrack(String name) {
         return tracks.get(name);
+    }
+
+    public void add(Tree tree) {
+        trees.put(tree.getName(), tree);
     }
 }

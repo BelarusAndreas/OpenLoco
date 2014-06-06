@@ -115,6 +115,11 @@ public class DatFileLoader {
                     assets.add(track);
                     break;
 
+                case TREES:
+                    Tree tree = loadTree(name, dataInputStream);
+                    assets.add(tree);
+                    break;
+
                 default:
                     break;
             }
@@ -388,6 +393,25 @@ public class DatFileLoader {
         return new Track.TrackVars(trackPieces, stationTrackPieces, numCompat, numMods, numSignals, buildCostFact,
                                   sellCostFact, tunnelCostFact, costInd, curveSpeed, numBridges, numStations,
                                   displayOffset);
+    }
+
+    private static Tree loadTree(String name, DatFileInputStream in) throws IOException {
+        TreeVars treeVars = loadTreeVars(in);
+        MultiLangString desc = in.readMultiLangString();
+        Sprites sprites = loadSprites(in);
+        return new Tree(name, treeVars, desc, sprites);
+    }
+
+    private static TreeVars loadTreeVars(DatFileInputStream in) throws IOException {
+        in.skipBytes(3);
+        int height = in.readUnsignedByte();
+        in.skipBytes(59);
+        int costInd = in.readUnsignedByte();
+        int buildCostFact = in.readSShort();
+        int clearCostFact = in.readSShort();
+        in.skipBytes(8);
+
+        return new TreeVars(height, costInd, buildCostFact, clearCostFact);
     }
 
 
