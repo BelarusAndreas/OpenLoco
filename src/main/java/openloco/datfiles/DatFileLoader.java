@@ -396,10 +396,7 @@ public class DatFileLoader {
     }
 
     private static Tree loadTree(String name, DatFileInputStream in) throws IOException {
-        TreeVars treeVars = loadTreeVars(in);
-        MultiLangString desc = in.readMultiLangString();
-        Sprites sprites = loadSprites(in);
-        return new Tree(name, treeVars, desc, sprites);
+        return loadSimpleObject(name, in, Tree::new, DatFileLoader::loadTreeVars);
     }
 
     private static TreeVars loadTreeVars(DatFileInputStream in) throws IOException {
@@ -414,5 +411,21 @@ public class DatFileLoader {
         return new TreeVars(height, costInd, buildCostFact, clearCostFact);
     }
 
+    private static <T, V> T loadSimpleObject(String name, DatFileInputStream in,
+                                             SimpleObjectFactory<T, V> simpleObjectFactory,
+                                             VarExtractor<V> varExtractor) throws IOException {
+        V vars = varExtractor.extract(in);
+        MultiLangString desc = in.readMultiLangString();
+        Sprites sprites = loadSprites(in);
+        return simpleObjectFactory.create(name, vars, desc, sprites);
+    }
+
+    public static interface SimpleObjectFactory<T, V> {
+        T create(String name, V vars, MultiLangString description, Sprites sprites);
+    }
+
+    public static interface VarExtractor<V> {
+        V extract(DatFileInputStream in) throws IOException;
+    }
 
 }
