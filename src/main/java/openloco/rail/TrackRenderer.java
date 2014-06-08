@@ -28,8 +28,8 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                     drawStraight(track, sprites, node);
                     break;
 
-                case MEDIUMCURVE:
-                    drawMediumCurve(track, sprites, node);
+                case SMALLCURVE:
+                    drawSmallCurve(track, sprites, node);
                     break;
             }
         }
@@ -57,7 +57,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         sprites.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS));
     }
 
-    private void drawMediumCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
+    private void drawSmallCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
         int spritesPerTile = 4;
         int maxRotation = 4;
         int rotation = node.getRotation() % maxRotation;
