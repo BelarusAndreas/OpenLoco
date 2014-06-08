@@ -42,23 +42,8 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
     }
 
     private void drawStraight(Track track, List<SpriteInstance> sprites, TrackNode node) {
-        int spritesPerTile = 1;
-        int maxRotation = 2;
-        int rotation = node.getRotation() % maxRotation;
-        int ballastIndex = 18 + spritesPerTile * rotation;
-        int sleeperIndex = 20 + spritesPerTile * rotation;
-        int railIndex = 22 + spritesPerTile * rotation;
-
-        OpenGlSprite ballastSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(ballastIndex));
-        OpenGlSprite sleeperSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(sleeperIndex));
-        OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(railIndex));
-
-        int screenX = Math.round(IsoUtil.isoX(node.getX(), node.getY(), node.getZ()));
-        int screenY = Math.round(IsoUtil.isoY(node.getX(), node.getY(), node.getZ()));
-
-        sprites.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST));
-        sprites.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS));
-        sprites.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS));
+        int[][][] deltas = {{{0, 0}}};
+        drawTrackPiece(track, sprites, node, 1, 2, deltas, 18);
     }
 
     private void drawSmallCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
