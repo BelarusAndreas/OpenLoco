@@ -58,17 +58,17 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
     }
 
     private void drawSmallCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
-        int[][] xDeltas = {
-                {0, 1, 0, 1}, {0, 0, 1, 1}, {0,-1, 0,-1}, {0, 0,-1,-1}
-        };
-        int[][] yDeltas = {
-                {0, 0,-1,-1}, {0, 1, 0, 1}, {0, 0, 1, 1}, {0,-1, 0,-1}
+        int[][][] deltas = {
+                { {0, 0}, {1, 0}, {0,-1}, {1,-1} },
+                { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
+                { {0, 0}, {-1,0}, {0, 1}, {-1,1} },
+                { {0, 0}, {0,-1}, {-1,0}, {-1,-1} }
         };
 
-        drawTrackPiece(track, spriteInstances, node, 4, 4, xDeltas, yDeltas, 24, 40, 56);
+        drawTrackPiece(track, spriteInstances, node, 4, 4, deltas, 24, 40, 56);
     }
 
-    private void drawTrackPiece(Track track, List<SpriteInstance> spriteInstances, TrackNode node, int spritesPerTile, int maxRotation, int[][] xDeltas, int[][] yDeltas, int ballastStartIndex, int sleeperStartIndex, int railStartIndex) {
+    private void drawTrackPiece(Track track, List<SpriteInstance> spriteInstances, TrackNode node, int spritesPerTile, int maxRotation, int[][][] deltas, int ballastStartIndex, int sleeperStartIndex, int railStartIndex) {
         int rotation = node.getRotation() % maxRotation;
         int ballastIndex = ballastStartIndex + spritesPerTile * rotation;
         int sleeperIndex = sleeperStartIndex + spritesPerTile * rotation;
@@ -78,8 +78,8 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             OpenGlSprite ballastSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(ballastIndex + i));
             OpenGlSprite sleeperSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(sleeperIndex + i));
             OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(railIndex + i));
-            int screenX = Math.round(IsoUtil.isoX(node.getX() + cellWidth * xDeltas[rotation][i], node.getY() + cellWidth * yDeltas[rotation][i], node.getZ()));
-            int screenY = Math.round(IsoUtil.isoY(node.getX() + cellWidth*xDeltas[rotation][i], node.getY() + cellWidth*yDeltas[rotation][i], node.getZ()));
+            int screenX = Math.round(IsoUtil.isoX(node.getX() + cellWidth * deltas[rotation][i][0], node.getY() + cellWidth * deltas[rotation][i][1], node.getZ()));
+            int screenY = Math.round(IsoUtil.isoY(node.getX() + cellWidth* deltas[rotation][i][0], node.getY() + cellWidth* deltas[rotation][i][1], node.getZ()));
             spriteInstances.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST));
             spriteInstances.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS));
             spriteInstances.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS));
