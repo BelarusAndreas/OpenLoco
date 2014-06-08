@@ -47,6 +47,11 @@ public class TrackDemo extends BaseDemo {
         network.add(new TrackNode(21*cellWidth, 19*cellWidth, 0, Track.TrackPiece.SMALLCURVE, 2));
         network.add(new TrackNode(19*cellWidth, 20*cellWidth, 0, Track.TrackPiece.SMALLCURVE, 3));
 
+        network.add(new TrackNode(18*cellWidth, 18*cellWidth, 0, Track.TrackPiece.MEDIUMCURVE, 0));
+        network.add(new TrackNode(21*cellWidth, 16*cellWidth, 0, Track.TrackPiece.MEDIUMCURVE, 1));
+        network.add(new TrackNode(23*cellWidth, 19*cellWidth, 0, Track.TrackPiece.MEDIUMCURVE, 2));
+        network.add(new TrackNode(20*cellWidth, 21*cellWidth, 0, Track.TrackPiece.MEDIUMCURVE, 3));
+
         TrackRenderer trackRenderer = new TrackRenderer(assets);
 
         spriteInstances.addAll(trackRenderer.render(network));
