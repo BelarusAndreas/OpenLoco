@@ -35,6 +35,10 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                 case MEDIUMCURVE:
                     drawMediumCurve(track, sprites, node);
                     break;
+
+                case SBEND:
+                    drawSBend(track, sprites, node);
+                    break;
             }
         }
 
@@ -66,6 +70,17 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         };
 
         drawTrackPiece(track, spriteInstances, node, 5, 4, deltas, 136);
+    }
+
+    private void drawSBend(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
+        int[][][] deltas = {
+                { {0, 0}, {0, -1}, {-1, -1}, {-1, -2} },
+                { {0, 0}, {1, 0}, {1, -1}, {2, -1} },
+                { {0, 0}, {0, -1}, {1, -1}, {1, -2} },
+                { {0, 0}, {1, 0}, {1, 1}, {2, 1} }
+        };
+
+        drawTrackPiece(track, spriteInstances, node, 4, 4, deltas, 352);
     }
 
     private void drawTrackPiece(Track track, List<SpriteInstance> spriteInstances, TrackNode node, int spritesPerTile, int maxRotation, int[][][] deltas, int spriteStartIndex) {
