@@ -39,23 +39,23 @@ public class TrackDemo extends BaseDemo {
         for (int i=0; i<36; i++) {
             int trackX = 18;
             int trackY = i;
-            network.add(new TrackNode(trackX*cellWidth, trackY*cellWidth, 0, Track.TrackPiece.STRAIGHT, 0));
+            network.add(new TrackNode(trackX, trackY, 0, Track.TrackPiece.STRAIGHT, 0));
         }
 
-        network.add(new TrackNode(18*cellWidth, 18*cellWidth, 0, Track.TrackPiece.SMALLCURVE, 0));
-        network.add(new TrackNode(20*cellWidth, 17*cellWidth, 0, Track.TrackPiece.SMALLCURVE, 1));
-        network.add(new TrackNode(21*cellWidth, 19*cellWidth, 0, Track.TrackPiece.SMALLCURVE, 2));
-        network.add(new TrackNode(19*cellWidth, 20*cellWidth, 0, Track.TrackPiece.SMALLCURVE, 3));
+        network.add(new TrackNode(18, 18, 0, Track.TrackPiece.SMALLCURVE, 0));
+        network.add(new TrackNode(20, 17, 0, Track.TrackPiece.SMALLCURVE, 1));
+        network.add(new TrackNode(21, 19, 0, Track.TrackPiece.SMALLCURVE, 2));
+        network.add(new TrackNode(19, 20, 0, Track.TrackPiece.SMALLCURVE, 3));
 
-        network.add(new TrackNode(18*cellWidth, 18*cellWidth, 0, Track.TrackPiece.MEDIUMCURVE, 0));
-        network.add(new TrackNode(21*cellWidth, 16*cellWidth, 0, Track.TrackPiece.MEDIUMCURVE, 1));
-        network.add(new TrackNode(23*cellWidth, 19*cellWidth, 0, Track.TrackPiece.MEDIUMCURVE, 2));
-        network.add(new TrackNode(20*cellWidth, 21*cellWidth, 0, Track.TrackPiece.MEDIUMCURVE, 3));
+        network.add(new TrackNode(18, 18, 0, Track.TrackPiece.MEDIUMCURVE, 0));
+        network.add(new TrackNode(21, 16, 0, Track.TrackPiece.MEDIUMCURVE, 1));
+        network.add(new TrackNode(23, 19, 0, Track.TrackPiece.MEDIUMCURVE, 2));
+        network.add(new TrackNode(20, 21, 0, Track.TrackPiece.MEDIUMCURVE, 3));
 
-        network.add(new TrackNode(18*cellWidth, 24*cellWidth, 0, Track.TrackPiece.SBEND, 0));
-        network.add(new TrackNode(21*cellWidth, 16*cellWidth, 0, Track.TrackPiece.SBEND, 1));
-        network.add(new TrackNode(18*cellWidth, 24*cellWidth, 0, Track.TrackPiece.SBEND, 2));
-        network.add(new TrackNode(21*cellWidth, 16*cellWidth, 0, Track.TrackPiece.SBEND, 3));
+        network.add(new TrackNode(18, 24, 0, Track.TrackPiece.SBEND, 0));
+        network.add(new TrackNode(21, 16, 0, Track.TrackPiece.SBEND, 1));
+        network.add(new TrackNode(18, 24, 0, Track.TrackPiece.SBEND, 2));
+        network.add(new TrackNode(21, 16, 0, Track.TrackPiece.SBEND, 3));
 
         TrackRenderer trackRenderer = new TrackRenderer(assets);
 

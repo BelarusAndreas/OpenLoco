@@ -11,6 +11,7 @@ import java.util.List;
 public class TrackRenderer implements Renderer<TrackNetwork>{
 
     private final Assets assets;
+    private static final int TILE_HEIGHT = 16;
 
     public TrackRenderer(Assets assets) {
         this.assets = assets;
@@ -93,8 +94,8 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             OpenGlSprite ballastSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(ballastIndex + i));
             OpenGlSprite sleeperSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(sleeperIndex + i));
             OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(railIndex + i));
-            int screenX = Math.round(IsoUtil.isoX(node.getX() + cellWidth * deltas[rotation][i][0], node.getY() + cellWidth * deltas[rotation][i][1], node.getZ()));
-            int screenY = Math.round(IsoUtil.isoY(node.getX() + cellWidth* deltas[rotation][i][0], node.getY() + cellWidth* deltas[rotation][i][1], node.getZ()));
+            int screenX = Math.round(IsoUtil.isoX(cellWidth * (node.getX() + deltas[rotation][i][0]), cellWidth * (node.getY() + deltas[rotation][i][1]), TILE_HEIGHT*node.getZ()));
+            int screenY = Math.round(IsoUtil.isoY(cellWidth * (node.getX() + deltas[rotation][i][0]), cellWidth * (node.getY() + deltas[rotation][i][1]), TILE_HEIGHT*node.getZ()));
             spriteInstances.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST));
             spriteInstances.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS));
             spriteInstances.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS));
