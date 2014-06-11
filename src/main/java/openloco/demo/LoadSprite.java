@@ -1,13 +1,11 @@
 package openloco.demo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import openloco.Assets;
 import openloco.entities.Ground;
 import openloco.entities.Vehicle;
-import openloco.datfiles.DatFileLoader;
 import openloco.entities.Sprites;
 import openloco.entities.VehicleSpriteVar;
 import openloco.graphics.IsoUtil;
