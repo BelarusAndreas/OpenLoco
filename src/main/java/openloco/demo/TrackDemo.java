@@ -4,9 +4,7 @@ import openloco.Assets;
 import openloco.entities.Track;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
-import openloco.rail.TrackNetwork;
-import openloco.rail.TrackNode;
-import openloco.rail.TrackRenderer;
+import openloco.rail.*;
 import openloco.terrain.Terrain;
 import openloco.terrain.TerrainRenderer;
 
@@ -54,6 +52,18 @@ public class TrackDemo extends BaseDemo {
         network.add(new TrackNode(21, 16, 0, Track.TrackPiece.SBEND, 1));
         network.add(new TrackNode(18, 24, 0, Track.TrackPiece.SBEND, 2));
         network.add(new TrackNode(21, 16, 0, Track.TrackPiece.SBEND, 3));
+
+        TrackLayer trackLayer = new TrackLayer(14, 22, 0);
+        for (int i=0; i<8; i++) {
+            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT, Orientation.N);
+        }
+        network.addAll(trackLayer.getNodes());
+
+        trackLayer = new TrackLayer(15, 14, 0);
+        for (int i=0; i<8; i++) {
+            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT, Orientation.E);
+        }
+        network.addAll(trackLayer.getNodes());
 
         TrackRenderer trackRenderer = new TrackRenderer(assets);
 

@@ -47,7 +47,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
     }
 
     private void drawStraight(Track track, List<SpriteInstance> sprites, TrackNode node) {
-        int[][][] deltas = {{{0, 0}}};
+        int[][][] deltas = {{{0, 0}}, {{0, 0}}};
         drawTrackPiece(track, sprites, node, 1, 2, deltas, 18);
     }
 

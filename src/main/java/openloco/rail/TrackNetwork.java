@@ -12,6 +12,10 @@ public class TrackNetwork {
         allNodes.add(trackNode);
     }
 
+    public void addAll(List<TrackNode> nodes) {
+        allNodes.addAll(nodes);
+    }
+
     public List<TrackNode> getAllNodes() {
         return Collections.unmodifiableList(allNodes);
     }
