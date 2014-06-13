@@ -53,15 +53,15 @@ public class TrackDemo extends BaseDemo {
         network.add(new TrackNode(18, 24, 0, Track.TrackPiece.SBEND, 2));
         network.add(new TrackNode(21, 16, 0, Track.TrackPiece.SBEND, 3));
 
-        TrackLayer trackLayer = new TrackLayer(14, 22, 0);
+        TrackLayer trackLayer = new TrackLayer(14, 22, 0, Orientation.N);
         for (int i=0; i<8; i++) {
-            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT, Orientation.N);
+            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT);
         }
         network.addAll(trackLayer.getNodes());
 
-        trackLayer = new TrackLayer(15, 14, 0);
+        trackLayer = new TrackLayer(15, 14, 0, Orientation.E);
         for (int i=0; i<8; i++) {
-            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT, Orientation.E);
+            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT);
         }
         network.addAll(trackLayer.getNodes());
 

@@ -10,16 +10,18 @@ public class TrackLayer {
     private int currentX;
     private int currentY;
     private int currentZ;
+    private Orientation orientation;
 
     private List<TrackNode> nodes = new ArrayList<>();
 
-    public TrackLayer(int startX, int startY, int startZ) {
+    public TrackLayer(int startX, int startY, int startZ, Orientation orientation) {
         this.currentX = startX;
         this.currentY = startY;
         this.currentZ = startZ;
+        this.orientation = orientation;
     }
 
-    public void addTrackPiece(Track.TrackPiece pieceType, Orientation orientation) {
+    public void addTrackPiece(Track.TrackPiece pieceType) {
         if (pieceType == Track.TrackPiece.STRAIGHT) {
             int rotation;
             if (orientation == Orientation.N || orientation == Orientation.S) {
