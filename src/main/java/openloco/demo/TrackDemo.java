@@ -31,12 +31,15 @@ public class TrackDemo extends BaseDemo {
         Terrain terrain = new Terrain(width, height);
         spriteInstances = terrainRenderer.render(terrain);
 
+        TrackLayer trackLayer;
+
         TrackNetwork network = new TrackNetwork();
+
+        trackLayer = new TrackLayer(18, 35, 0, Orientation.N);
         for (int i=0; i<36; i++) {
-            int trackX = 18;
-            int trackY = i;
-            network.add(new TrackNode(trackX, trackY, 0, Track.TrackPiece.STRAIGHT, 0));
+            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT);
         }
+        network.addAll(trackLayer.getNodes());
 
         network.add(new TrackNode(18, 18, 0, Track.TrackPiece.SMALLCURVE, 0));
         network.add(new TrackNode(20, 17, 0, Track.TrackPiece.SMALLCURVE, 1));
@@ -53,7 +56,7 @@ public class TrackDemo extends BaseDemo {
         network.add(new TrackNode(18, 24, 0, Track.TrackPiece.SBEND, 2));
         network.add(new TrackNode(21, 16, 0, Track.TrackPiece.SBEND, 3));
 
-        TrackLayer trackLayer = new TrackLayer(14, 22, 0, Orientation.N);
+        trackLayer = new TrackLayer(14, 22, 0, Orientation.N);
         for (int i=0; i<8; i++) {
             trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT);
         }
