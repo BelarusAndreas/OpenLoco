@@ -37,7 +37,7 @@ public class TrackDemo extends BaseDemo {
 
         trackLayer = new TrackLayer(18, 35, 0, Orientation.N);
         for (int i=0; i<36; i++) {
-            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT);
+            trackLayer.addStraight();
         }
         network.addAll(trackLayer.getNodes());
 
@@ -58,13 +58,13 @@ public class TrackDemo extends BaseDemo {
 
         trackLayer = new TrackLayer(14, 22, 0, Orientation.N);
         for (int i=0; i<8; i++) {
-            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT);
+            trackLayer.addStraight();
         }
         network.addAll(trackLayer.getNodes());
 
         trackLayer = new TrackLayer(15, 14, 0, Orientation.E);
         for (int i=0; i<8; i++) {
-            trackLayer.addTrackPiece(Track.TrackPiece.STRAIGHT);
+            trackLayer.addStraight();
         }
         network.addAll(trackLayer.getNodes());
 

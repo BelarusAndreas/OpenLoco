@@ -21,7 +21,11 @@ public class TrackLayer {
         this.orientation = orientation;
     }
 
-    public void addTrackPiece(Track.TrackPiece pieceType) {
+    public void addStraight() {
+        addTrackPiece(Track.TrackPiece.STRAIGHT);
+    }
+
+    private void addTrackPiece(Track.TrackPiece pieceType) {
         if (pieceType == Track.TrackPiece.STRAIGHT) {
             int rotation;
             if (orientation == Orientation.N || orientation == Orientation.S) {
