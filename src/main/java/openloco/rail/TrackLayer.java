@@ -25,6 +25,43 @@ public class TrackLayer {
         addTrackPiece(Track.TrackPiece.STRAIGHT);
     }
 
+    public void addSBend(CurveDirection curveDirection) {
+        int rotation = curveDirection == CurveDirection.LEFT? 0 : 2;
+
+        if (orientation == Orientation.E || orientation == Orientation.W) {
+            rotation++;
+        }
+
+        switch (orientation) {
+            case S:
+                currentX += (curveDirection == CurveDirection.LEFT)? 1 : -1;
+                currentY += 3;
+                break;
+            case W:
+                currentX -= 3;
+                currentY += (curveDirection == CurveDirection.LEFT)? 1 : -1;
+                break;
+        }
+
+        if (curveDirection == CurveDirection.LEFT) {
+            addNode(Track.TrackPiece.SBEND, rotation);
+        }
+        else {
+            addNode(Track.TrackPiece.SBEND, rotation);
+        }
+
+        switch (orientation) {
+            case N:
+                currentX += (curveDirection == CurveDirection.LEFT)? -1 : 1;
+                currentY -= 3;
+                break;
+            case E:
+                currentX += 3;
+                currentY += (curveDirection == CurveDirection.LEFT)? -1 : 1;
+                break;
+        }
+    }
+
     private void addTrackPiece(Track.TrackPiece pieceType) {
         if (pieceType == Track.TrackPiece.STRAIGHT) {
             int rotation;
@@ -37,7 +74,7 @@ public class TrackLayer {
             else {
                 throw new IllegalArgumentException("Invalid orientation " + orientation + " for piece type " + pieceType);
             }
-            nodes.add(new TrackNode(currentX, currentY, currentZ, pieceType, rotation));
+            addNode(pieceType, rotation);
             switch (orientation) {
                 case N:
                     currentY--;
@@ -55,8 +92,11 @@ public class TrackLayer {
         }
     }
 
+    private void addNode(Track.TrackPiece pieceType, int rotation) {
+        nodes.add(new TrackNode(currentX, currentY, currentZ, pieceType, rotation));
+    }
+
     public List<TrackNode> getNodes() {
         return nodes;
     }
-
 }

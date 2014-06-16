@@ -41,6 +41,7 @@ public class TrackDemo extends BaseDemo {
         }
         network.addAll(trackLayer.getNodes());
 
+        /*
         network.add(new TrackNode(18, 18, 0, Track.TrackPiece.SMALLCURVE, 0));
         network.add(new TrackNode(20, 17, 0, Track.TrackPiece.SMALLCURVE, 1));
         network.add(new TrackNode(21, 19, 0, Track.TrackPiece.SMALLCURVE, 2));
@@ -50,12 +51,29 @@ public class TrackDemo extends BaseDemo {
         network.add(new TrackNode(21, 16, 0, Track.TrackPiece.MEDIUMCURVE, 1));
         network.add(new TrackNode(23, 19, 0, Track.TrackPiece.MEDIUMCURVE, 2));
         network.add(new TrackNode(20, 21, 0, Track.TrackPiece.MEDIUMCURVE, 3));
+        */
 
-        network.add(new TrackNode(18, 24, 0, Track.TrackPiece.SBEND, 0));
-        network.add(new TrackNode(21, 16, 0, Track.TrackPiece.SBEND, 1));
-        network.add(new TrackNode(18, 24, 0, Track.TrackPiece.SBEND, 2));
-        network.add(new TrackNode(21, 16, 0, Track.TrackPiece.SBEND, 3));
+        trackLayer = new TrackLayer(18, 24, 0, Orientation.N);
+        trackLayer.addSBend(CurveDirection.LEFT);
+        trackLayer.addSBend(CurveDirection.RIGHT);
+        network.addAll(trackLayer.getNodes());
 
+        trackLayer = new TrackLayer(18, 17, 0, Orientation.S);
+        trackLayer.addSBend(CurveDirection.LEFT);
+        trackLayer.addSBend(CurveDirection.RIGHT);
+        network.addAll(trackLayer.getNodes());
+
+        trackLayer = new TrackLayer(19, 18, 0, Orientation.E);
+        trackLayer.addSBend(CurveDirection.LEFT);
+        trackLayer.addSBend(CurveDirection.RIGHT);
+        network.addAll(trackLayer.getNodes());
+
+        trackLayer = new TrackLayer(26, 18, 0, Orientation.W);
+        trackLayer.addSBend(CurveDirection.LEFT);
+        trackLayer.addSBend(CurveDirection.RIGHT);
+        network.addAll(trackLayer.getNodes());
+
+        /*
         trackLayer = new TrackLayer(14, 22, 0, Orientation.N);
         for (int i=0; i<8; i++) {
             trackLayer.addStraight();
@@ -67,6 +85,7 @@ public class TrackDemo extends BaseDemo {
             trackLayer.addStraight();
         }
         network.addAll(trackLayer.getNodes());
+        */
 
         TrackRenderer trackRenderer = new TrackRenderer(assets);
 
