@@ -73,20 +73,6 @@ public class TrackDemo extends BaseDemo {
         trackLayer.addSBend(CurveDirection.RIGHT);
         network.addAll(trackLayer.getNodes());
 
-        /*
-        trackLayer = new TrackLayer(14, 22, 0, Orientation.N);
-        for (int i=0; i<8; i++) {
-            trackLayer.addStraight();
-        }
-        network.addAll(trackLayer.getNodes());
-
-        trackLayer = new TrackLayer(15, 14, 0, Orientation.E);
-        for (int i=0; i<8; i++) {
-            trackLayer.addStraight();
-        }
-        network.addAll(trackLayer.getNodes());
-        */
-
         TrackRenderer trackRenderer = new TrackRenderer(assets);
 
         spriteInstances.addAll(trackRenderer.render(network));
