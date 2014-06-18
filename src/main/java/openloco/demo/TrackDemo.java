@@ -1,7 +1,6 @@
 package openloco.demo;
 
 import openloco.Assets;
-import openloco.entities.Track;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
 import openloco.rail.*;
