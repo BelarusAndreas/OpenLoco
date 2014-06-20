@@ -87,26 +87,36 @@ public class TrackLayer {
     }
 
     public void addSmallCurve(CurveDirection curveDirection) {
+        addCurve(curveDirection, Track.TrackPiece.SMALLCURVE);
+    }
+
+    public void addMediumCurve(CurveDirection curveDirection) {
+        addCurve(curveDirection, Track.TrackPiece.MEDIUMCURVE);
+    }
+
+    private void addCurve(CurveDirection curveDirection, Track.TrackPiece curveType) {
         int rotation = orientation.ordinal()/2;
 
+        int curveSize = curveType == Track.TrackPiece.SMALLCURVE? 2 : 3;
+
         if (curveDirection == CurveDirection.LEFT) {
-            int[][] preOffsets = { {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+            int[][] preOffsets = { {-(curveSize-1), -(curveSize-1)}, {(curveSize-1), -(curveSize-1)}, {(curveSize-1), (curveSize-1)}, {-(curveSize-1), (curveSize-1)}};
             int[] preOffset = preOffsets[rotation];
             currentX += preOffset[0];
             currentY += preOffset[1];
             int tileRotations[] = {1, 2, 3, 0};
             int tileRotation = tileRotations[rotation];
-            addNode(Track.TrackPiece.SMALLCURVE, tileRotation);
+            addNode(curveType, tileRotation);
             currentX -= preOffset[0];
             currentY -= preOffset[1];
-            int[][] offsets = { {-2, -1}, {1, -2}, {2, 1}, {-1, 2} };
+            int[][] offsets = { {-curveSize, -(curveSize-1)}, {(curveSize-1), -curveSize}, {curveSize, (curveSize-1)}, {-(curveSize-1), curveSize} };
             int[] offset = offsets[rotation];
             currentX += offset[0];
             currentY += offset[1];
         }
         else {
-            int[][] offsets = { {2, -1}, {1, 2}, {-2, 1}, {-1,-2} };
-            addNode(Track.TrackPiece.SMALLCURVE, rotation);
+            int[][] offsets = { {curveSize, -(curveSize-1)}, {(curveSize-1), curveSize}, {-curveSize, (curveSize-1)}, {-(curveSize-1),-curveSize} };
+            addNode(curveType, rotation);
             int[] offset = offsets[rotation];
             currentX += offset[0];
             currentY += offset[1];

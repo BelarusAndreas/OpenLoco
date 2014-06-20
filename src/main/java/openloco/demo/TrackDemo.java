@@ -77,10 +77,21 @@ public class TrackDemo extends BaseDemo {
         trackLayer.addSmallCurve(CurveDirection.RIGHT);
         trackLayer.addSmallCurve(CurveDirection.RIGHT);
         trackLayer.addSmallCurve(CurveDirection.RIGHT);
+
         trackLayer.addSmallCurve(CurveDirection.LEFT);
         trackLayer.addSmallCurve(CurveDirection.LEFT);
         trackLayer.addSmallCurve(CurveDirection.LEFT);
         trackLayer.addSmallCurve(CurveDirection.LEFT);
+
+        trackLayer.addMediumCurve(CurveDirection.RIGHT);
+        trackLayer.addMediumCurve(CurveDirection.RIGHT);
+        trackLayer.addMediumCurve(CurveDirection.RIGHT);
+        trackLayer.addMediumCurve(CurveDirection.RIGHT);
+
+        trackLayer.addMediumCurve(CurveDirection.LEFT);
+        trackLayer.addMediumCurve(CurveDirection.LEFT);
+        trackLayer.addMediumCurve(CurveDirection.LEFT);
+        trackLayer.addMediumCurve(CurveDirection.LEFT);
         network.addAll(trackLayer.getNodes());
 
         TrackRenderer trackRenderer = new TrackRenderer(assets);
