@@ -1,6 +1,7 @@
 package openloco.demo;
 
 import openloco.Assets;
+import openloco.entities.Track;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
 import openloco.rail.*;
@@ -34,6 +35,7 @@ public class TrackDemo extends BaseDemo {
 
         TrackNetwork network = new TrackNetwork();
 
+        /*
         trackLayer = new TrackLayer(18, 35, 0, Orientation.N);
         for (int i=0; i<36; i++) {
             trackLayer.addStraight();
@@ -81,6 +83,16 @@ public class TrackDemo extends BaseDemo {
         trackLayer.addMediumCurve(CurveDirection.LEFT);
         trackLayer.addMediumCurve(CurveDirection.LEFT);
         network.addAll(trackLayer.getNodes());
+        */
+
+        network.add(new TrackNode(12, 20, 0, Track.TrackPiece.WIDECURVE, 0));
+        network.add(new TrackNode(13, 18, 0, Track.TrackPiece.WIDECURVE, 7));
+        network.add(new TrackNode(16, 17, 0, Track.TrackPiece.WIDECURVE, 1));
+        network.add(new TrackNode(18, 18, 0, Track.TrackPiece.WIDECURVE, 4));
+        network.add(new TrackNode(19, 21, 0, Track.TrackPiece.WIDECURVE, 2));
+        network.add(new TrackNode(18, 23, 0, Track.TrackPiece.WIDECURVE, 5));
+        network.add(new TrackNode(15, 24, 0, Track.TrackPiece.WIDECURVE, 3));
+        network.add(new TrackNode(13, 23, 0, Track.TrackPiece.WIDECURVE, 6));
 
         TrackRenderer trackRenderer = new TrackRenderer(assets);
 

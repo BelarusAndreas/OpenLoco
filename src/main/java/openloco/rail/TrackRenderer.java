@@ -37,6 +37,10 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                     drawMediumCurve(track, sprites, node);
                     break;
 
+                case WIDECURVE:
+                    drawWideCurve(track, sprites, node);
+                    break;
+
                 case SBEND:
                     drawSBend(track, sprites, node);
                     break;
@@ -71,6 +75,21 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         };
 
         drawTrackPiece(track, spriteInstances, node, 5, 4, deltas, 136);
+    }
+
+    private void drawWideCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
+        int[][][] deltas = {
+                {{0, 0}, {0,-1}, {1, -1}, {0, -2}, {1, -2}},
+                {{0, 0}, {1, 0}, {1, 1}, {2, 0}, {2, 1}},
+                {{0, 0}, {0, 1}, {-1, 1}, {0, 2}, {-1, 2}},
+                {{0, 0}, {-1, 0}, {-1, -1}, {-2, 0}, {-2, -1}},
+                {{1, 2}, {1, 1}, {0, 1}, {1, 0}, {0, 0}},
+                {{-2, 1}, {-1, 1}, {-1, 0}, {0, 1}, {0, 0}},
+                {{-1, -2}, {-1, -1}, {0, -1}, {-1, 0}, {0, 0}},
+                {{2, -1}, {1, -1}, {1, 0}, {0, -1}, {0, 0}}
+        };
+
+        drawTrackPiece(track, spriteInstances, node, 5, 8, deltas, 208);
     }
 
     private void drawSBend(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
