@@ -27,6 +27,21 @@ public class TrackLayerTranslationTest {
     }
 
     @Test
+    public void testDiagonalTranslation() {
+        testDiagonalTranslation(Orientation.NE, 1, -1);
+        testDiagonalTranslation(Orientation.SE, 1, 1);
+        testDiagonalTranslation(Orientation.SW, -1, 1);
+        testDiagonalTranslation(Orientation.NW, -1, -1);
+    }
+
+    private void testDiagonalTranslation(Orientation orientation, int deltaX, int deltaY) {
+        layer = createTrackLayer(orientation);
+        layer.addStraight();
+        assertPosition(START_X+deltaX, START_Y+deltaY);
+        assertOrientation(orientation);
+    }
+
+    @Test
     public void testSBendTranslation() {
         testSBendTranslation(Orientation.N, CurveDirection.LEFT, -1, -3);
         testSBendTranslation(Orientation.N, CurveDirection.RIGHT, 1, -3);

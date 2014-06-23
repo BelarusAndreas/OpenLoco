@@ -23,30 +23,47 @@ public class TrackLayer {
 
     public void addStraight() {
         int rotation;
-        if (orientation == Orientation.N || orientation == Orientation.S) {
-            rotation = 0;
-        }
-        else if (orientation == Orientation.E || orientation == Orientation.W) {
-            rotation = 1;
-        }
-        else {
-            throw new IllegalArgumentException("Invalid orientation " + orientation + " for piece type " + Track.TrackPiece.STRAIGHT);
-        }
-        addNode(Track.TrackPiece.STRAIGHT, rotation);
+        Track.TrackPiece pieceType;
         switch (orientation) {
             case N:
-                currentY--;
+            case S:
+                rotation = 0;
+                pieceType = Track.TrackPiece.STRAIGHT;
+                break;
+            case NE:
+            case SW:
+                rotation = 0;
+                pieceType = Track.TrackPiece.DIAGONAL;
                 break;
             case E:
-                currentX++;
-                break;
-            case S:
-                currentY++;
-                break;
             case W:
-                currentX--;
+                rotation = 1;
+                pieceType = Track.TrackPiece.STRAIGHT;
                 break;
+            case SE:
+            case NW:
+                rotation = 1;
+                pieceType = Track.TrackPiece.DIAGONAL;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid orientation " + orientation + " for straight");
         }
+
+        final int[][] preTranslations = {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {-1, 1}, {0, 0}, {-1, -1}};
+        final int[] preTranslation = preTranslations[orientation.ordinal()];
+
+        currentX += preTranslation[0];
+        currentY += preTranslation[1];
+        addNode(pieceType, rotation);
+        currentX -= preTranslation[0];
+        currentY -= preTranslation[1];
+
+        final int[][] translations = {{0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}};
+        final int[] translation = translations[orientation.ordinal()];
+
+        currentX += translation[0];
+        currentY += translation[1];
     }
 
     public void addSBend(CurveDirection curveDirection) {
