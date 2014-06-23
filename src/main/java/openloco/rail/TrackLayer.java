@@ -93,7 +93,7 @@ public class TrackLayer {
     public void addMediumCurve(CurveDirection curveDirection) {
         addCurve(curveDirection, Track.TrackPiece.MEDIUMCURVE);
     }
-    
+
     public void addWideCurve(CurveDirection curveDirection) {
         if (curveDirection == CurveDirection.LEFT) {
             final int[] rotations = {4, 2, 5, 3, 6, 0, 7, 1};
@@ -171,5 +171,17 @@ public class TrackLayer {
 
     public List<TrackNode> getNodes() {
         return nodes;
+    }
+
+    public int getCurrentX() {
+        return currentX;
+    }
+
+    public int getCurrentY() {
+        return currentY;
+    }
+
+    public Orientation getOrientation() {
+        return orientation;
     }
 }
