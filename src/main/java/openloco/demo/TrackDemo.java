@@ -38,8 +38,12 @@ public class TrackDemo extends BaseDemo {
         trackLayer = new TrackLayer(20, 16, 0, Orientation.N);
 
         trackLayer.addWideCurve(CurveDirection.RIGHT);
+        network.add(new TrackNode(trackLayer.getCurrentX(), trackLayer.getCurrentY(), 0, Track.TrackPiece.DIAGONAL, 0));
+
         trackLayer.addWideCurve(CurveDirection.RIGHT);
         trackLayer.addWideCurve(CurveDirection.RIGHT);
+        network.add(new TrackNode(trackLayer.getCurrentX(), trackLayer.getCurrentY(), 0, Track.TrackPiece.DIAGONAL, 1));
+
         trackLayer.addWideCurve(CurveDirection.RIGHT);
         trackLayer.addWideCurve(CurveDirection.RIGHT);
         trackLayer.addWideCurve(CurveDirection.RIGHT);
