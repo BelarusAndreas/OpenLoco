@@ -30,6 +30,7 @@ public class DatFileLoader {
     public void loadFiles() throws IOException {
         logger.info("Loading assets from {}...", DATA_DIR);
         Files.list(new File(DATA_DIR).toPath())
+                .filter((p) -> p.endsWith(".dat"))
                 .forEach(this::load);
         logger.info("Finished loading assets.");
     }
