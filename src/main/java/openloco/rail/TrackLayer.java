@@ -93,6 +93,41 @@ public class TrackLayer {
     public void addMediumCurve(CurveDirection curveDirection) {
         addCurve(curveDirection, Track.TrackPiece.MEDIUMCURVE);
     }
+    
+    public void addWideCurve(CurveDirection curveDirection) {
+        if (curveDirection == CurveDirection.LEFT) {
+            final int[] rotations = {4, 2, 5, 3, 6, 0, 7, 1};
+            int rotation = rotations[orientation.ordinal()];
+
+            int[][] preTranslations = {{-1, 2}, {-2, -1}, {1, -2}, {2, 1}, {-1, -2}, {2, -1}, {1, 2}, {-2, 1}};
+            int[] preTranslation = preTranslations[rotation];
+            currentX += preTranslation[0];
+            currentY += preTranslation[1];
+            addNode(Track.TrackPiece.WIDECURVE, rotation);
+            currentX -= preTranslation[0];
+            currentY -= preTranslation[1];
+
+            int[][] postTranslations = {{-1, 3}, {-3, -1}, {1, -3}, {3, 1}, {-1, -2}, {2, -1}, {1, 2}, {-2, 1}};
+            int[] postTranslation = postTranslations[rotation];
+            currentX += postTranslation[0];
+            currentY += postTranslation[1];
+
+            orientation = Orientation.values()[(orientation.ordinal()+7) % 8];
+        }
+        else {
+            final int[] rotations = {0, 7, 1, 4, 2, 5, 3, 6};
+            int rotation = rotations[orientation.ordinal()];
+
+            addNode(Track.TrackPiece.WIDECURVE, rotation);
+
+            int[][] afterOffset = {{1, -2}, {3, -1}, {2, 1}, {1, 3}, {-1, 2}, {-3, 1}, {-2, -1}, {-1, -3}};
+            int[] offset = afterOffset[orientation.ordinal()];
+            currentX += offset[0];
+            currentY += offset[1];
+            orientation = Orientation.values()[(orientation.ordinal()+1) % 8];
+        }
+
+    }
 
     private void addCurve(CurveDirection curveDirection, Track.TrackPiece curveType) {
         int rotation = orientation.ordinal()/2;
