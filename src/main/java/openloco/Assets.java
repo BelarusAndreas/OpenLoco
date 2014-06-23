@@ -13,6 +13,7 @@ public class Assets {
     private final Map<String, CliffFace> cliffFaces = new HashMap<>();
     private final Map<String, Track> tracks = new HashMap<>();
     private final Map<String, Tree> trees = new HashMap<>();
+    private final Map<String, InterfaceStyle> interfaceStyles = new HashMap<>();
 
     public void add(Vehicle vehicle) {
         vehicles.put(vehicle.getName(), vehicle);
@@ -52,5 +53,9 @@ public class Assets {
 
     public void add(Tree tree) {
         trees.put(tree.getName(), tree);
+    }
+
+    public void add(InterfaceStyle interfaceStyle) {
+        interfaceStyles.put(interfaceStyle.getName(), interfaceStyle);
     }
 }

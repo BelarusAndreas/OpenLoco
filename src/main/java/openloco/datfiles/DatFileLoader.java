@@ -5,8 +5,11 @@ import openloco.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -30,7 +33,7 @@ public class DatFileLoader {
     public void loadFiles() throws IOException {
         logger.info("Loading assets from {}...", DATA_DIR);
         Files.list(new File(DATA_DIR).toPath())
-                .filter((p) -> p.endsWith(".dat"))
+                .filter((p) -> p.toString().toLowerCase().endsWith(".dat"))
                 .forEach(this::load);
         logger.info("Finished loading assets.");
     }
@@ -90,6 +93,12 @@ public class DatFileLoader {
         DatFileInputStream dataInputStream = new DatFileInputStream(new ByteArrayInputStream(chunk));
         try {
             switch (objectClass) {
+
+                case INTERFACES:
+                    logger.debug("Found interface: {}", name);
+                    InterfaceStyle interfaceStyle = loadInterfaceStyle(name, dataInputStream);
+                    assets.add(interfaceStyle);
+                    break;
 
                 case COMPANIES:
                     Company company = loadCompany(name, dataInputStream);
@@ -276,6 +285,12 @@ public class DatFileLoader {
         return new Sprites.SpriteHeader(offset, width, height, xOffset, yOffset, flags);
     }
 
+    public static InterfaceStyle loadInterfaceStyle(String name, DatFileInputStream dataInputStream) throws IOException {
+        MultiLangString styleName = dataInputStream.readMultiLangString();
+        Sprites sprites = loadSprites(dataInputStream);
+        return new InterfaceStyle(name, styleName, sprites);
+    }
+
     public static Company loadCompany(String name, DatFileInputStream dataInputStream) throws IOException {
         Company.CompanyVars companyVars = loadCompanyVars(dataInputStream);
         MultiLangString ceoName = dataInputStream.readMultiLangString();
@@ -410,6 +425,18 @@ public class DatFileLoader {
         in.skipBytes(8);
 
         return new TreeVars(height, costInd, buildCostFact, clearCostFact);
+    }
+
+    private static void dumpSprites(String dataDir, String name, Sprites sprites) throws IOException {
+        int index = 0;
+        for (Sprites.RawSprite sprite: sprites.getList()) {
+            File f = new File(dataDir + "/../sprites/" + name.trim() + "_" + index + ".png");
+            FileOutputStream fos = new FileOutputStream(f);
+            BufferedImage image = new BufferedImage(sprite.getHeader().getWidth(), sprite.getHeader().getHeight(), BufferedImage.TYPE_INT_ARGB);
+            image.setRGB(0, 0, sprite.getHeader().getWidth(), sprite.getHeader().getHeight(), sprite.getPixels(), 0, sprite.getHeader().getWidth());
+            ImageIO.write(image, "png", fos);
+            index++;
+        }
     }
 
     private static <T, V> T loadSimpleObject(String name, DatFileInputStream in,
