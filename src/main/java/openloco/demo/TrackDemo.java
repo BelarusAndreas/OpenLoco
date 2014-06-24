@@ -29,39 +29,19 @@ public class TrackDemo extends BaseDemo {
     protected void init() {
         TerrainRenderer terrainRenderer = new TerrainRenderer(assets);
         Terrain terrain = new Terrain(width, height);
-        spriteInstances = terrainRenderer.render(terrain);
 
-        TrackLayer trackLayer;
+        spriteInstances = terrainRenderer.render(terrain);
 
         TrackNetwork network = new TrackNetwork();
 
-        trackLayer = new TrackLayer(20, 16, 0, Orientation.N);
-
-        trackLayer.addWideCurve(CurveDirection.RIGHT);
-        trackLayer.addWideCurve(CurveDirection.RIGHT);
-        trackLayer.addWideCurve(CurveDirection.RIGHT);
-        trackLayer.addWideCurve(CurveDirection.RIGHT);
-        trackLayer.addWideCurve(CurveDirection.RIGHT);
-        trackLayer.addWideCurve(CurveDirection.RIGHT);
-        trackLayer.addWideCurve(CurveDirection.RIGHT);
-        trackLayer.addWideCurve(CurveDirection.RIGHT);
-        trackLayer.addWideCurve(CurveDirection.LEFT);
-        trackLayer.addStraight();
-        trackLayer.addWideCurve(CurveDirection.LEFT);
-        trackLayer.addStraight();
-        trackLayer.addWideCurve(CurveDirection.LEFT);
-        trackLayer.addStraight();
-        trackLayer.addWideCurve(CurveDirection.LEFT);
-        trackLayer.addStraight();
-        trackLayer.addWideCurve(CurveDirection.LEFT);
-        trackLayer.addStraight();
-        trackLayer.addWideCurve(CurveDirection.LEFT);
-        trackLayer.addStraight();
-        trackLayer.addWideCurve(CurveDirection.LEFT);
-        trackLayer.addStraight();
-        trackLayer.addWideCurve(CurveDirection.LEFT);
-        trackLayer.addStraight();
-        trackLayer.addWideCurve(CurveDirection.LEFT);
+        TrackLayer trackLayer = new TrackLayer(18, 19, 0, Orientation.N);
+        trackLayer.addNormalSlopeUp();
+        trackLayer.addMediumCurve(CurveDirection.LEFT);
+        trackLayer.addNormalSlopeUp();
+        trackLayer.addMediumCurve(CurveDirection.LEFT);
+        trackLayer.addNormalSlopeUp();
+        trackLayer.addMediumCurve(CurveDirection.LEFT);
+        trackLayer.addNormalSlopeUp();
 
         network.addAll(trackLayer.getNodes());
 

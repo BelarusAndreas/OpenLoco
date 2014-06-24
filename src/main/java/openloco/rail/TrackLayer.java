@@ -182,6 +182,25 @@ public class TrackLayer {
         orientation = Orientation.values()[rotation*2];
     }
 
+    public void addNormalSlopeUp() {
+        nodes.add(new TrackNode(currentX, currentY, currentZ, Track.TrackPiece.NORMALSLOPE, orientation.ordinal()/2));
+        switch (orientation) {
+            case N:
+                currentY -= 2;
+                break;
+            case E:
+                currentX += 2;
+                break;
+            case S:
+                currentY += 2;
+                break;
+            case W:
+                currentX -= 2;
+                break;
+        }
+        currentZ++;
+    }
+
     private void addNode(Track.TrackPiece pieceType, int rotation) {
         nodes.add(new TrackNode(currentX, currentY, currentZ, pieceType, rotation));
     }

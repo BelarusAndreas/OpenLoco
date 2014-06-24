@@ -48,6 +48,10 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                 case DIAGONAL:
                     drawDiagonal(track, sprites, node);
                     break;
+
+                case NORMALSLOPE:
+                    drawNormalSlope(track, sprites, node);
+                    break;
             }
         }
 
@@ -114,6 +118,25 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         };
 
         drawTrackPiece(track, spriteInstances, node, 4, 2, deltas, 328);
+    }
+
+    private void drawNormalSlope(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
+        int[][][] deltas = {
+                { {0, 0}, {0, -1} },
+                { {0, 0}, {1, 0} },
+                { {0, 0}, {0, 1} },
+                { {0, 0}, {-1, 0} }
+        };
+
+        int rotation = node.getRotation() % 4;
+        int startIndex = 196;
+
+        for (int i=0; i < 2; i++) {
+            OpenGlSprite sprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(startIndex + i + (2*rotation)));
+            int screenX = Math.round(IsoUtil.isoX(cellWidth * (node.getX() + deltas[rotation][i][0]), cellWidth * (node.getY() + deltas[rotation][i][1]), TILE_HEIGHT*node.getZ()));
+            int screenY = Math.round(IsoUtil.isoY(cellWidth * (node.getX() + deltas[rotation][i][0]), cellWidth * (node.getY() + deltas[rotation][i][1]), TILE_HEIGHT*node.getZ()));
+            spriteInstances.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.RAILS));
+        }
     }
 
     private void drawTrackPiece(Track track, List<SpriteInstance> spriteInstances, TrackNode node, int spritesPerTile, int maxRotation, int[][][] deltas, int spriteStartIndex) {
