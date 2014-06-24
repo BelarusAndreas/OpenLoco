@@ -130,6 +130,11 @@ public class DatFileLoader {
                     assets.add(tree);
                     break;
 
+                case BRIDGES:
+                    Bridge bridge = loadBridge(name, dataInputStream);
+                    assets.add(bridge);
+                    break;
+
                 default:
                     break;
             }
@@ -425,6 +430,27 @@ public class DatFileLoader {
         in.skipBytes(8);
 
         return new TreeVars(height, costInd, buildCostFact, clearCostFact);
+    }
+
+    private static Bridge loadBridge(String name, DatFileInputStream in) throws IOException {
+        return loadSimpleObject(name, in, Bridge::new, DatFileLoader::loadBridgeVars);
+    }
+
+    private static BridgeVars loadBridgeVars(DatFileInputStream in) throws IOException {
+        in.skipBytes(2);
+        int noRoof = in.readUnsignedByte();
+        in.skipBytes(5);
+        int spanLength = in.readUnsignedByte();
+        int pillarSpacing = in.readUnsignedByte();
+        int maxSpeed = in.readSShort();
+        int maxHeight = in.readUnsignedByte();
+        int costInd = in.readUnsignedByte();
+        int baseCostFactor = in.readUShort();
+        int heightCostFactor = in.readUShort();
+        int sellCostFactor = in.readUShort();
+        int disabledTrackCfg = in.readSShort();
+        in.skipBytes(22);
+        return new BridgeVars(noRoof, spanLength, pillarSpacing, maxSpeed, maxHeight, costInd, baseCostFactor, heightCostFactor, sellCostFactor, disabledTrackCfg);
     }
 
     private static void dumpSprites(String dataDir, String name, Sprites sprites) throws IOException {
