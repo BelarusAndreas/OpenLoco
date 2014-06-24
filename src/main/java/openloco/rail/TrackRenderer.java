@@ -135,7 +135,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             OpenGlSprite sprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(startIndex + i + (2*rotation)));
             int screenX = Math.round(IsoUtil.isoX(cellWidth * (node.getX() + deltas[rotation][i][0]), cellWidth * (node.getY() + deltas[rotation][i][1]), TILE_HEIGHT*node.getZ()));
             int screenY = Math.round(IsoUtil.isoY(cellWidth * (node.getX() + deltas[rotation][i][0]), cellWidth * (node.getY() + deltas[rotation][i][1]), TILE_HEIGHT*node.getZ()));
-            spriteInstances.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.RAILS));
+            spriteInstances.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.RAILS, node.getZ()));
         }
     }
 
@@ -151,9 +151,9 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(railIndex + i));
             int screenX = Math.round(IsoUtil.isoX(cellWidth * (node.getX() + deltas[rotation][i][0]), cellWidth * (node.getY() + deltas[rotation][i][1]), TILE_HEIGHT*node.getZ()));
             int screenY = Math.round(IsoUtil.isoY(cellWidth * (node.getX() + deltas[rotation][i][0]), cellWidth * (node.getY() + deltas[rotation][i][1]), TILE_HEIGHT*node.getZ()));
-            spriteInstances.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST));
-            spriteInstances.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS));
-            spriteInstances.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS));
+            spriteInstances.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST, node.getZ()));
+            spriteInstances.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS, node.getZ()));
+            spriteInstances.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS, node.getZ()));
         }
     }
 }

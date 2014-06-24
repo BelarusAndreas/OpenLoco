@@ -6,12 +6,14 @@ public class SpriteInstance {
     private final int screenX;
     private final int screenY;
     private final SpriteLayer spriteLayer;
+    private final int zIndex;
 
-    public SpriteInstance(OpenGlSprite sprite, int screenX, int screenY, SpriteLayer spriteLayer) {
+    public SpriteInstance(OpenGlSprite sprite, int screenX, int screenY, SpriteLayer spriteLayer, int zIndex) {
         this.sprite = sprite;
         this.screenX = screenX;
         this.screenY = screenY;
         this.spriteLayer = spriteLayer;
+        this.zIndex = zIndex;
     }
 
     public OpenGlSprite getSprite() {
@@ -28,5 +30,9 @@ public class SpriteInstance {
 
     public SpriteLayer getSpriteLayer() {
         return spriteLayer;
+    }
+
+    public int getZIndex() {
+        return zIndex;
     }
 }

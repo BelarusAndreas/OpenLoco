@@ -132,7 +132,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
                 int cartZ = h *terrain.getTileHeight(i, j);
                 int isoX = Math.round(IsoUtil.isoX(cartX, cartY, cartZ));
                 int isoY = Math.round(IsoUtil.isoY(cartX, cartY, cartZ));
-                spriteInstances.add(new SpriteInstance(sprite, isoX, isoY, SpriteLayer.TERRAIN));
+                spriteInstances.add(new SpriteInstance(sprite, isoX, isoY, SpriteLayer.TERRAIN, cartZ));
 
                 if (j < terrain.getYMax()-1) {
                     int aW = terrain.getCornerHeight(i, j, Terrain.W);
@@ -173,13 +173,13 @@ public class TerrainRenderer implements Renderer<Terrain> {
             int z = h * a;
             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, lhSpriteType), x, y, SpriteLayer.TERRAIN));
+            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, lhSpriteType), x, y, SpriteLayer.TERRAIN, z));
         }
         else if (b < a) {
             int z = h * b;
             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, hlSpriteType), x, y, SpriteLayer.TERRAIN));
+            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, hlSpriteType), x, y, SpriteLayer.TERRAIN, z));
         }
     }
 
@@ -187,7 +187,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
         for (int z=fromZ; z<toZ; z+=h) {
             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-            spriteInstances.add(new SpriteInstance(cliffSprites.get(0), x, y, SpriteLayer.TERRAIN));
+            spriteInstances.add(new SpriteInstance(cliffSprites.get(0), x, y, SpriteLayer.TERRAIN, z));
         }
     }
 

@@ -42,7 +42,37 @@ public class TrackDemo extends BaseDemo {
         trackLayer.addNormalSlopeUp();
         trackLayer.addMediumCurve(CurveDirection.LEFT);
         trackLayer.addNormalSlopeUp();
+        network.addAll(trackLayer.getNodes());
 
+        trackLayer = new TrackLayer(18, 20, 0, Orientation.S);
+        trackLayer.addMediumCurve(CurveDirection.RIGHT);
+        trackLayer.addMediumCurve(CurveDirection.RIGHT);
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addSmallCurve(CurveDirection.RIGHT);
+        trackLayer.addSmallCurve(CurveDirection.RIGHT);
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
+        trackLayer.addStraight();
         network.addAll(trackLayer.getNodes());
 
         TrackRenderer trackRenderer = new TrackRenderer(assets);

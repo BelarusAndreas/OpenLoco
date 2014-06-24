@@ -15,14 +15,36 @@ public abstract class BaseDemo {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
-    public static final Comparator<SpriteInstance> SPRITE_DEPTH_COMPARATOR = (SpriteInstance s, SpriteInstance t) -> {
-        if (s.getScreenY() != t.getScreenY()) {
-            return s.getScreenY() - t.getScreenY();
+
+    public static final class ChainComparator<T> implements Comparator<T> {
+
+        private final Comparator<T>[] comparators;
+
+        public ChainComparator(Comparator<T>... comparators) {
+            this.comparators = comparators;
         }
-        else {
-            return s.getSpriteLayer().compareTo(t.getSpriteLayer());
+
+        @Override
+        public int compare(T o1, T o2) {
+            int result = 0;
+            for (Comparator<T> c: comparators) {
+                result = c.compare(o1, o2);
+                if (result != 0) {
+                    break;
+                }
+            }
+            return result;
         }
-    };
+    }
+
+    private static final Comparator<SpriteInstance> COMPARE_LAYERS = (s, t)  -> s.getSpriteLayer().compareTo(t.getSpriteLayer());
+
+    private static final Comparator<SpriteInstance> COMPARE_SCREEN_Y = (s, t) -> s.getScreenY() - t.getScreenY();
+
+    private static final Comparator<SpriteInstance> COMPARE_Z_INDEX = (s, t) -> s.getZIndex() - t.getZIndex();
+
+    public static final Comparator<SpriteInstance> SPRITE_DEPTH_COMPARATOR = new ChainComparator<>(COMPARE_Z_INDEX, COMPARE_LAYERS, COMPARE_SCREEN_Y);
+
 
     private int frameCount = 0;
     private long renderTime = 0;
