@@ -1,7 +1,7 @@
 package openloco.entities;
 
 public class BridgeVars {
-    private final int noRoof;
+    private final boolean hasRoof;
     private final int spanLength;
     private final int pillarSpacing;
     private final int maxSpeed;
@@ -12,8 +12,8 @@ public class BridgeVars {
     private final int sellCostFactor;
     private final int disabledTrackCfg;
 
-    public BridgeVars(int noRoof, int spanLength, int pillarSpacing, int maxSpeed, int maxHeight, int costInd, int baseCostFactor, int heightCostFactor, int sellCostFactor, int disabledTrackCfg) {
-        this.noRoof = noRoof;
+    public BridgeVars(int hasRoof, int spanLength, int pillarSpacing, int maxSpeed, int maxHeight, int costInd, int baseCostFactor, int heightCostFactor, int sellCostFactor, int disabledTrackCfg) {
+        this.hasRoof = hasRoof != 0;
         this.spanLength = spanLength;
         this.pillarSpacing = pillarSpacing;
         this.maxSpeed = maxSpeed;
@@ -25,8 +25,8 @@ public class BridgeVars {
         this.disabledTrackCfg = disabledTrackCfg;
     }
 
-    public int getNoRoof() {
-        return noRoof;
+    public boolean hasRoof() {
+        return hasRoof;
     }
 
     public int getSpanLength() {
