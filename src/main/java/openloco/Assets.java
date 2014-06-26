@@ -63,4 +63,8 @@ public class Assets {
     public void add(Bridge bridge) {
         bridges.put(bridge.getName(), bridge);
     }
+
+    public Bridge getBridge(String name) {
+        return bridges.get(name);
+    }
 }
