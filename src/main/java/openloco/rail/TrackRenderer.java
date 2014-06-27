@@ -63,6 +63,29 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
     private void drawStraight(Track track, List<SpriteInstance> sprites, TrackNode node) {
         int[][][] deltas = {{{0, 0}}, {{0, 0}}};
         drawTrackPiece(track, sprites, node, 1, 2, deltas, 18);
+
+        drawStraightBridgeWalls(sprites, node);
+        drawBridgeSupports(sprites, node, deltas);
+    }
+
+    private void drawStraightBridgeWalls(List<SpriteInstance> sprites, TrackNode trackNode) {
+        if (trackNode.getZ() > 0) {
+            int spriteIndex;
+            if (trackNode.getRotation() % 2 == 0) {
+                spriteIndex = 39;
+            } else {
+                spriteIndex = 63;
+            }
+
+            Bridge bridge = assets.getBridge("BRDGBRCK");
+
+            for (int i = 0; i < 2; i++) {
+                OpenGlSprite sprite = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(spriteIndex + i));
+                int screenX = Math.round(IsoUtil.isoX(cellWidth * (trackNode.getX()), cellWidth * (trackNode.getY()), trackNode.getZ() * TILE_HEIGHT));
+                int screenY = Math.round(IsoUtil.isoY(cellWidth * (trackNode.getX()), cellWidth * (trackNode.getY()), trackNode.getZ() * TILE_HEIGHT));
+                sprites.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.BRIDGE, trackNode.getZ() * TILE_HEIGHT + 1));
+            }
+        }
     }
 
     private void drawSmallCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
@@ -152,6 +175,49 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             spriteInstances.add(new SpriteInstance(wedgeSprite, screenX, screenY, SpriteLayer.BRIDGE, zIndex));
             spriteInstances.add(new SpriteInstance(wallSpriteW, screenX, screenY, SpriteLayer.BRIDGE, zIndex+1));
             spriteInstances.add(new SpriteInstance(wallSpriteE, screenX, screenY, SpriteLayer.BRIDGE, zIndex+1));
+        }
+
+        drawBridgeSupports(spriteInstances, node, deltas);
+    }
+
+    private void drawBridgeSupports(List<SpriteInstance> spriteInstances, TrackNode node, int[][][] allDeltas) {
+        if (node.getZ() > 0) {
+            int rotation = node.getRotation() % allDeltas.length;
+            int[][] deltas = allDeltas[rotation];
+            Bridge bridge = assets.getBridge("BRDGBRCK");
+
+            int topIndex;
+            int supportIndex;
+
+            if (rotation % 2 == 0) {
+                topIndex = 36;
+                supportIndex = 16;
+            }
+            else {
+                topIndex = 60;
+                supportIndex = 24;
+            }
+
+            for (int i=0; i<deltas.length; i++) {
+                for (int j=0; j<3; j++) {
+                    OpenGlSprite baseSprite = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(topIndex+j));
+                    int zIndex = TILE_HEIGHT * (node.getZ() - 1);
+                    int screenX = Math.round(IsoUtil.isoX(cellWidth * (node.getX() + deltas[i][0]), cellWidth * (node.getY() + deltas[i][1]), zIndex));
+                    int screenY = Math.round(IsoUtil.isoY(cellWidth * (node.getX() + deltas[i][0]), cellWidth * (node.getY() + deltas[i][1]), zIndex));
+                    spriteInstances.add(new SpriteInstance(baseSprite, screenX, screenY, SpriteLayer.BRIDGE, zIndex+2));
+                }
+
+
+                for (int z = node.getZ()-1; z>=0; z--) {
+                    OpenGlSprite supportSprite1 = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(supportIndex));
+                    OpenGlSprite supportSprite2 = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(supportIndex+1));
+                    int zIndex = z*TILE_HEIGHT;
+                    int screenX = Math.round(IsoUtil.isoX(cellWidth * (node.getX() + deltas[i][0]), cellWidth * (node.getY() + deltas[i][1]), zIndex));
+                    int screenY = Math.round(IsoUtil.isoY(cellWidth * (node.getX() + deltas[i][0]), cellWidth * (node.getY() + deltas[i][1]), zIndex));
+                    spriteInstances.add(new SpriteInstance(supportSprite1, screenX, screenY, SpriteLayer.BRIDGE, zIndex+1));
+                    spriteInstances.add(new SpriteInstance(supportSprite2, screenX, screenY, SpriteLayer.BRIDGE, zIndex+1));
+                }
+            }
         }
     }
 
