@@ -1,17 +1,18 @@
 package openloco.demo;
 
+import com.sun.nio.file.SensitivityWatchEventModifier;
 import openloco.Assets;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
 import openloco.graphics.Tile;
 import org.lwjgl.input.Keyboard;
 
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +20,17 @@ public class NashornScriptDemo extends BaseDemo {
 
     private Assets assets;
     private List<SpriteInstance> spriteInstances;
+    private WatchService watchService;
 
     private int width = 36;
     private int height = 36;
 
-    public NashornScriptDemo(Assets assets) {
+    public NashornScriptDemo(Assets assets) throws IOException {
         this.assets = assets;
+        watchService = FileSystems.getDefault().newWatchService();
+        String initScript = System.getProperty("openloco.initScript");
+        Path path = Paths.get(initScript).getParent();
+        path.register(watchService, new WatchEvent.Kind[]{StandardWatchEventKinds.ENTRY_MODIFY}, SensitivityWatchEventModifier.HIGH);
     }
 
     @Override
@@ -43,7 +49,7 @@ public class NashornScriptDemo extends BaseDemo {
             engine.eval("init();", bindings);
             System.out.println("Called init");
         } catch (ScriptException e) {
-            throw new RuntimeException(e);
+            JOptionPane.showMessageDialog(null, "ScriptException whilst running script:\n\n" + e.getMessage(), "ScriptException", JOptionPane.ERROR_MESSAGE);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -56,6 +62,18 @@ public class NashornScriptDemo extends BaseDemo {
                     && Keyboard.getEventKeyState()) {
                 init();
             }
+        }
+
+        WatchKey watchKey = watchService.poll();
+        if (watchKey != null) {
+            boolean changed = false;
+            for (WatchEvent<?> event: watchKey.pollEvents()) {
+                changed = true;
+            }
+            if (changed) {
+                init();
+            }
+            watchKey.reset();
         }
     }
 
@@ -72,5 +90,10 @@ public class NashornScriptDemo extends BaseDemo {
     @Override
     protected float getYOffset() {
         return -IsoUtil.isoY(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        watchService.close();
     }
 }
