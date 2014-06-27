@@ -10,6 +10,7 @@ import openloco.entities.Sprites;
 import openloco.entities.VehicleSpriteVar;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.OpenGlSprite;
+import openloco.graphics.Tile;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -52,10 +53,9 @@ public class LoadSprite extends BaseDemo {
         GL11.glPushMatrix();
         GL11.glTranslatef(getScreenWidth()/2.0f, getScreenHeight()/2.0f, 0f);
 
-        int gridWidth = 32;
-        int cellCount = 9;
+        int tileCount = 9;
 
-        GL11.glTranslatef(-IsoUtil.isoX(gridWidth * cellCount / 2, gridWidth * cellCount / 2, 0), -IsoUtil.isoY(gridWidth * cellCount / 2, gridWidth * cellCount / 2, 0), 0f);
+        GL11.glTranslatef(-IsoUtil.isoX(Tile.WIDTH * tileCount / 2, Tile.WIDTH * tileCount / 2, 0), -IsoUtil.isoY(Tile.WIDTH * tileCount / 2, Tile.WIDTH * tileCount / 2, 0), 0f);
 
         GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -63,9 +63,9 @@ public class LoadSprite extends BaseDemo {
         GL11.glEnable(GL11.GL_BLEND);
 
         GL11.glPushMatrix();
-        for (int i=0; i<cellCount; i++) {
-            for (int j=0; j<cellCount; j++) {
-                grassSprite.draw(IsoUtil.isoX(i * gridWidth, j * gridWidth, 0), IsoUtil.isoY(i * gridWidth, j * gridWidth, 0));
+        for (int i=0; i<tileCount; i++) {
+            for (int j=0; j<tileCount; j++) {
+                grassSprite.draw(IsoUtil.isoX(i * Tile.WIDTH, j * Tile.WIDTH, 0), IsoUtil.isoY(i * Tile.WIDTH, j * Tile.WIDTH, 0));
             }
         }
         GL11.glPopMatrix();
@@ -77,10 +77,10 @@ public class LoadSprite extends BaseDemo {
         GL11.glColor4f(0.7f, 0.7f, 0.7f, 0.1f);
         GL11.glBegin(GL11.GL_LINES);
 
-        for (int i=0; i<=cellCount; i++) {
+        for (int i=0; i<=tileCount; i++) {
             int a = 0;
-            int b = i * gridWidth;
-            int c = cellCount * gridWidth;
+            int b = i * Tile.WIDTH;
+            int c = tileCount * Tile.WIDTH;
 
             GL11.glVertex2f(IsoUtil.isoX(a, b, 0), IsoUtil.isoY(a, b, 0));
             GL11.glVertex2f(IsoUtil.isoX(c, b, 0), IsoUtil.isoY(c, b, 0));

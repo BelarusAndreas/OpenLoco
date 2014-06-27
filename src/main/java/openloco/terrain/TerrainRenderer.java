@@ -17,8 +17,8 @@ public class TerrainRenderer implements Renderer<Terrain> {
     private final List<OpenGlSprite> cliffSpritesSw = new ArrayList<>();
     private final List<OpenGlSprite> cliffSpritesSe = new ArrayList<>();
 
-    private static final int w = Terrain.CELL_WIDTH;
-    private static final int h = Terrain.HEIGHT_STEP;
+    private static final int w = Tile.WIDTH;
+    private static final int h = Tile.HEIGHT_STEP;
 
     private enum CliffSpriteType {
         UNCLIPPED,

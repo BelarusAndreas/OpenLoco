@@ -1,9 +1,9 @@
 package openloco.demo;
 
 import openloco.Assets;
-import openloco.entities.Track;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
+import openloco.graphics.Tile;
 import openloco.rail.*;
 import openloco.terrain.Terrain;
 import openloco.terrain.TerrainRenderer;
@@ -16,8 +16,6 @@ public class TrackDemo extends BaseDemo {
 
     private int width = 36;
     private int height = 36;
-
-    public static final int cellWidth = 32;
 
     private List<SpriteInstance> spriteInstances;
 
@@ -87,11 +85,11 @@ public class TrackDemo extends BaseDemo {
 
     @Override
     protected float getXOffset() {
-        return -IsoUtil.isoX(cellWidth * width / 2, cellWidth * height / 2, 0);
+        return -IsoUtil.isoX(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
     }
 
     @Override
     protected float getYOffset() {
-        return -IsoUtil.isoY(cellWidth * width / 2, cellWidth * height / 2, 0);
+        return -IsoUtil.isoY(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
     }
 }

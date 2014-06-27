@@ -3,6 +3,7 @@ package openloco.demo;
 import openloco.Assets;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
+import openloco.graphics.Tile;
 import org.lwjgl.input.Keyboard;
 
 import javax.script.Bindings;
@@ -22,8 +23,6 @@ public class NashornScriptDemo extends BaseDemo {
     private int width = 36;
     private int height = 36;
 
-    public static final int cellWidth = 32;
-
     public NashornScriptDemo(Assets assets) {
         this.assets = assets;
     }
@@ -38,7 +37,6 @@ public class NashornScriptDemo extends BaseDemo {
             bindings.put("spriteInstances", spriteInstances);
             bindings.put("width", width);
             bindings.put("height", height);
-            bindings.put("cellWidth", cellWidth);
 
             String initScript = System.getProperty("openloco.initScript");
             engine.eval(new FileReader(initScript), bindings);
@@ -68,11 +66,11 @@ public class NashornScriptDemo extends BaseDemo {
 
     @Override
     protected float getXOffset() {
-        return -IsoUtil.isoX(cellWidth * width / 2, cellWidth * height / 2, 0);
+        return -IsoUtil.isoX(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
     }
 
     @Override
     protected float getYOffset() {
-        return -IsoUtil.isoY(cellWidth * width / 2, cellWidth * height / 2, 0);
+        return -IsoUtil.isoY(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
     }
 }

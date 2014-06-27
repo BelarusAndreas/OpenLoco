@@ -3,6 +3,7 @@ package openloco.demo;
 import openloco.Assets;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
+import openloco.graphics.Tile;
 import openloco.terrain.Terrain;
 import openloco.terrain.TerrainRenderer;
 import org.lwjgl.input.Mouse;
@@ -23,7 +24,6 @@ public class TerrainDemo extends BaseDemo {
 
     private int width = 9;
     private int height = 9;
-    private int cellWidth = 32;
     private List<SpriteInstance> spriteInstances;
 
     private float clickX = 0;
@@ -55,12 +55,12 @@ public class TerrainDemo extends BaseDemo {
 
     @Override
     protected float getXOffset() {
-        return -IsoUtil.isoX(cellWidth * width / 2, cellWidth * height / 2, 0);
+        return -IsoUtil.isoX(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
     }
 
     @Override
     protected float getYOffset() {
-        return -IsoUtil.isoY(cellWidth * width / 2, cellWidth * height / 2, 0);
+        return -IsoUtil.isoY(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
     }
 
     @Override
@@ -71,12 +71,12 @@ public class TerrainDemo extends BaseDemo {
                 float y = (0.5f*getScreenHeight() - getYOffset()) - (Mouse.getEventY());
                 logger.debug("Click: ({}, {})", x, y);
 
-                int tileX = (int)Math.floor(IsoUtil.cartX(x, y)/cellWidth);
-                int tileY = (int)Math.floor(IsoUtil.cartY(x, y)/cellWidth);
+                int tileX = (int)Math.floor(IsoUtil.cartX(x, y)/ Tile.WIDTH);
+                int tileY = (int)Math.floor(IsoUtil.cartY(x, y)/ Tile.WIDTH);
                 logger.debug("Tile pos: ({}, {})", tileX, tileY);
 
-                clickX = cellWidth*tileX;
-                clickY = cellWidth*tileY;
+                clickX = Tile.WIDTH *tileX;
+                clickY = Tile.WIDTH *tileY;
 
 
                 logger.debug("Cart pos: ({}, {})", clickX, clickY);
@@ -104,9 +104,9 @@ public class TerrainDemo extends BaseDemo {
 
         GL11.glBegin(GL11.GL_LINE_LOOP);
         GL11.glVertex2f(IsoUtil.isoX(clickX, clickY, 0), IsoUtil.isoY(clickX, clickY, 0));
-        GL11.glVertex2f(IsoUtil.isoX(clickX+cellWidth, clickY, 0), IsoUtil.isoY(clickX+cellWidth, clickY, 0));
-        GL11.glVertex2f(IsoUtil.isoX(clickX+cellWidth, clickY+cellWidth, 0), IsoUtil.isoY(clickX+cellWidth, clickY+cellWidth, 0));
-        GL11.glVertex2f(IsoUtil.isoX(clickX, clickY+cellWidth, 0), IsoUtil.isoY(clickX, clickY+cellWidth, 0));
+        GL11.glVertex2f(IsoUtil.isoX(clickX+ Tile.WIDTH, clickY, 0), IsoUtil.isoY(clickX+ Tile.WIDTH, clickY, 0));
+        GL11.glVertex2f(IsoUtil.isoX(clickX+ Tile.WIDTH, clickY+ Tile.WIDTH, 0), IsoUtil.isoY(clickX+ Tile.WIDTH, clickY+ Tile.WIDTH, 0));
+        GL11.glVertex2f(IsoUtil.isoX(clickX, clickY+ Tile.WIDTH, 0), IsoUtil.isoY(clickX, clickY+ Tile.WIDTH, 0));
         GL11.glEnd();
 
         GL11.glPopMatrix();

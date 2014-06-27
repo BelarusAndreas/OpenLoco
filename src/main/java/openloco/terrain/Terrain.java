@@ -10,8 +10,6 @@ public class Terrain {
 
     private int xMax;
     private int yMax;
-    public static final int CELL_WIDTH = 32;
-    public static final int HEIGHT_STEP = 16;
 
     public static final int W = 0;
     public static final int S = 1;
@@ -26,18 +24,18 @@ public class Terrain {
         cornerHeight = new int[4 * xMax * yMax];
     }
 
-    private int cellIndex(int i, int j) {
+    private int tileIndex(int i, int j) {
         return i + j * xMax;
     }
 
-    private void computeCornerHeight(int cellIndex) {
-        int tileHeight = tileHeights[cellIndex];
-        int tileType = tileTypes[cellIndex];
+    private void computeCornerHeight(int tileIndex) {
+        int tileHeight = tileHeights[tileIndex];
+        int tileType = tileTypes[tileIndex];
 
-        cornerHeight[4*cellIndex + W] = tileHeight + (tileType & 1);
-        cornerHeight[4*cellIndex + S] = tileHeight + ((tileType & 2) >> 1);
-        cornerHeight[4*cellIndex + E] = tileHeight + ((tileType & 4) >> 2);
-        cornerHeight[4*cellIndex + N] = tileHeight + ((tileType & 8) >> 3);
+        cornerHeight[4*tileIndex + W] = tileHeight + (tileType & 1);
+        cornerHeight[4*tileIndex + S] = tileHeight + ((tileType & 2) >> 1);
+        cornerHeight[4*tileIndex + E] = tileHeight + ((tileType & 4) >> 2);
+        cornerHeight[4*tileIndex + N] = tileHeight + ((tileType & 8) >> 3);
     }
 
     public int getXMax() {
@@ -49,27 +47,27 @@ public class Terrain {
     }
 
     public int getTileType(int i, int j) {
-        return tileTypes[cellIndex(i, j)];
+        return tileTypes[tileIndex(i, j)];
     }
 
     public int getTileHeight(int i, int j) {
-        return tileHeights[cellIndex(i, j)];
+        return tileHeights[tileIndex(i, j)];
     }
 
     public void setTileType(int i, int j, int tileType) {
-        int cellIndex = cellIndex(i, j);
-        tileTypes[cellIndex] = tileType;
-        computeCornerHeight(cellIndex);
+        int tileIndex = tileIndex(i, j);
+        tileTypes[tileIndex] = tileType;
+        computeCornerHeight(tileIndex);
     }
 
     public int getCornerHeight(int i, int j, int corner) {
-        int cellIndex = cellIndex(i, j);
-        return cornerHeight[4*cellIndex + corner];
+        int tileIndex = tileIndex(i, j);
+        return cornerHeight[4*tileIndex + corner];
     }
 
     public void setTileHeights(int i, int j, int height) {
-        int cellIndex = cellIndex(i, j);
-        tileHeights[cellIndex] = height;
-        computeCornerHeight(cellIndex);
+        int tileIndex = tileIndex(i, j);
+        tileHeights[tileIndex] = height;
+        computeCornerHeight(tileIndex);
     }
 }
