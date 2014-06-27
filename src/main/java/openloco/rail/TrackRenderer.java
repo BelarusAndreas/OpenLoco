@@ -75,7 +75,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                 spriteIndex = 63;
             }
 
-            Bridge bridge = assets.getBridge("BRDGBRCK");
+            Bridge bridge = assets.getBridge(trackNode.getBridgeType());
 
             for (int i = 0; i < 2; i++) {
                 OpenGlSprite sprite = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(spriteIndex + i));
@@ -154,7 +154,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         int rotation = node.getRotation() % 4;
         int startIndex = 196;
 
-        Bridge bridge = assets.getBridge("BRDGBRCK");
+        Bridge bridge = assets.getBridge(node.getBridgeType());
 
         for (int i=0; i < 2; i++) {
             int zIndex = Tile.HEIGHT_STEP *node.getZ();
@@ -182,7 +182,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         if (node.getZ() > 0) {
             int rotation = node.getRotation() % allDeltas.length;
             int[][] deltas = allDeltas[rotation];
-            Bridge bridge = assets.getBridge("BRDGBRCK");
+            Bridge bridge = assets.getBridge(node.getBridgeType());
 
             int topIndex;
             int supportIndex;

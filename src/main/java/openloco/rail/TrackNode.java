@@ -37,4 +37,8 @@ public class TrackNode {
     public int getRotation() {
         return rotation;
     }
+
+    public String getBridgeType() {
+        return "BRDGBRCK";
+    }
 }
