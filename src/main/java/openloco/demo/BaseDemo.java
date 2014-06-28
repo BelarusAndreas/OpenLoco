@@ -20,6 +20,7 @@ public abstract class BaseDemo {
 
         private final Comparator<T>[] comparators;
 
+        @SafeVarargs
         public ChainComparator(Comparator<T>... comparators) {
             this.comparators = comparators;
         }
@@ -45,6 +46,7 @@ public abstract class BaseDemo {
 
     private static final Comparator<SpriteInstance> COMPARE_CART_Y = (s, t) -> s.getCartY() - t.getCartY();
 
+    @SuppressWarnings("unchecked")
     public static final Comparator<SpriteInstance>  SPRITE_DEPTH_COMPARATOR = new ChainComparator<>(COMPARE_CART_X, COMPARE_CART_Y, COMPARE_Z_INDEX, COMPARE_LAYERS);
 
 
