@@ -81,7 +81,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                 OpenGlSprite sprite = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(spriteIndex + i));
                 int screenX = Math.round(IsoUtil.isoX(Tile.WIDTH * (trackNode.getX()), Tile.WIDTH * (trackNode.getY()), trackNode.getZ() * Tile.HEIGHT_STEP));
                 int screenY = Math.round(IsoUtil.isoY(Tile.WIDTH * (trackNode.getX()), Tile.WIDTH * (trackNode.getY()), trackNode.getZ() * Tile.HEIGHT_STEP));
-                sprites.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.BRIDGE, trackNode.getZ() * Tile.HEIGHT_STEP + 1));
+                sprites.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.BRIDGE, Tile.WIDTH*trackNode.getX(), Tile.WIDTH*trackNode.getY(), trackNode.getZ() * Tile.HEIGHT_STEP + 1));
             }
         }
     }
@@ -159,9 +159,11 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         for (int i=0; i < 2; i++) {
             int zIndex = Tile.HEIGHT_STEP *node.getZ();
             OpenGlSprite sprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(startIndex + i + (2*rotation)));
-            int screenX = Math.round(IsoUtil.isoX(Tile.WIDTH * (node.getX() + deltas[rotation][i][0]), Tile.WIDTH * (node.getY() + deltas[rotation][i][1]), zIndex));
-            int screenY = Math.round(IsoUtil.isoY(Tile.WIDTH * (node.getX() + deltas[rotation][i][0]), Tile.WIDTH * (node.getY() + deltas[rotation][i][1]), zIndex));
-            spriteInstances.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.RAILS, zIndex));
+            int cartX = Tile.WIDTH * (node.getX() + deltas[rotation][i][0]);
+            int cartY = Tile.WIDTH * (node.getY() + deltas[rotation][i][1]);
+            int screenX = Math.round(IsoUtil.isoX(cartX, cartY, zIndex));
+            int screenY = Math.round(IsoUtil.isoY(cartX, cartY, zIndex));
+            spriteInstances.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.RAILS, cartX, cartY, zIndex));
 
             //draw the bridge wedge
             int spriteIndex = 84+(node.getRotation()*6)+(3*i);
@@ -170,9 +172,9 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             OpenGlSprite wallSpriteW = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(spriteIndex + 1));
             OpenGlSprite wallSpriteE = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(spriteIndex + 2));
 
-            spriteInstances.add(new SpriteInstance(wedgeSprite, screenX, screenY, SpriteLayer.BRIDGE, zIndex));
-            spriteInstances.add(new SpriteInstance(wallSpriteW, screenX, screenY, SpriteLayer.BRIDGE, zIndex+1));
-            spriteInstances.add(new SpriteInstance(wallSpriteE, screenX, screenY, SpriteLayer.BRIDGE, zIndex+1));
+            spriteInstances.add(new SpriteInstance(wedgeSprite, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex));
+            spriteInstances.add(new SpriteInstance(wallSpriteW, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+1));
+            spriteInstances.add(new SpriteInstance(wallSpriteE, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+1));
         }
 
         drawBridgeSupports(spriteInstances, node, deltas);
@@ -197,12 +199,15 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             }
 
             for (int i=0; i<deltas.length; i++) {
+                int cartX = Tile.WIDTH * (node.getX() + deltas[i][0]);
+                int cartY = Tile.WIDTH * (node.getY() + deltas[i][1]);
+
                 for (int j=0; j<3; j++) {
                     OpenGlSprite baseSprite = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(topIndex+j));
                     int zIndex = Tile.HEIGHT_STEP * (node.getZ() - 1);
-                    int screenX = Math.round(IsoUtil.isoX(Tile.WIDTH * (node.getX() + deltas[i][0]), Tile.WIDTH * (node.getY() + deltas[i][1]), zIndex));
-                    int screenY = Math.round(IsoUtil.isoY(Tile.WIDTH * (node.getX() + deltas[i][0]), Tile.WIDTH * (node.getY() + deltas[i][1]), zIndex));
-                    spriteInstances.add(new SpriteInstance(baseSprite, screenX, screenY, SpriteLayer.BRIDGE, zIndex+2));
+                    int screenX = Math.round(IsoUtil.isoX(cartX, cartY, zIndex));
+                    int screenY = Math.round(IsoUtil.isoY(cartX, cartY, zIndex));
+                    spriteInstances.add(new SpriteInstance(baseSprite, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+2));
                 }
 
 
@@ -210,10 +215,10 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                     OpenGlSprite supportSprite1 = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(supportIndex));
                     OpenGlSprite supportSprite2 = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(supportIndex+1));
                     int zIndex = z* Tile.HEIGHT_STEP;
-                    int screenX = Math.round(IsoUtil.isoX(Tile.WIDTH * (node.getX() + deltas[i][0]), Tile.WIDTH * (node.getY() + deltas[i][1]), zIndex));
-                    int screenY = Math.round(IsoUtil.isoY(Tile.WIDTH * (node.getX() + deltas[i][0]), Tile.WIDTH * (node.getY() + deltas[i][1]), zIndex));
-                    spriteInstances.add(new SpriteInstance(supportSprite1, screenX, screenY, SpriteLayer.BRIDGE, zIndex+1));
-                    spriteInstances.add(new SpriteInstance(supportSprite2, screenX, screenY, SpriteLayer.BRIDGE, zIndex+1));
+                    int screenX = Math.round(IsoUtil.isoX(cartX, cartY, zIndex));
+                    int screenY = Math.round(IsoUtil.isoY(cartX, cartY, zIndex));
+                    spriteInstances.add(new SpriteInstance(supportSprite1, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+1));
+                    spriteInstances.add(new SpriteInstance(supportSprite2, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+1));
                 }
             }
         }
@@ -229,11 +234,13 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             OpenGlSprite ballastSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(ballastIndex + i));
             OpenGlSprite sleeperSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(sleeperIndex + i));
             OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(railIndex + i));
-            int screenX = Math.round(IsoUtil.isoX(Tile.WIDTH * (node.getX() + deltas[rotation][i][0]), Tile.WIDTH * (node.getY() + deltas[rotation][i][1]), Tile.HEIGHT_STEP *node.getZ()));
-            int screenY = Math.round(IsoUtil.isoY(Tile.WIDTH * (node.getX() + deltas[rotation][i][0]), Tile.WIDTH * (node.getY() + deltas[rotation][i][1]), Tile.HEIGHT_STEP *node.getZ()));
-            spriteInstances.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST, Tile.HEIGHT_STEP *node.getZ()));
-            spriteInstances.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS, Tile.HEIGHT_STEP *node.getZ()));
-            spriteInstances.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS, Tile.HEIGHT_STEP *node.getZ()));
+            int cartX = Tile.WIDTH * (node.getX() + deltas[rotation][i][0]);
+            int cartY = Tile.WIDTH * (node.getY() + deltas[rotation][i][1]);
+            int screenX = Math.round(IsoUtil.isoX(cartX, cartY, Tile.HEIGHT_STEP *node.getZ()));
+            int screenY = Math.round(IsoUtil.isoY(cartX, cartY, Tile.HEIGHT_STEP *node.getZ()));
+            spriteInstances.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST, cartX, cartY, Tile.HEIGHT_STEP * node.getZ()));
+            spriteInstances.add(new SpriteInstance(sleeperSprite, screenX, screenY, SpriteLayer.SLEEPERS, cartX, cartY, Tile.HEIGHT_STEP * node.getZ()));
+            spriteInstances.add(new SpriteInstance(railSprite, screenX, screenY, SpriteLayer.RAILS, cartX, cartY, Tile.HEIGHT_STEP * node.getZ()));
         }
     }
 }

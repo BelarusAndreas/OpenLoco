@@ -39,11 +39,13 @@ public abstract class BaseDemo {
 
     private static final Comparator<SpriteInstance> COMPARE_LAYERS = (s, t)  -> s.getSpriteLayer().compareTo(t.getSpriteLayer());
 
-    private static final Comparator<SpriteInstance> COMPARE_SCREEN_Y = (s, t) -> s.getScreenY() - t.getScreenY();
+    private static final Comparator<SpriteInstance> COMPARE_Z_INDEX = (s, t) -> s.getCartZ() - t.getCartZ();
 
-    private static final Comparator<SpriteInstance> COMPARE_Z_INDEX = (s, t) -> s.getZIndex() - t.getZIndex();
+    private static final Comparator<SpriteInstance> COMPARE_CART_X = (s, t) -> s.getCartX() - t.getCartX();
 
-    public static final Comparator<SpriteInstance> SPRITE_DEPTH_COMPARATOR = new ChainComparator<>(COMPARE_Z_INDEX, COMPARE_LAYERS, COMPARE_SCREEN_Y);
+    private static final Comparator<SpriteInstance> COMPARE_CART_Y = (s, t) -> s.getCartY() - t.getCartY();
+
+    public static final Comparator<SpriteInstance>  SPRITE_DEPTH_COMPARATOR = new ChainComparator<>(COMPARE_CART_X, COMPARE_CART_Y, COMPARE_Z_INDEX, COMPARE_LAYERS);
 
 
     private int frameCount = 0;
