@@ -6,6 +6,10 @@ public enum BridgeTileType {
     FULL_WALL_W(i(39), i(1), none()),
     FULL_WALL_E(i(40), i(36, 37, 38), i(18, 19)),
     FULL_WALL_S(i(64), i(60, 61, 62), i(26, 27)),
+
+    FULL_WALL_NS(i(63, 64), i(60, 61, 62), i(26, 27)),
+    FULL_WALL_EW(i(39, 40), i(36, 37, 38), i(18, 19)),
+
     HALF_NW(i(12), i(11), i(34, 35)),
     HALF_NE(i(14), i(2), none()),
     HALF_SE(i(13), i(3), none()),

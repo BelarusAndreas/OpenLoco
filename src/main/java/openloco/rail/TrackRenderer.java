@@ -64,28 +64,12 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         int[][][] deltas = {{{0, 0}}, {{0, 0}}};
         drawTrackPiece(track, sprites, node, 1, 2, deltas, 18);
 
-        drawStraightBridgeWalls(sprites, node);
-        drawBridgeSupports(sprites, node, deltas);
-    }
+        BridgeTileType[][] bridgeTileTypes = {
+                { FULL_WALL_EW },
+                { FULL_WALL_NS }
+        };
 
-    private void drawStraightBridgeWalls(List<SpriteInstance> sprites, TrackNode trackNode) {
-        if (trackNode.getZ() > 0) {
-            int spriteIndex;
-            if (trackNode.getRotation() % 2 == 0) {
-                spriteIndex = 39;
-            } else {
-                spriteIndex = 63;
-            }
-
-            Bridge bridge = assets.getBridge(trackNode.getBridgeType());
-
-            for (int i = 0; i < 2; i++) {
-                OpenGlSprite sprite = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(spriteIndex + i));
-                int screenX = Math.round(IsoUtil.isoX(Tile.WIDTH * (trackNode.getX()), Tile.WIDTH * (trackNode.getY()), trackNode.getZ() * Tile.HEIGHT_STEP));
-                int screenY = Math.round(IsoUtil.isoY(Tile.WIDTH * (trackNode.getX()), Tile.WIDTH * (trackNode.getY()), trackNode.getZ() * Tile.HEIGHT_STEP));
-                sprites.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.BRIDGE, Tile.WIDTH*trackNode.getX(), Tile.WIDTH*trackNode.getY(), trackNode.getZ() * Tile.HEIGHT_STEP + 1));
-            }
-        }
+        drawBridgeTiles(sprites, node, deltas, bridgeTileTypes);
     }
 
     private void drawSmallCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
@@ -141,7 +125,15 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                 { {0, 0}, {1, 0}, {1, 1}, {2, 1} }
         };
 
+        BridgeTileType[][] bridgeTileTypes = {
+            { FULL_WALL_EW, HALF_SW, HALF_NE, FULL_WALL_EW },
+            { FULL_WALL_NS, HALF_NW, HALF_SE, FULL_WALL_NS },
+            { FULL_WALL_EW, HALF_SE, HALF_NW, FULL_WALL_EW },
+            { FULL_WALL_NS, HALF_SW, HALF_NE, FULL_WALL_NS }
+        };
+
         drawTrackPiece(track, spriteInstances, node, 4, 4, deltas, 352);
+        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
     }
 
     private void drawDiagonal(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
