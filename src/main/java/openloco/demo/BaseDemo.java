@@ -13,9 +13,6 @@ import java.util.List;
 
 public abstract class BaseDemo {
 
-    private static final int SCREEN_WIDTH = 800;
-    private static final int SCREEN_HEIGHT = 600;
-
     public static final class ChainComparator<T> implements Comparator<T> {
 
         private final Comparator<T>[] comparators;
@@ -59,7 +56,9 @@ public abstract class BaseDemo {
         try {
             title = "OpenLoco demo :: " + getClass().getSimpleName();
             Display.setTitle(title);
-            Display.setDisplayMode(new DisplayMode(getScreenWidth(), getScreenHeight()));
+            DisplayMode displayMode = new DisplayMode(800, 600);
+            Display.setDisplayMode(displayMode);
+            Display.setResizable(true);
             Display.create();
             Display.setVSyncEnabled(true);
         } catch (LWJGLException e) {
@@ -82,20 +81,20 @@ public abstract class BaseDemo {
 
         GL11.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
-        GL11.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        GL11.glViewport(0, 0, getScreenWidth(), getScreenHeight());
 
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GL11.glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 1, -1);
+        GL11.glOrtho(0, getScreenWidth(), getScreenHeight(), 0, 1, -1);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
     }
 
     public int getScreenWidth() {
-        return SCREEN_WIDTH;
+        return Display.getWidth();
     }
 
     public int getScreenHeight() {
-        return SCREEN_HEIGHT;
+        return Display.getHeight();
     }
 
     protected void initDisplay() {
@@ -108,6 +107,7 @@ public abstract class BaseDemo {
         init();
 
         while (true) {
+            updateInternal();
             update();
             renderInternal();
 
@@ -118,6 +118,12 @@ public abstract class BaseDemo {
                 Display.destroy();
                 break;
             }
+        }
+    }
+
+    private void updateInternal() {
+        if (Display.wasResized()) {
+            initOpenGL();
         }
     }
 
