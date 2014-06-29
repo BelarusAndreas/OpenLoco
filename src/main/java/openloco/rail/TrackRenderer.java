@@ -61,19 +61,19 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
     }
 
     private void drawStraight(Track track, List<SpriteInstance> sprites, TrackNode node) {
-        int[][][] deltas = {{{0, 0}}, {{0, 0}}};
-        drawTrackPiece(track, sprites, node, 1, 2, deltas, 18);
+        int[][][] allOffsets = {{{0, 0}}, {{0, 0}}};
+        drawTrackPiece(track, sprites, node, allOffsets, 18);
 
         BridgeTileType[][] bridgeTileTypes = {
                 { FULL_WALL_EW },
                 { FULL_WALL_NS }
         };
 
-        drawBridgeTiles(sprites, node, deltas, bridgeTileTypes);
+        drawBridgeTiles(sprites, node, allOffsets, bridgeTileTypes);
     }
 
     private void drawSmallCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
-        int[][][] deltas = {
+        int[][][] allOffsets = {
                 { {0, 0}, {1, 0}, {0,-1}, {1,-1} },
                 { {0, 0}, {0, 1}, {1, 0}, {1, 1} },
                 { {0, 0}, {-1,0}, {0, 1}, {-1,1} },
@@ -87,12 +87,12 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             { FULL_WALL_S, HALF_SW, HALF_NE, FULL_WALL_W }
         };
 
-        drawTrackPiece(track, spriteInstances, node, 4, 4, deltas, 24);
-        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
+        drawTrackPiece(track, spriteInstances, node, allOffsets, 24);
+        drawBridgeTiles(spriteInstances, node, allOffsets, bridgeTileTypes);
     }
 
     private void drawMediumCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
-        int[][][] deltas = {
+        int[][][] allOffsets = {
                 { {0, 0}, {0, -1}, {1,-1}, {1,-2}, {2,-2} },
                 { {0, 0}, {1, 0}, {1, 1}, {2, 1}, {2, 2} },
                 { {0, 0}, {0, 1}, {-1,1}, {-1, 2}, {-2, 2} },
@@ -106,12 +106,12 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             { FULL_WALL_NS, HALF_NE, HALF_SW, HALF_NE, FULL_WALL_EW }
         };
 
-        drawTrackPiece(track, spriteInstances, node, 5, 4, deltas, 136);
-        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
+        drawTrackPiece(track, spriteInstances, node, allOffsets, 136);
+        drawBridgeTiles(spriteInstances, node, allOffsets, bridgeTileTypes);
     }
 
     private void drawWideCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
-        int[][][] deltas = {
+        int[][][] allOffsets = {
                 {{0, 0}, {0,-1}, {1, -1}, {0, -2}, {1, -2}},
                 {{0, 0}, {1, 0}, {1, 1}, {2, 0}, {2, 1}},
                 {{0, 0}, {0, 1}, {-1, 1}, {0, 2}, {-1, 2}},
@@ -133,12 +133,12 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             { FULL_WALL_NS, FULL_WALL_N, HALF_NW, HALF_SE, HALF_NE_NO_WALL }
         };
 
-        drawTrackPiece(track, spriteInstances, node, 5, 8, deltas, 208);
-        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
+        drawTrackPiece(track, spriteInstances, node, allOffsets, 208);
+        drawBridgeTiles(spriteInstances, node, allOffsets, bridgeTileTypes);
     }
 
     private void drawSBend(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
-        int[][][] deltas = {
+        int[][][] allOffsets = {
                 { {0, 0}, {0, -1}, {-1, -1}, {-1, -2} },
                 { {0, 0}, {1, 0}, {1, -1}, {2, -1} },
                 { {0, 0}, {0, -1}, {1, -1}, {1, -2} },
@@ -152,12 +152,12 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             { FULL_WALL_NS, HALF_SW, HALF_NE, FULL_WALL_NS }
         };
 
-        drawTrackPiece(track, spriteInstances, node, 4, 4, deltas, 352);
-        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
+        drawTrackPiece(track, spriteInstances, node, allOffsets, 352);
+        drawBridgeTiles(spriteInstances, node, allOffsets, bridgeTileTypes);
     }
 
     private void drawDiagonal(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
-        int[][][] deltas = {
+        int[][][] allOffsets = {
                 { {0, 0}, {0, -1}, {1, 0}, {1, -1} },
                 { {0, 0}, {1, 0}, {0, 1}, {1, 1} }
         };
@@ -167,12 +167,12 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             { HALF_SE_NO_WALL, HALF_SW, HALF_NE, HALF_NW_NO_WALL }
         };
 
-        drawTrackPiece(track, spriteInstances, node, 4, 2, deltas, 328);
-        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
+        drawTrackPiece(track, spriteInstances, node, allOffsets, 328);
+        drawBridgeTiles(spriteInstances, node, allOffsets, bridgeTileTypes);
     }
 
     private void drawNormalSlope(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
-        int[][][] deltas = {
+        int[][][] allOffsets = {
                 { {0, 0}, {0, -1} },
                 { {0, 0}, {1, 0} },
                 { {0, 0}, {0, 1} },
@@ -187,8 +187,8 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         for (int i=0; i < 2; i++) {
             int zIndex = Tile.HEIGHT_STEP *node.getZ();
             OpenGlSprite sprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(startIndex + i + (2*rotation)));
-            int cartX = Tile.WIDTH * (node.getX() + deltas[rotation][i][0]);
-            int cartY = Tile.WIDTH * (node.getY() + deltas[rotation][i][1]);
+            int cartX = Tile.WIDTH * (node.getX() + allOffsets[rotation][i][0]);
+            int cartY = Tile.WIDTH * (node.getY() + allOffsets[rotation][i][1]);
             int screenX = Math.round(IsoUtil.isoX(cartX, cartY, zIndex));
             int screenY = Math.round(IsoUtil.isoY(cartX, cartY, zIndex));
             spriteInstances.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.RAILS, cartX, cartY, zIndex+i));
@@ -212,10 +212,12 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             { SUPPORTS_ONLY_NS, SUPPORTS_ONLY_NS },
         };
 
-        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
+        drawBridgeTiles(spriteInstances, node, allOffsets, bridgeTileTypes);
     }
 
-    private void drawTrackPiece(Track track, List<SpriteInstance> spriteInstances, TrackNode node, int spritesPerTile, int maxRotation, int[][][] deltas, int spriteStartIndex) {
+    private void drawTrackPiece(Track track, List<SpriteInstance> spriteInstances, TrackNode node, int[][][] allOffsets, int spriteStartIndex) {
+        int maxRotation = allOffsets.length;
+        int spritesPerTile = allOffsets[0].length;
         int rotation = node.getRotation() % maxRotation;
         int ballastIndex = spriteStartIndex + spritesPerTile * rotation;
         int sleeperIndex = spriteStartIndex + ((maxRotation + rotation) * spritesPerTile);
@@ -225,8 +227,8 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             OpenGlSprite ballastSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(ballastIndex + i));
             OpenGlSprite sleeperSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(sleeperIndex + i));
             OpenGlSprite railSprite = OpenGlSprite.createFromRawSprite(track.getSprites().get(railIndex + i));
-            int cartX = Tile.WIDTH * (node.getX() + deltas[rotation][i][0]);
-            int cartY = Tile.WIDTH * (node.getY() + deltas[rotation][i][1]);
+            int cartX = Tile.WIDTH * (node.getX() + allOffsets[rotation][i][0]);
+            int cartY = Tile.WIDTH * (node.getY() + allOffsets[rotation][i][1]);
             int screenX = Math.round(IsoUtil.isoX(cartX, cartY, Tile.HEIGHT_STEP *node.getZ()));
             int screenY = Math.round(IsoUtil.isoY(cartX, cartY, Tile.HEIGHT_STEP *node.getZ()));
             spriteInstances.add(new SpriteInstance(ballastSprite, screenX, screenY, SpriteLayer.BALLAST, cartX, cartY, Tile.HEIGHT_STEP * node.getZ()));
