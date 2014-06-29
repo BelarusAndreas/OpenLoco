@@ -99,7 +99,15 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                 { {0, 0}, {-1,0}, {-1,-1}, {-2,-1}, {-2,-2} }
         };
 
+        BridgeTileType[][] bridgeTileTypes = {
+            { FULL_WALL_EW, HALF_SE, HALF_NW, HALF_SE, FULL_WALL_NS },
+            { FULL_WALL_NS, HALF_SW, HALF_NE, HALF_SW, FULL_WALL_EW },
+            { FULL_WALL_EW, HALF_NW, HALF_SE, HALF_NW, FULL_WALL_NS },
+            { FULL_WALL_NS, HALF_NE, HALF_SW, HALF_NE, FULL_WALL_EW }
+        };
+
         drawTrackPiece(track, spriteInstances, node, 5, 4, deltas, 136);
+        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
     }
 
     private void drawWideCurve(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
@@ -114,7 +122,19 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                 {{2, -1}, {1, -1}, {1, 0}, {0, -1}, {0, 0}}
         };
 
+        BridgeTileType[][] bridgeTileTypes = {
+            { FULL_WALL_EW, FULL_WALL_W, HALF_NW, HALF_SE, HALF_SW_NO_WALL },
+            { FULL_WALL_NS, FULL_WALL_N, HALF_NE, HALF_SW, HALF_NW_NO_WALL },
+            { FULL_WALL_EW, FULL_WALL_E, HALF_SE, HALF_NW, HALF_NE_NO_WALL },
+            { FULL_WALL_NS, FULL_WALL_S, HALF_SW, HALF_NE, HALF_SE_NO_WALL },
+            { FULL_WALL_EW, FULL_WALL_E, HALF_NE, HALF_SW, HALF_SE_NO_WALL },
+            { FULL_WALL_NS, FULL_WALL_S, HALF_SE, HALF_NW, HALF_SW_NO_WALL },
+            { FULL_WALL_EW, FULL_WALL_W, HALF_SW, HALF_NE, HALF_NW_NO_WALL },
+            { FULL_WALL_NS, FULL_WALL_N, HALF_NW, HALF_SE, HALF_NE_NO_WALL }
+        };
+
         drawTrackPiece(track, spriteInstances, node, 5, 8, deltas, 208);
+        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
     }
 
     private void drawSBend(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
@@ -142,7 +162,13 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
                 { {0, 0}, {1, 0}, {0, 1}, {1, 1} }
         };
 
+        BridgeTileType[][] bridgeTileTypes = {
+            { HALF_NE_NO_WALL, HALF_SE, HALF_NW, HALF_SW_NO_WALL },
+            { HALF_SE_NO_WALL, HALF_SW, HALF_NE, HALF_NW_NO_WALL }
+        };
+
         drawTrackPiece(track, spriteInstances, node, 4, 2, deltas, 328);
+        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
     }
 
     private void drawNormalSlope(Track track, List<SpriteInstance> spriteInstances, TrackNode node) {
@@ -165,7 +191,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             int cartY = Tile.WIDTH * (node.getY() + deltas[rotation][i][1]);
             int screenX = Math.round(IsoUtil.isoX(cartX, cartY, zIndex));
             int screenY = Math.round(IsoUtil.isoY(cartX, cartY, zIndex));
-            spriteInstances.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.RAILS, cartX, cartY, zIndex));
+            spriteInstances.add(new SpriteInstance(sprite, screenX, screenY, SpriteLayer.RAILS, cartX, cartY, zIndex+i));
 
             //draw the bridge wedge
             int spriteIndex = 84+(node.getRotation()*6)+(3*i);
@@ -174,56 +200,19 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             OpenGlSprite wallSpriteW = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(spriteIndex + 1));
             OpenGlSprite wallSpriteE = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(spriteIndex + 2));
 
-            spriteInstances.add(new SpriteInstance(wedgeSprite, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex));
-            spriteInstances.add(new SpriteInstance(wallSpriteW, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+1));
-            spriteInstances.add(new SpriteInstance(wallSpriteE, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+1));
+            spriteInstances.add(new SpriteInstance(wedgeSprite, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+i-1));
+            spriteInstances.add(new SpriteInstance(wallSpriteW, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+i+1));
+            spriteInstances.add(new SpriteInstance(wallSpriteE, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+i+1));
         }
 
-        drawBridgeSupports(spriteInstances, node, deltas);
-    }
+        BridgeTileType[][] bridgeTileTypes = {
+            { SUPPORTS_ONLY_EW, SUPPORTS_ONLY_EW },
+            { SUPPORTS_ONLY_NS, SUPPORTS_ONLY_NS },
+            { SUPPORTS_ONLY_EW, SUPPORTS_ONLY_EW },
+            { SUPPORTS_ONLY_NS, SUPPORTS_ONLY_NS },
+        };
 
-    private void drawBridgeSupports(List<SpriteInstance> spriteInstances, TrackNode node, int[][][] allDeltas) {
-        if (node.getZ() > 0) {
-            int rotation = node.getRotation() % allDeltas.length;
-            int[][] deltas = allDeltas[rotation];
-            Bridge bridge = assets.getBridge(node.getBridgeType());
-
-            int topIndex;
-            int supportIndex;
-
-            if (rotation % 2 == 0) {
-                topIndex = 36;
-                supportIndex = 16;
-            }
-            else {
-                topIndex = 60;
-                supportIndex = 24;
-            }
-
-            for (int i=0; i<deltas.length; i++) {
-                int cartX = Tile.WIDTH * (node.getX() + deltas[i][0]);
-                int cartY = Tile.WIDTH * (node.getY() + deltas[i][1]);
-
-                for (int j=0; j<3; j++) {
-                    OpenGlSprite baseSprite = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(topIndex+j));
-                    int zIndex = Tile.HEIGHT_STEP * (node.getZ() - 1);
-                    int screenX = Math.round(IsoUtil.isoX(cartX, cartY, zIndex));
-                    int screenY = Math.round(IsoUtil.isoY(cartX, cartY, zIndex));
-                    spriteInstances.add(new SpriteInstance(baseSprite, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+2));
-                }
-
-
-                for (int z = node.getZ()-1; z>=0; z--) {
-                    OpenGlSprite supportSprite1 = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(supportIndex));
-                    OpenGlSprite supportSprite2 = OpenGlSprite.createFromRawSprite(bridge.getSprites().get(supportIndex+1));
-                    int zIndex = z* Tile.HEIGHT_STEP;
-                    int screenX = Math.round(IsoUtil.isoX(cartX, cartY, zIndex));
-                    int screenY = Math.round(IsoUtil.isoY(cartX, cartY, zIndex));
-                    spriteInstances.add(new SpriteInstance(supportSprite1, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+1));
-                    spriteInstances.add(new SpriteInstance(supportSprite2, screenX, screenY, SpriteLayer.BRIDGE, cartX, cartY, zIndex+1));
-                }
-            }
-        }
+        drawBridgeTiles(spriteInstances, node, deltas, bridgeTileTypes);
     }
 
     private void drawTrackPiece(Track track, List<SpriteInstance> spriteInstances, TrackNode node, int spritesPerTile, int maxRotation, int[][][] deltas, int spriteStartIndex) {
