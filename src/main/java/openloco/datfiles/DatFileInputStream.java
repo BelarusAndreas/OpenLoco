@@ -84,5 +84,16 @@ public class DatFileInputStream extends DataInputStream {
     }
 
 
-
+    public long[] loadAux(int count, int size) throws IOException {
+        long[] result = new long[count];
+        for (int i=0; i<count; i++) {
+            if (size == 1) {
+                result[i] = ((readByte() << 24) >> 24);
+            }
+            else if (size == 2) {
+                result[i] = readSShort();
+            }
+        }
+        return result;
+    }
 }

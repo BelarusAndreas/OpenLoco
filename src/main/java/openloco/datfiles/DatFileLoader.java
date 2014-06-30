@@ -95,7 +95,6 @@ public class DatFileLoader {
             switch (objectClass) {
 
                 case INTERFACES:
-                    logger.debug("Found interface: {}", name);
                     InterfaceStyle interfaceStyle = loadInterfaceStyle(name, dataInputStream);
                     assets.add(interfaceStyle);
                     break;
@@ -133,6 +132,11 @@ public class DatFileLoader {
                 case BRIDGES:
                     Bridge bridge = loadBridge(name, dataInputStream);
                     assets.add(bridge);
+                    break;
+
+                case INDUSTRIES:
+                    Industry industry = loadIndustry(name, dataInputStream);
+                    assets.add(industry);
                     break;
 
                 default:
@@ -451,6 +455,41 @@ public class DatFileLoader {
         int disabledTrackCfg = in.readSShort();
         in.skipBytes(22);
         return new BridgeVars(noRoof, spanLength, pillarSpacing, maxSpeed, maxHeight, costInd, baseCostFactor, heightCostFactor, sellCostFactor, disabledTrackCfg);
+    }
+
+    private static Industry loadIndustry(String name, DatFileInputStream in) throws IOException {
+        IndustryVars industryVars = loadIndustryVars(in);
+        MultiLangString description = in.readMultiLangString();
+        MultiLangString templatedName = in.readMultiLangString();
+        MultiLangString prefixDescription = in.readMultiLangString();
+        MultiLangString closingDownMessage = in.readMultiLangString();
+        MultiLangString productionUpMessage = in.readMultiLangString();
+        MultiLangString productionDownMessage = in.readMultiLangString();
+        MultiLangString singular = in.readMultiLangString();
+        MultiLangString plural = in.readMultiLangString();
+
+        long[] aux0 = in.loadAux(industryVars.getNumAux01(), 1);
+        long[] aux1 = in.loadAux(industryVars.getNumAux01(), 2);
+
+        return new Industry(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, aux0, aux1);
+    }
+
+    private static IndustryVars loadIndustryVars(DatFileInputStream in) throws IOException {
+        in.skipBytes(30);
+        byte numAux01 = in.readByte();
+        byte numAux4Ent = in.readByte();
+        in.skipBytes(157);
+        byte numAux5 = in.readByte();
+        in.skipBytes(12);
+        int firstYear = in.readUShort();
+        int lastYear = in.readUShort();
+        in.skipBytes(1);
+        byte costInd = in.readByte();
+        int costFactor = in.readSShort();
+        in.skipBytes(18);
+        EnumSet<IndustryVars.IndustryFlag> industryFlags = in.readBitField(4, IndustryVars.IndustryFlag.class);
+        in.skipBytes(12);
+        return new IndustryVars(numAux01, numAux4Ent, numAux5, firstYear, lastYear, costInd, costFactor, industryFlags);
     }
 
     private static void dumpSprites(String dataDir, String name, Sprites sprites) throws IOException {

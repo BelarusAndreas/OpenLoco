@@ -15,6 +15,7 @@ public class Assets {
     private final Map<String, Tree> trees = new HashMap<>();
     private final Map<String, InterfaceStyle> interfaceStyles = new HashMap<>();
     private final Map<String, Bridge> bridges = new HashMap<>();
+    private final Map<String, Industry> industries = new HashMap<>();
 
     public void add(Vehicle vehicle) {
         vehicles.put(vehicle.getName(), vehicle);
@@ -66,5 +67,9 @@ public class Assets {
 
     public Bridge getBridge(String name) {
         return bridges.get(name);
+    }
+
+    public void add(Industry industry) {
+        industries.put(industry.getName(), industry);
     }
 }
