@@ -88,7 +88,7 @@ public class DatFileInputStream extends DataInputStream {
         long[] result = new long[count];
         for (int i=0; i<count; i++) {
             if (size == 1) {
-                result[i] = ((readByte() << 24) >> 24);
+                result[i] = readByte();
             }
             else if (size == 2) {
                 result[i] = readSShort();
