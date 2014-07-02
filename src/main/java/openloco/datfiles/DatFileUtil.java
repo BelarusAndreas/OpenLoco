@@ -20,7 +20,7 @@ public class DatFileUtil {
     }
 
     public static byte[] rleDecode(byte[] input, int offset, long length) {
-        List<Byte> buffer = new ArrayList<Byte>();
+        List<Byte> buffer = new ArrayList<>();
         while (length > 0) {
             byte rle = input[offset++];
             int run = Math.abs(rle)+1;

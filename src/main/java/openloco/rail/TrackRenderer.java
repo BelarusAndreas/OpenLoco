@@ -257,19 +257,16 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
         int y = (trackNode.getY()+offset[1])*Tile.WIDTH;
         int z = trackNode.getZ()*Tile.HEIGHT_STEP;
 
-        for (int u=0; u<walls.length; u++) {
-            int wallSprite = walls[u];
+        for (int wallSprite: walls) {
             outputBridgeSprite(sprites, bridge, wallSprite, x, y, z);
         }
 
-        for (int v=0; v<base.length; v++) {
-            int baseSprite = base[v];
+        for (int baseSprite: base) {
             outputBridgeSprite(sprites, bridge, baseSprite, x, y, z-Tile.HEIGHT_STEP);
         }
 
         for (int h=trackNode.getZ()-2; h>=0; h--) {
-            for (int s=0; s<supports.length; s++) {
-                int supportSprite = supports[s];
+            for (int supportSprite: supports) {
                 outputBridgeSprite(sprites, bridge, supportSprite, x, y, h*Tile.HEIGHT_STEP);
             }
         }

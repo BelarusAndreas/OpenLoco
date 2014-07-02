@@ -102,7 +102,7 @@ public abstract class BaseDemo {
         initOpenGL();
     }
 
-    public void run() throws IOException {
+    public void run() {
         initDisplay();
         init();
 

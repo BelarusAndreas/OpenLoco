@@ -73,7 +73,7 @@ public class DatFileInputStream extends DataInputStream {
         Map<Integer, String> strings = new HashMap<>();
         byte language;
         while ((language = readByte()) != (byte)0xFF){
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             char ch;
             while ((ch = (char)readByte()) != (byte)0x00) {
                 sb.append(ch);
@@ -82,7 +82,6 @@ public class DatFileInputStream extends DataInputStream {
         }
         return new MultiLangString(strings);
     }
-
 
     public long[] loadAux(int count, int size) throws IOException {
         long[] result = new long[count];

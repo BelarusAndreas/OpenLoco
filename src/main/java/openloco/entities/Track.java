@@ -56,7 +56,7 @@ public class Track {
         public int getNumStations() {
             return numStations;
         }
-    };
+    }
 
     public static enum TrackPiece {
         DIAGONAL(1),

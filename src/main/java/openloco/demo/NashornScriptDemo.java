@@ -95,5 +95,6 @@ public class NashornScriptDemo extends BaseDemo {
     @Override
     protected void finalize() throws Throwable {
         watchService.close();
+        super.finalize();
     }
 }

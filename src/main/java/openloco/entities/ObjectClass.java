@@ -34,5 +34,5 @@ public enum ObjectClass {
     INDUSTRIES,
     REGIONS,
     COMPANIES,                  // 0x20
-    TEXTS;
+    TEXTS
 }

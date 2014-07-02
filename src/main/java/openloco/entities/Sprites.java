@@ -84,7 +84,7 @@ public class Sprites {
         unknown3,
         unknown4,
         COPY,
-        unknown5;
+        unknown5
     }
 
 }

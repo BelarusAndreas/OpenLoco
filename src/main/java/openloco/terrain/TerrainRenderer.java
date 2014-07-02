@@ -26,7 +26,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
         LH_TOP,
         HL_BOTTOM,
         LH_BOTTOM
-    };
+    }
 
     public TerrainRenderer(Assets assets) {
         Ground ground = assets.getGround("GRASS1  ");
