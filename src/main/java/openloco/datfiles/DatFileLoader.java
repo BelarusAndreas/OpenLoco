@@ -518,7 +518,7 @@ public class DatFileLoader {
     }
 
     public static interface VarExtractor<V> {
-        V extract(DatFileInputStream in);
+        V extract(DatFileInputStream in) throws IOException;
     }
 
 }
