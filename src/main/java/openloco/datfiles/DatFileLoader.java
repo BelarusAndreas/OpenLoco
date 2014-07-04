@@ -190,7 +190,7 @@ public class DatFileLoader {
 
         Sprites sprites = loadSprites(inputStream);
 
-        return new Vehicle(name, description, vars, trackType, cargoCapacities, visualFx, wakeFx, rackRail, startSnd, compatibleVehicles, sounds, sprites);
+        return new Vehicle(name, description, vars, trackType, trackModifications, cargoCapacities, visualFx, wakeFx, rackRail, startSnd, compatibleVehicles, sounds, sprites);
     }
 
     public static CargoCapacity loadCargoCapacity(DatFileInputStream in) throws IOException {

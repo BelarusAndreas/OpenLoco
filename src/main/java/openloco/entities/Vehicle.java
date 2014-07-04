@@ -8,6 +8,7 @@ public class Vehicle {
     private final MultiLangString description;
     private final VehicleVars vars;
     private final UseObject trackType;
+    private final List<UseObject> trackModifications;
     private final List<CargoCapacity> cargoCapacities;
     private final UseObject visualFx;
     private final UseObject wakeFx;
@@ -18,13 +19,14 @@ public class Vehicle {
     private final Sprites sprites;
 
     public Vehicle(String name, MultiLangString description, VehicleVars vars, UseObject trackType,
-                   List<CargoCapacity> cargoCapacities, UseObject visualFx, UseObject wakeFx, UseObject rackRail,
+                   List<UseObject> trackModifications, List<CargoCapacity> cargoCapacities, UseObject visualFx, UseObject wakeFx, UseObject rackRail,
                    UseObject startSound, List<UseObject> compatibleVehicles, List<UseObject> sounds, Sprites sprites) {
 
         this.name = name;
         this.description = description;
         this.vars = vars;
         this.trackType = trackType;
+        this.trackModifications = trackModifications;
         this.cargoCapacities = cargoCapacities;
         this.visualFx = visualFx;
         this.wakeFx = wakeFx;
