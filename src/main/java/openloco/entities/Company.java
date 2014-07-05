@@ -2,7 +2,7 @@ package openloco.entities;
 
 public class Company {
 
-    private String name;
+    private final String name;
     private final CompanyVars companyVars;
     private final MultiLangString companyName;
     private final MultiLangString ceoName;
@@ -37,9 +37,9 @@ public class Company {
     }
 
     public static class CompanyVars {
-        private byte intelligence;
-        private byte aggressiveness;
-        private byte competitiveness;
+        private final byte intelligence;
+        private final byte aggressiveness;
+        private final byte competitiveness;
 
         public CompanyVars(byte intelligence, byte aggressiveness, byte competitiveness) {
             this.intelligence = intelligence;

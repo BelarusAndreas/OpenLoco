@@ -2,8 +2,8 @@ package openloco.entities;
 
 public class GroundVars {
 
-    private byte costInd;
-    private short costFactor;
+    private final byte costInd;
+    private final short costFactor;
 
     public GroundVars(byte costInd, short costFactor) {
         this.costInd = costInd;

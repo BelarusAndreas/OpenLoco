@@ -5,8 +5,8 @@ import java.util.List;
 
 public class CargoCapacity {
 
-    private byte capacity;
-    private List<CargoRefitCapacity> refitCapacities = new ArrayList<>();
+    private final byte capacity;
+    private final List<CargoRefitCapacity> refitCapacities;
 
     public CargoCapacity(byte capacity, List<CargoRefitCapacity> refitCapacities) {
         this.capacity = capacity;

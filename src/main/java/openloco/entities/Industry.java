@@ -1,7 +1,7 @@
 package openloco.entities;
 
 public class Industry {
-    private String name;
+    private final String name;
     private final IndustryVars industryVars;
     private final MultiLangString templatedName;
     private final MultiLangString description;
