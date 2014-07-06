@@ -84,15 +84,66 @@ public class DatFileInputStream extends DataInputStream {
     }
 
     public long[] loadAux(int count, int size) throws IOException {
-        long[] result = new long[count];
-        for (int i=0; i<count; i++) {
-            if (size == 1) {
-                result[i] = readByte();
+        return loadAuxArray(count, 1, size)[0];
+    }
+
+    public long[][] loadAuxArray(int count, int entryCount, int size) throws IOException {
+        long[][] result = new long[entryCount][];
+        for (int i=0; i<entryCount; i++) {
+            long[] value = new long[count];
+            for (int j = 0; j<count; j++) {
+                value[j] = readValueOfSize(size);
             }
-            else if (size == 2) {
-                result[i] = readSShort();
-            }
+            result[i] = value;
         }
         return result;
+    }
+
+    public long[] loadAuxVarCount(int count, int size) throws IOException {
+        return loadAuxArrayVarCount(count, 1, size)[0];
+    }
+
+    public long[][] loadAuxArrayVarCount(int count, int entryCount, int size) throws IOException {
+        long[][] result = new long[entryCount][];
+        for (int i=0; i<entryCount; i++) {
+            List<Long> value = new LinkedList<>();
+            int j = 0;
+            while (true) {
+                mark(1);
+                byte escape = readByte();
+                if (escape == -1) {
+                    break;
+                }
+                reset();
+                value.add(readValueOfSize(size));
+                j++;
+            }
+
+            result[i] = extractPrimitiveArray(value);
+        }
+        return result;
+    }
+
+    private long[] extractPrimitiveArray(List<Long> value) {
+        long[] valueArray = new long[value.size()];
+        int x = 0;
+        for (long l: value) {
+            valueArray[x++] = l;
+        }
+        return valueArray;
+    }
+
+    private long readValueOfSize(int size) throws IOException {
+        long value;
+        if (size == 1) {
+            value = readByte();
+        }
+        else if (size == 2) {
+            value = readSShort();
+        }
+        else {
+            throw new IllegalArgumentException("Illegal value size: " + size);
+        }
+        return value;
     }
 }
