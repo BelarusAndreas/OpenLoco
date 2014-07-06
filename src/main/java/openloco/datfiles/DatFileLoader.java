@@ -485,17 +485,11 @@ public class DatFileLoader {
         long[][] aux4 = in.loadAuxArrayVarCount(2, industryVars.getNumAux4Ent(), 1);
         long[] aux5 = in.loadAux(industryVars.getNumAux5(), 1);
 
-        List<UseObject> produces = Collections.emptyList();
-        List<UseObject> accepts = Collections.emptyList();
-        List<UseObject> fences = Collections.emptyList();
+        List<UseObject> produces = in.readUseObjectList(2, ObjectClass.CARGOES);
+        List<UseObject> accepts = in.readUseObjectList(3, ObjectClass.CARGOES);
+        List<UseObject> fences = in.readUseObjectList(6, ObjectClass.FENCES);
 
-        //List<UseObject> produces = in.readUseObjectList(2, ObjectClass.CARGOES);
-        //List<UseObject> accepts = in.readUseObjectList(3, ObjectClass.CARGOES);
-        //List<UseObject> fences = in.readUseObjectList(6, ObjectClass.FENCES);
-
-        Sprites sprites = new Sprites(Collections.emptyList());
-
-        //Sprites sprites = loadSprites(in);
+        Sprites sprites = loadSprites(in);
 
         return new Industry(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, aux0, aux1, aux2, aux3, aux4, aux5, produces, accepts, fences, sprites);
     }

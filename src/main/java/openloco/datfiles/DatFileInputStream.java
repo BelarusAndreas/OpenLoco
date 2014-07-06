@@ -48,15 +48,19 @@ public class DatFileInputStream extends DataInputStream {
 
     public UseObject readUseObject(EnumSet<ObjectClass> objectClasses) throws IOException {
         byte objectClassId = readByte();
-        ObjectClass objectClass = ObjectClass.values()[objectClassId];
-        if (!objectClasses.contains(objectClass)) {
-            throw new RuntimeException("Invalid object reference");
-        }
         skipBytes(3);
         byte[] ref = new byte[8];
         readFully(ref);
         String objectReference = new String(ref);
         skipBytes(4);
+
+        if (objectClassId == -1) {
+            return null;
+        }
+        ObjectClass objectClass = ObjectClass.values()[objectClassId];
+        if (!objectClasses.contains(objectClass)) {
+            throw new RuntimeException("Invalid object reference");
+        }
         return new UseObject(objectClass, objectReference);
     }
 
@@ -64,7 +68,10 @@ public class DatFileInputStream extends DataInputStream {
         EnumSet<ObjectClass> validObjectClasses = EnumSet.copyOf(Arrays.asList(validObjects));
         List<UseObject> references = new ArrayList<>();
         for (int i=0; i<count; i++) {
-            references.add(readUseObject(validObjectClasses));
+            UseObject objectRef = readUseObject(validObjectClasses);
+            if (objectRef != null) {
+                references.add(objectRef);
+            }
         }
         return references;
     }
