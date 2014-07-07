@@ -144,7 +144,7 @@ public class DatFileLoader {
             }
         }
         catch (IOException ioe) {
-            logger.error("IOException whilst loading object of class {}: ", objectClass, ioe);
+            logger.error("IOException whilst loading object '{}' of class {}: ", name, objectClass, ioe);
         }
     }
 
