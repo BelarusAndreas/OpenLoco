@@ -243,42 +243,51 @@ public class DatFileLoader {
             spriteHeaders.add(loadSpriteHeader(in));
         }
 
+        int spriteIndex = 0;
+
         for (Sprites.SpriteHeader header : spriteHeaders) {
             boolean isChunked = header.getFlags().contains(Sprites.SpriteFlag.CHUNKED);
+            boolean isCopy = header.getFlags().contains(Sprites.SpriteFlag.COPY);
 
             if (isChunked) {
                 in.skipBytes(2*header.getHeight());
             }
 
-            int[] pixels = new int[header.getWidth() * header.getHeight()];
-            for (int row=0; row<header.getHeight(); row++) {
-                int rowOffset = row * header.getWidth();
+            if (isCopy) {
+                Sprites.RawSprite prevSprite = sprites.get(spriteIndex-1);
+                sprites.add(new Sprites.RawSprite(prevSprite.getHeader(), prevSprite.getPixels()));
+            }
+            else {
+                int[] pixels = new int[header.getWidth() * header.getHeight()];
+                for (int row = 0; row < header.getHeight(); row++) {
+                    int rowOffset = row * header.getWidth();
 
-                if (isChunked) {
-                    for (int col=0; col<header.getWidth(); col++) {
-                        pixels[rowOffset + col] = Palette.BACKGROUND;
-                    }
+                    if (isChunked) {
+                        for (int col = 0; col < header.getWidth(); col++) {
+                            pixels[rowOffset + col] = Palette.BACKGROUND;
+                        }
 
-                    boolean last;
-                    do {
-                        int lenLast = 0xFF & in.readByte();
-                        last = (0xFF & (lenLast & 0x80)) != 0;
-                        int len = 0x7f & lenLast;
-                        int offset = 0xFF & in.readByte();
-                        for (int col = offset; col < offset + len; col++) {
+                        boolean last;
+                        do {
+                            int lenLast = 0xFF & in.readByte();
+                            last = (0xFF & (lenLast & 0x80)) != 0;
+                            int len = 0x7f & lenLast;
+                            int offset = 0xFF & in.readByte();
+                            for (int col = offset; col < offset + len; col++) {
+                                pixels[rowOffset + col] = Palette.COLOUR[0xFF & in.readByte()];
+                            }
+                        }
+                        while (!last);
+                    } else {
+                        for (int col = 0; col < header.getWidth(); col++) {
                             pixels[rowOffset + col] = Palette.COLOUR[0xFF & in.readByte()];
                         }
                     }
-                    while (!last);
                 }
-                else {
-                    for (int col=0; col<header.getWidth(); col++) {
-                        pixels[rowOffset + col] = Palette.COLOUR[0xFF & in.readByte()];
-                    }
-                }
-            }
 
-            sprites.add(new Sprites.RawSprite(header, pixels));
+                sprites.add(new Sprites.RawSprite(header, pixels));
+            }
+            spriteIndex++;
         }
 
         return new Sprites(sprites);
