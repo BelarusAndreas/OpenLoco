@@ -72,4 +72,8 @@ public class Assets {
     public void add(Industry industry) {
         industries.put(industry.getName(), industry);
     }
+
+    public Industry getIndustry(String name) {
+        return industries.get(name);
+    }
 }
