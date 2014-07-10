@@ -5,7 +5,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatFileUtil {
+class DatFileUtil {
 
     public static long readUint32LE(byte[] bytes, int pointer) {
         return readUintLE(bytes, pointer, 4);
@@ -79,11 +79,11 @@ public class DatFileUtil {
         return toArray(buffer);
     }
 
-    public static byte rotr8(byte a, byte n) {
+    private static byte rotr8(byte a, byte n) {
         return (byte)(0xFF & (((a)>>(n))|((a)<<(8-n))));
     }
 
-    public static byte[] toArray(List<Byte> buffer) {
+    private static byte[] toArray(List<Byte> buffer) {
         byte[] result = new byte[buffer.size()];
         for (int i=0; i<buffer.size(); i++) {
             result[i] = buffer.get(i);

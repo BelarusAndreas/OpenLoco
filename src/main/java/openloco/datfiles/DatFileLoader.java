@@ -193,7 +193,7 @@ public class DatFileLoader {
         return new Vehicle(name, description, vars, trackType, trackModifications, cargoCapacities, visualFx, wakeFx, rackRail, startSnd, compatibleVehicles, sounds, sprites);
     }
 
-    public static CargoCapacity loadCargoCapacity(DatFileInputStream in) throws IOException {
+    private static CargoCapacity loadCargoCapacity(DatFileInputStream in) throws IOException {
         byte capacity = in.readByte();
         List<CargoCapacity.CargoRefitCapacity> refitCapacities = new ArrayList<>();
         if (capacity != 0) {
@@ -208,7 +208,7 @@ public class DatFileLoader {
         return new CargoCapacity(capacity, refitCapacities);
     }
 
-    public static GroundVars loadGroundVars(DatFileInputStream in) throws IOException {
+    private static GroundVars loadGroundVars(DatFileInputStream in) throws IOException {
         in.skipBytes(2);
         byte costInd = in.readByte();
         in.skipBytes(5);
@@ -217,7 +217,7 @@ public class DatFileLoader {
         return new GroundVars(costInd, costFactor);
     }
 
-    public static Ground loadGround(String name, DatFileInputStream dataInputStream) throws IOException {
+    private static Ground loadGround(String name, DatFileInputStream dataInputStream) throws IOException {
         GroundVars groundVars = loadGroundVars(dataInputStream);
         MultiLangString desc = dataInputStream.readMultiLangString();
         UseObject cliff = dataInputStream.readUseObject(EnumSet.of(ObjectClass.CLIFF_FACES));
@@ -225,14 +225,14 @@ public class DatFileLoader {
         return new Ground(name, groundVars, desc, cliff, sprites);
     }
 
-    public static CliffFace loadCliffFace(String name, DatFileInputStream dataInputStream) throws IOException {
+    private static CliffFace loadCliffFace(String name, DatFileInputStream dataInputStream) throws IOException {
         dataInputStream.skipBytes(6);
         MultiLangString description = dataInputStream.readMultiLangString();
         Sprites sprites = loadSprites(dataInputStream);
         return new CliffFace(name, description, sprites);
     }
 
-    public static Sprites loadSprites(DatFileInputStream in) throws IOException {
+    private static Sprites loadSprites(DatFileInputStream in) throws IOException {
         List<Sprites.RawSprite> sprites = new ArrayList<>();
 
         long num = in.readUnsignedInt();
@@ -293,7 +293,7 @@ public class DatFileLoader {
         return new Sprites(sprites);
     }
 
-    public static Sprites.SpriteHeader loadSpriteHeader(DatFileInputStream in) throws IOException {
+    private static Sprites.SpriteHeader loadSpriteHeader(DatFileInputStream in) throws IOException {
         long offset = in.readUnsignedInt();
         int width = in.readUShort();
         int height = in.readUShort();
@@ -303,13 +303,13 @@ public class DatFileLoader {
         return new Sprites.SpriteHeader(offset, width, height, xOffset, yOffset, flags);
     }
 
-    public static InterfaceStyle loadInterfaceStyle(String name, DatFileInputStream dataInputStream) throws IOException {
+    private static InterfaceStyle loadInterfaceStyle(String name, DatFileInputStream dataInputStream) throws IOException {
         MultiLangString styleName = dataInputStream.readMultiLangString();
         Sprites sprites = loadSprites(dataInputStream);
         return new InterfaceStyle(name, styleName, sprites);
     }
 
-    public static Company loadCompany(String name, DatFileInputStream dataInputStream) throws IOException {
+    private static Company loadCompany(String name, DatFileInputStream dataInputStream) throws IOException {
         Company.CompanyVars companyVars = loadCompanyVars(dataInputStream);
         MultiLangString ceoName = dataInputStream.readMultiLangString();
         MultiLangString companyName = dataInputStream.readMultiLangString();
@@ -317,7 +317,7 @@ public class DatFileLoader {
         return new Company(name, companyVars, ceoName, companyName, sprites);
     }
 
-    public static VehicleSpriteVar loadVehicleSpriteVar(DatFileInputStream in) throws IOException {
+    private static VehicleSpriteVar loadVehicleSpriteVar(DatFileInputStream in) throws IOException {
         byte levelSpriteCount = in.readByte();
         byte upDownSpriteCount = in.readByte();
         byte frames = in.readByte();
@@ -332,7 +332,7 @@ public class DatFileLoader {
         return new VehicleSpriteVar(levelSpriteCount, upDownSpriteCount, frames, vehType, numUnits, tiltCount, bogeyPos, flags, spriteNum);
     }
 
-    public static VehicleVars loadVehicleVars(DatFileInputStream in) throws IOException {
+    private static VehicleVars loadVehicleVars(DatFileInputStream in) throws IOException {
         in.skipBytes(2);
         byte vehicleClass = in.readByte();
         byte vehicleType = in.readByte();
@@ -376,7 +376,7 @@ public class DatFileLoader {
                 visFxHeight, visFxType, wakeFxType, designed, obsolete, startsndtype, numSnd);
     }
 
-    public static Company.CompanyVars loadCompanyVars(DatFileInputStream in) throws IOException {
+    private static Company.CompanyVars loadCompanyVars(DatFileInputStream in) throws IOException {
         in.skipBytes(12);
         in.skipBytes(2); //spritesets
         in.skipBytes(38);
@@ -387,7 +387,7 @@ public class DatFileLoader {
         return new Company.CompanyVars(intelligence, aggressiveness, competitiveness);
     }
 
-    public static Track loadTrack(String name, DatFileInputStream in) throws IOException {
+    private static Track loadTrack(String name, DatFileInputStream in) throws IOException {
         Track.TrackVars trackVars = loadTrackVars(in);
         MultiLangString description = in.readMultiLangString();
         List<UseObject> compatibleTracks = in.readUseObjectList(trackVars.getNumCompat(), ObjectClass.TRACKS, ObjectClass.ROADS);

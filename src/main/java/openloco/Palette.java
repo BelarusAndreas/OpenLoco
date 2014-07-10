@@ -276,8 +276,8 @@ public class Palette {
     }
 
     public static final int BACKGROUND = COLOUR[0];
-    public static final int SECONDARY_START = 202;
-    public static final int SECONDARY_END = 213;
+    private static final int SECONDARY_START = 202;
+    private static final int SECONDARY_END = 213;
 
     public static boolean isCompanyPrimary(int pixel) {
         return colourIndexInRange(pixel, PRIMARY_COLOURS) != -1;
