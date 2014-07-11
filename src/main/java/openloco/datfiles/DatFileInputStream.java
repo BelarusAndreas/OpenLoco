@@ -59,7 +59,7 @@ public class DatFileInputStream extends DataInputStream {
         }
         ObjectClass objectClass = ObjectClass.values()[objectClassId];
         if (!objectClasses.contains(objectClass)) {
-            throw new RuntimeException("Invalid object reference");
+            throw new IllegalArgumentException("Invalid object reference: " + objectClass + " is not one of " + objectClasses);
         }
         return new UseObject(objectClass, objectReference);
     }
