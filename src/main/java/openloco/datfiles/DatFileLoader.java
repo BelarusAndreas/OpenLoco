@@ -139,6 +139,11 @@ public class DatFileLoader {
                     assets.add(industry);
                     break;
 
+                case FENCES:
+                    Fence fence = loadFence(name, dataInputStream);
+                    assets.add(fence);
+                    break;
+
                 default:
                     break;
             }
@@ -501,6 +506,15 @@ public class DatFileLoader {
         Sprites sprites = loadSprites(in);
 
         return new Industry(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, aux0, aux1, aux2, aux3, aux4, aux5, produces, accepts, fences, sprites);
+    }
+
+    private static Fence loadFence(String name, DatFileInputStream in) throws IOException {
+        return loadSimpleObject(name, in, Fence::new, DatFileLoader::loadFenceVars);
+    }
+
+    private static Void loadFenceVars(DatFileInputStream in) throws IOException {
+        in.skipBytes(10);
+        return null;
     }
 
     private static IndustryVars loadIndustryVars(DatFileInputStream in) throws IOException {
