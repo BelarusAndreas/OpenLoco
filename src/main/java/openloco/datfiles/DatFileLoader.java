@@ -496,7 +496,7 @@ public class DatFileLoader {
         }
 
         long[] aux3 = in.loadAuxVarCount(1, 2);
-        long[][] aux4 = in.loadAuxArrayVarCount(2, industryVars.getNumAux4Ent(), 1);
+        long[][] buildingSprites = in.loadAuxArrayVarCount(2, industryVars.getNumBuildings(), 1);
         long[] aux5 = in.loadAux(industryVars.getNumAux5(), 1);
 
         List<UseObject> produces = in.readUseObjectList(2, ObjectClass.CARGOES);
@@ -505,7 +505,7 @@ public class DatFileLoader {
 
         Sprites sprites = loadSprites(in);
 
-        return new Industry(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, aux0, aux1, aux2, aux3, aux4, aux5, produces, accepts, fences, sprites);
+        return new Industry(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, aux0, aux1, aux2, aux3, buildingSprites, aux5, produces, accepts, fences, sprites);
     }
 
     private static Fence loadFence(String name, DatFileInputStream in) throws IOException {
@@ -520,7 +520,7 @@ public class DatFileLoader {
     private static IndustryVars loadIndustryVars(DatFileInputStream in) throws IOException {
         in.skipBytes(30);
         byte numAux01 = in.readByte();
-        byte numAux4Ent = in.readByte();
+        byte numBuildings = in.readByte();
         in.skipBytes(157);
         byte numAux5 = in.readByte();
         in.skipBytes(12);
@@ -532,7 +532,7 @@ public class DatFileLoader {
         in.skipBytes(18);
         EnumSet<IndustryVars.IndustryFlag> industryFlags = in.readBitField(4, IndustryVars.IndustryFlag.class);
         in.skipBytes(12);
-        return new IndustryVars(numAux01, numAux4Ent, numAux5, firstYear, lastYear, costInd, costFactor, industryFlags);
+        return new IndustryVars(numAux01, numBuildings, numAux5, firstYear, lastYear, costInd, costFactor, industryFlags);
     }
 
     private static void dumpSprites(String dataDir, String name, Sprites sprites) throws IOException {

@@ -16,7 +16,7 @@ public class IndustryVars {
     }
 
     private final byte numAux01;
-    private final byte numAux4Ent;
+    private final byte numBuildings;
     private final byte numAux5;
     private final int firstYear;
     private final int lastYear;
@@ -24,10 +24,10 @@ public class IndustryVars {
     private final int costFactor;
     private final EnumSet<IndustryFlag> industryFlags;
 
-    public IndustryVars(byte numAux01, byte numAux4Ent, byte numAux5, int firstYear, int lastYear, byte costInd, int costFactor, EnumSet<IndustryFlag> industryFlags) {
+    public IndustryVars(byte numAux01, byte numBuildings, byte numAux5, int firstYear, int lastYear, byte costInd, int costFactor, EnumSet<IndustryFlag> industryFlags) {
 
         this.numAux01 = numAux01;
-        this.numAux4Ent = numAux4Ent;
+        this.numBuildings = numBuildings;
         this.numAux5 = numAux5;
         this.firstYear = firstYear;
         this.lastYear = lastYear;
@@ -40,8 +40,8 @@ public class IndustryVars {
         return numAux01;
     }
 
-    public byte getNumAux4Ent() {
-        return numAux4Ent;
+    public byte getNumBuildings() {
+        return numBuildings;
     }
 
     public byte getNumAux5() {
