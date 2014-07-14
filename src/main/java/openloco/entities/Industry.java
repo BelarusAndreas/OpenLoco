@@ -126,4 +126,8 @@ public class Industry {
     public Sprites getSprites() {
         return sprites;
     }
+
+    public int getBuildingCount() {
+        return industryVars.getNumBuildings();
+    }
 }
