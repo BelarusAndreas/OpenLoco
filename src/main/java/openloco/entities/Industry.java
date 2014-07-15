@@ -103,10 +103,6 @@ public class Industry {
         return aux3;
     }
 
-    public long[][] getBuildingSprites() {
-        return buildingSprites;
-    }
-
     public long[] getAux5() {
         return aux5;
     }
@@ -130,4 +126,9 @@ public class Industry {
     public int getBuildingCount() {
         return industryVars.getNumBuildings();
     }
+
+    public Building getBuilding(int index) {
+        return new Building(buildingSprites[index]);
+    }
+
 }
