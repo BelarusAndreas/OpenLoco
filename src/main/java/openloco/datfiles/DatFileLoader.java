@@ -482,8 +482,8 @@ public class DatFileLoader {
         MultiLangString singular = in.readMultiLangString();
         MultiLangString plural = in.readMultiLangString();
 
-        long[] aux0 = in.loadAux(industryVars.getNumAux01(), 1);
-        long[] aux1 = in.loadAux(industryVars.getNumAux01(), 2);
+        long[] spriteHeights = in.loadAux(industryVars.getNumSprites(), 1);
+        long[] aux1 = in.loadAux(industryVars.getNumSprites(), 2);
 
         long[][] aux2 = new long[4][];
         for (int i=0; i<4; i++) {
@@ -505,7 +505,7 @@ public class DatFileLoader {
 
         Sprites sprites = loadSprites(in);
 
-        return new Industry(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, aux0, aux1, aux2, aux3, buildingSprites, aux5, produces, accepts, fences, sprites);
+        return new Industry(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, spriteHeights, aux1, aux2, aux3, buildingSprites, aux5, produces, accepts, fences, sprites);
     }
 
     private static Fence loadFence(String name, DatFileInputStream in) throws IOException {
@@ -519,7 +519,7 @@ public class DatFileLoader {
 
     private static IndustryVars loadIndustryVars(DatFileInputStream in) throws IOException {
         in.skipBytes(30);
-        byte numAux01 = in.readByte();
+        byte numSprites = in.readByte();
         byte numBuildings = in.readByte();
         in.skipBytes(157);
         byte numAux5 = in.readByte();
@@ -532,7 +532,7 @@ public class DatFileLoader {
         in.skipBytes(18);
         EnumSet<IndustryVars.IndustryFlag> industryFlags = in.readBitField(4, IndustryVars.IndustryFlag.class);
         in.skipBytes(12);
-        return new IndustryVars(numAux01, numBuildings, numAux5, firstYear, lastYear, costInd, costFactor, industryFlags);
+        return new IndustryVars(numSprites, numBuildings, numAux5, firstYear, lastYear, costInd, costFactor, industryFlags);
     }
 
     private static void dumpSprites(String dataDir, String name, Sprites sprites) throws IOException {
