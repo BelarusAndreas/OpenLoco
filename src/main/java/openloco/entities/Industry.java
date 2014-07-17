@@ -13,7 +13,7 @@ public class Industry {
     private final MultiLangString productionDownMessage;
     private final MultiLangString singular;
     private final MultiLangString plural;
-    private final long[] aux0;
+    private final long[] spriteHeights;
     private final long[] aux1;
     private final long[][] aux2;
     private final long[] aux3;
@@ -24,7 +24,7 @@ public class Industry {
     private final List<UseObject> fences;
     private final Sprites sprites;
 
-    public Industry(String name, IndustryVars industryVars, MultiLangString description, MultiLangString templatedName, MultiLangString prefixDescription, MultiLangString closingDownMessage, MultiLangString productionUpMessage, MultiLangString productionDownMessage, MultiLangString singular, MultiLangString plural, long[] aux0, long[] aux1, long[][] aux2, long[] aux3, long[][] buildingSprites, long[] aux5, List<UseObject> produces, List<UseObject> accepts, List<UseObject> fences, Sprites sprites) {
+    public Industry(String name, IndustryVars industryVars, MultiLangString description, MultiLangString templatedName, MultiLangString prefixDescription, MultiLangString closingDownMessage, MultiLangString productionUpMessage, MultiLangString productionDownMessage, MultiLangString singular, MultiLangString plural, long[] spriteHeights, long[] aux1, long[][] aux2, long[] aux3, long[][] buildingSprites, long[] aux5, List<UseObject> produces, List<UseObject> accepts, List<UseObject> fences, Sprites sprites) {
         this.name = name;
         this.industryVars = industryVars;
         this.description = description;
@@ -35,7 +35,7 @@ public class Industry {
         this.productionDownMessage = productionDownMessage;
         this.singular = singular;
         this.plural = plural;
-        this.aux0 = aux0;
+        this.spriteHeights = spriteHeights;
         this.aux1 = aux1;
         this.aux2 = aux2;
         this.aux3 = aux3;
@@ -87,8 +87,8 @@ public class Industry {
         return plural;
     }
 
-    public long[] getAux0() {
-        return aux0;
+    public long[] getSpriteHeights() {
+        return spriteHeights;
     }
 
     public long[] getAux1() {
