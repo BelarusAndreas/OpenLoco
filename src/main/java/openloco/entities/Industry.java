@@ -14,7 +14,7 @@ public class Industry {
     private final MultiLangString singular;
     private final MultiLangString plural;
     private final long[] spriteHeights;
-    private final long[] aux1;
+    private final long[] animationFlags;
     private final long[][] aux2;
     private final long[] aux3;
     private final long[][] buildingSprites;
@@ -24,7 +24,7 @@ public class Industry {
     private final List<UseObject> fences;
     private final Sprites sprites;
 
-    public Industry(String name, IndustryVars industryVars, MultiLangString description, MultiLangString templatedName, MultiLangString prefixDescription, MultiLangString closingDownMessage, MultiLangString productionUpMessage, MultiLangString productionDownMessage, MultiLangString singular, MultiLangString plural, long[] spriteHeights, long[] aux1, long[][] aux2, long[] aux3, long[][] buildingSprites, long[] aux5, List<UseObject> produces, List<UseObject> accepts, List<UseObject> fences, Sprites sprites) {
+    public Industry(String name, IndustryVars industryVars, MultiLangString description, MultiLangString templatedName, MultiLangString prefixDescription, MultiLangString closingDownMessage, MultiLangString productionUpMessage, MultiLangString productionDownMessage, MultiLangString singular, MultiLangString plural, long[] spriteHeights, long[] animationFlags, long[][] aux2, long[] aux3, long[][] buildingSprites, long[] aux5, List<UseObject> produces, List<UseObject> accepts, List<UseObject> fences, Sprites sprites) {
         this.name = name;
         this.industryVars = industryVars;
         this.description = description;
@@ -36,7 +36,7 @@ public class Industry {
         this.singular = singular;
         this.plural = plural;
         this.spriteHeights = spriteHeights;
-        this.aux1 = aux1;
+        this.animationFlags = animationFlags;
         this.aux2 = aux2;
         this.aux3 = aux3;
         this.buildingSprites = buildingSprites;
@@ -91,8 +91,8 @@ public class Industry {
         return spriteHeights;
     }
 
-    public long[] getAux1() {
-        return aux1;
+    public long[] getAnimationFlags() {
+        return animationFlags;
     }
 
     public long[][] getAux2() {
