@@ -87,10 +87,6 @@ public class Industry {
         return plural;
     }
 
-    public long[] getSpriteHeights() {
-        return spriteHeights;
-    }
-
     public long[] getAnimationFlags() {
         return animationFlags;
     }
@@ -128,7 +124,7 @@ public class Industry {
     }
 
     public Building getBuilding(int index) {
-        return new Building(buildingSprites[index]);
+        return new Building(buildingSprites[index], spriteHeights);
     }
 
 }
