@@ -13,6 +13,10 @@ public class Building {
         }
     }
 
+    public int getSpriteCount() {
+        return spriteOffsets.length;
+    }
+
     public long[] getSpriteOffsets() {
         return spriteOffsets;
     }
