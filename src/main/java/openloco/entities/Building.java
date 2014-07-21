@@ -21,6 +21,10 @@ public class Building {
         return spriteOffsets;
     }
 
+    public int getSpriteOffset(int i) {
+        return (int) spriteOffsets[i];
+    }
+
     public long[] getSpriteHeights() {
         return spriteHeights;
     }
