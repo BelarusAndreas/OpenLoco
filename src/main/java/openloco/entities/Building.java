@@ -28,4 +28,8 @@ public class Building {
     public long[] getSpriteHeights() {
         return spriteHeights;
     }
+
+    public int getSpriteHeight(int i) {
+        return (int) spriteHeights[i];
+    }
 }
