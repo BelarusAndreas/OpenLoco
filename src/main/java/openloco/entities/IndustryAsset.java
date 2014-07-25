@@ -2,7 +2,7 @@ package openloco.entities;
 
 import java.util.List;
 
-public class Industry {
+public class IndustryAsset {
     private final String name;
     private final IndustryVars industryVars;
     private final MultiLangString templatedName;
@@ -24,7 +24,7 @@ public class Industry {
     private final List<UseObject> fences;
     private final Sprites sprites;
 
-    public Industry(String name, IndustryVars industryVars, MultiLangString description, MultiLangString templatedName, MultiLangString prefixDescription, MultiLangString closingDownMessage, MultiLangString productionUpMessage, MultiLangString productionDownMessage, MultiLangString singular, MultiLangString plural, long[] spriteHeights, long[] animationFlags, long[][] aux2, long[] aux3, long[][] buildingSprites, long[] aux5, List<UseObject> produces, List<UseObject> accepts, List<UseObject> fences, Sprites sprites) {
+    public IndustryAsset(String name, IndustryVars industryVars, MultiLangString description, MultiLangString templatedName, MultiLangString prefixDescription, MultiLangString closingDownMessage, MultiLangString productionUpMessage, MultiLangString productionDownMessage, MultiLangString singular, MultiLangString plural, long[] spriteHeights, long[] animationFlags, long[][] aux2, long[] aux3, long[][] buildingSprites, long[] aux5, List<UseObject> produces, List<UseObject> accepts, List<UseObject> fences, Sprites sprites) {
         this.name = name;
         this.industryVars = industryVars;
         this.description = description;
@@ -123,8 +123,8 @@ public class Industry {
         return industryVars.getNumBuildings();
     }
 
-    public Building getBuilding(int index) {
-        return new Building(buildingSprites[index], spriteHeights);
+    public BuildingAsset getBuilding(int index) {
+        return new BuildingAsset(buildingSprites[index], spriteHeights);
     }
 
 }

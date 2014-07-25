@@ -135,8 +135,8 @@ public class DatFileLoader {
                     break;
 
                 case INDUSTRIES:
-                    Industry industry = loadIndustry(name, dataInputStream);
-                    assets.add(industry);
+                    IndustryAsset industryAsset = loadIndustry(name, dataInputStream);
+                    assets.add(industryAsset);
                     break;
 
                 case FENCES:
@@ -471,7 +471,7 @@ public class DatFileLoader {
         return new BridgeVars(noRoof, spanLength, pillarSpacing, maxSpeed, maxHeight, costInd, baseCostFactor, heightCostFactor, sellCostFactor, disabledTrackCfg);
     }
 
-    private static Industry loadIndustry(String name, DatFileInputStream in) throws IOException {
+    private static IndustryAsset loadIndustry(String name, DatFileInputStream in) throws IOException {
         IndustryVars industryVars = loadIndustryVars(in);
         MultiLangString description = in.readMultiLangString();
         MultiLangString templatedName = in.readMultiLangString();
@@ -505,7 +505,7 @@ public class DatFileLoader {
 
         Sprites sprites = loadSprites(in);
 
-        return new Industry(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, spriteHeights, animationFlags, aux2, aux3, buildingSprites, aux5, produces, accepts, fences, sprites);
+        return new IndustryAsset(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, spriteHeights, animationFlags, aux2, aux3, buildingSprites, aux5, produces, accepts, fences, sprites);
     }
 
     private static Fence loadFence(String name, DatFileInputStream in) throws IOException {

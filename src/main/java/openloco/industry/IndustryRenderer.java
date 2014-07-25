@@ -1,8 +1,8 @@
 package openloco.industry;
 
 import openloco.Assets;
-import openloco.entities.Building;
-import openloco.entities.Industry;
+import openloco.entities.BuildingAsset;
+import openloco.entities.IndustryAsset;
 import openloco.entities.Sprites;
 import openloco.graphics.*;
 
@@ -19,30 +19,30 @@ public class IndustryRenderer implements Renderer<IndustryInstance> {
 
     @Override
     public List<SpriteInstance> render(IndustryInstance industryInstance) {
-        Industry industry = assets.getIndustry(industryInstance.getType());
+        IndustryAsset industryAsset = assets.getIndustry(industryInstance.getType());
         List<SpriteInstance> spriteInstances = new ArrayList<>();
 
         for (BuildingInstance buildingInstance: industryInstance.getBuildings()) {
-            spriteInstances.addAll(render(buildingInstance, industry));
+            spriteInstances.addAll(render(buildingInstance, industryAsset));
         }
 
         return spriteInstances;
     }
 
-    private List<SpriteInstance> render(BuildingInstance buildingInstance, Industry industry) {
+    private List<SpriteInstance> render(BuildingInstance buildingInstance, IndustryAsset industryAsset) {
         ArrayList<SpriteInstance> spriteInstances = new ArrayList<>();
-        Building building = industry.getBuilding(buildingInstance.getType());
+        BuildingAsset buildingAsset = industryAsset.getBuilding(buildingInstance.getType());
         int[] p = {0, 0, 0};
 
-        for (int i=0; i<building.getSpriteCount(); i++) {
-            int spriteOffset = 4*building.getSpriteOffset(i);
-            Sprites.RawSprite sprite = industry.getSprites().get(spriteOffset);
+        for (int i=0; i< buildingAsset.getSpriteCount(); i++) {
+            int spriteOffset = 4* buildingAsset.getSpriteOffset(i);
+            Sprites.RawSprite sprite = industryAsset.getSprites().get(spriteOffset);
             OpenGlSprite glSprite = OpenGlSprite.createFromRawSprite(sprite);
 
             p = new int[]{buildingInstance.getX(), buildingInstance.getY(), p[2]};
             int screenX = Math.round(IsoUtil.isoX(p[0], p[1], p[2]));
             int screenY = Math.round(IsoUtil.isoY(p[0], p[1], p[2]));
-            p[2] = building.getSpriteHeight(i);
+            p[2] = buildingAsset.getSpriteHeight(i);
 
             spriteInstances.add(new SpriteInstance(glSprite, screenX, screenY, SpriteLayer.BUILDING, p[0], p[1], p[2]));
         }

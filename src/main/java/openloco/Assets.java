@@ -15,7 +15,7 @@ public class Assets {
     private final Map<String, Tree> trees = new HashMap<>();
     private final Map<String, InterfaceStyle> interfaceStyles = new HashMap<>();
     private final Map<String, Bridge> bridges = new HashMap<>();
-    private final Map<String, Industry> industries = new HashMap<>();
+    private final Map<String, IndustryAsset> industries = new HashMap<>();
     private final Map<String, Fence> fences = new HashMap<>();
 
     public void add(Vehicle vehicle) {
@@ -70,11 +70,11 @@ public class Assets {
         return bridges.get(name);
     }
 
-    public void add(Industry industry) {
-        industries.put(industry.getName(), industry);
+    public void add(IndustryAsset industryAsset) {
+        industries.put(industryAsset.getName(), industryAsset);
     }
 
-    public Industry getIndustry(String name) {
+    public IndustryAsset getIndustry(String name) {
         return industries.get(name);
     }
 
