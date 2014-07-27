@@ -8,9 +8,7 @@ import openloco.entities.Ground;
 import openloco.entities.Vehicle;
 import openloco.entities.Sprites;
 import openloco.entities.VehicleSpriteVar;
-import openloco.graphics.IsoUtil;
-import openloco.graphics.OpenGlSprite;
-import openloco.graphics.Tile;
+import openloco.graphics.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -65,7 +63,7 @@ public class LoadSprite extends BaseDemo {
         GL11.glPushMatrix();
         for (int i=0; i<tileCount; i++) {
             for (int j=0; j<tileCount; j++) {
-                grassSprite.draw(IsoUtil.isoX(i * Tile.WIDTH, j * Tile.WIDTH, 0), IsoUtil.isoY(i * Tile.WIDTH, j * Tile.WIDTH, 0));
+                grassSprite.draw(IsoUtil.calculateScreenCoord(new CartCoord(i*Tile.WIDTH, j*Tile.WIDTH, 0)));
             }
         }
         GL11.glPopMatrix();
@@ -99,7 +97,7 @@ public class LoadSprite extends BaseDemo {
         GL11.glEnable(GL11.GL_BLEND);
 
         OpenGlSprite sprite = sprites.get(spriteIndex);
-        sprite.draw(getScreenWidth() / 2.0f, getScreenHeight() / 2.0f);
+        sprite.draw(new ScreenCoord((int)(getScreenWidth() / 2.0f), (int)(getScreenHeight() / 2.0f)));
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
