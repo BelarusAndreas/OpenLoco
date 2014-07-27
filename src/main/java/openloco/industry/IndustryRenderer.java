@@ -32,19 +32,19 @@ public class IndustryRenderer implements Renderer<IndustryInstance> {
     private List<SpriteInstance> render(BuildingInstance buildingInstance, IndustryAsset industryAsset) {
         ArrayList<SpriteInstance> spriteInstances = new ArrayList<>();
         BuildingAsset buildingAsset = industryAsset.getBuilding(buildingInstance.getType());
-        int[] p = {0, 0, 0};
+
+        int previousZ = 0;
 
         for (int i=0; i< buildingAsset.getSpriteCount(); i++) {
             int spriteOffset = 4* buildingAsset.getSpriteOffset(i);
             Sprites.RawSprite sprite = industryAsset.getSprites().get(spriteOffset);
             OpenGlSprite glSprite = OpenGlSprite.createFromRawSprite(sprite);
 
-            p = new int[]{buildingInstance.getX(), buildingInstance.getY(), p[2]};
-            int screenX = Math.round(IsoUtil.isoX(p[0], p[1], p[2]));
-            int screenY = Math.round(IsoUtil.isoY(p[0], p[1], p[2]));
-            p[2] = buildingAsset.getSpriteHeight(i);
+            CartCoord cartCoord = new CartCoord(buildingInstance.getX(), buildingInstance.getY(), previousZ);
+            ScreenCoord screenCoord = IsoUtil.calculateScreenCoord(cartCoord);
+            spriteInstances.add(new SpriteInstance(glSprite, screenCoord, SpriteLayer.BUILDING, cartCoord));
 
-            spriteInstances.add(new SpriteInstance(glSprite, screenX, screenY, SpriteLayer.BUILDING, p[0], p[1], p[2]));
+            previousZ = buildingAsset.getSpriteHeight(i);
         }
 
         return spriteInstances;

@@ -3,49 +3,35 @@ package openloco.graphics;
 public class SpriteInstance {
 
     private final OpenGlSprite sprite;
-    private final int screenX;
-    private final int screenY;
+    private final ScreenCoord screenCoord;
     private final SpriteLayer spriteLayer;
-    private final int cartX;
-    private final int cartY;
-    private final int cartZ;
+    private final CartCoord cartCoord;
 
     public SpriteInstance(OpenGlSprite sprite, int screenX, int screenY, SpriteLayer spriteLayer, int cartX, int cartY, int cartZ) {
+        this(sprite, new ScreenCoord(screenX, screenY), spriteLayer, new CartCoord(cartX, cartY, cartZ));
+    }
+
+    public SpriteInstance(OpenGlSprite sprite, ScreenCoord screenCoord, SpriteLayer spriteLayer, CartCoord cartCoord) {
         this.sprite = sprite;
-        this.screenX = screenX;
-        this.screenY = screenY;
+        this.screenCoord = screenCoord;
         this.spriteLayer = spriteLayer;
-        this.cartX = cartX;
-        this.cartY = cartY;
-        this.cartZ = cartZ;
+        this.cartCoord = cartCoord;
     }
 
     public OpenGlSprite getSprite() {
         return sprite;
     }
 
-    public int getScreenX() {
-        return screenX;
-    }
-
-    public int getScreenY() {
-        return screenY;
+    public ScreenCoord getScreenCoord() {
+        return screenCoord;
     }
 
     public SpriteLayer getSpriteLayer() {
         return spriteLayer;
     }
 
-    public int getCartX() {
-        return cartX;
-    }
-
-    public int getCartY() {
-        return cartY;
-    }
-
-    public int getCartZ() {
-        return cartZ;
+    public CartCoord getCartCoord() {
+        return cartCoord;
     }
 
 }

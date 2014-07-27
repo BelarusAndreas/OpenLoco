@@ -89,11 +89,11 @@ public class OpenGlSprite {
     }
 
 
-    public void draw(float x, float y) {
+    public void draw(ScreenCoord screenCoord) {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
 
-        float left = x + getXOffset();
-        float top = y + getYOffset();
+        float left = screenCoord.getX() + getXOffset();
+        float top = screenCoord.getY() + getYOffset();
 
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0, 0); GL11.glVertex2f(left, top);
