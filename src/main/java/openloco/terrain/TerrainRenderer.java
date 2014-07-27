@@ -127,12 +127,9 @@ public class TerrainRenderer implements Renderer<Terrain> {
         for (int i=0; i<terrain.getXMax(); i++) {
             for (int j = 0; j < terrain.getYMax(); j++) {
                 OpenGlSprite sprite = tiles.get(terrain.getTileType(i, j));
-                int cartX = i * w;
-                int cartY = j * w;
-                int cartZ = h *terrain.getTileHeight(i, j);
-                int isoX = Math.round(IsoUtil.isoX(cartX, cartY, cartZ));
-                int isoY = Math.round(IsoUtil.isoY(cartX, cartY, cartZ));
-                spriteInstances.add(new SpriteInstance(sprite, isoX, isoY, SpriteLayer.TERRAIN, cartX, cartY, cartZ));
+                CartCoord cartCoord = new CartCoord(i * w, j * w, h *terrain.getTileHeight(i, j));
+                ScreenCoord screenCoord = IsoUtil.calculateScreenCoord(cartCoord);
+                spriteInstances.add(new SpriteInstance(sprite, screenCoord, SpriteLayer.TERRAIN, cartCoord));
 
                 if (j < terrain.getYMax()-1) {
                     int aW = terrain.getCornerHeight(i, j, Terrain.W);
@@ -169,17 +166,12 @@ public class TerrainRenderer implements Renderer<Terrain> {
     }
 
     private void renderDiagonalCliff(List<SpriteInstance> spriteInstances, int xIndex, int yIndex, int a, int b, int offset, List<OpenGlSprite> cliffSprites, CliffSpriteType lhSpriteType, CliffSpriteType hlSpriteType) {
-        if (a < b) {
-            int z = h * a;
+        if (a != b) {
+            int z = h * Math.min(a, b);
+            CliffSpriteType spriteType = (a < b) ? lhSpriteType : hlSpriteType;
             int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
             int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, lhSpriteType), x, y, SpriteLayer.TERRAIN, xIndex * w, yIndex * w, z));
-        }
-        else if (b < a) {
-            int z = h * b;
-            int x = Math.round(IsoUtil.isoX(xIndex * w, yIndex * w, z)) + offset;
-            int y = Math.round(IsoUtil.isoY(xIndex * w, yIndex * w, z)) - 1;
-            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, hlSpriteType), x, y, SpriteLayer.TERRAIN, xIndex * w, yIndex * w, z));
+            spriteInstances.add(new SpriteInstance(getCliffSprite(cliffSprites, 0, spriteType), x, y, SpriteLayer.TERRAIN, xIndex * w, yIndex * w, z));
         }
     }
 
