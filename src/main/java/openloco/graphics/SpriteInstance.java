@@ -8,12 +8,15 @@ public class SpriteInstance {
     private final CartCoord cartCoord;
 
     public SpriteInstance(OpenGlSprite sprite, int screenX, int screenY, SpriteLayer spriteLayer, int cartX, int cartY, int cartZ) {
-        this(sprite, new ScreenCoord(screenX, screenY), spriteLayer, new CartCoord(cartX, cartY, cartZ));
+        this.sprite = sprite;
+        this.screenCoord = new ScreenCoord(screenX, screenY);
+        this.spriteLayer = spriteLayer;
+        this.cartCoord = new CartCoord(cartX, cartY, cartZ);
     }
 
-    public SpriteInstance(OpenGlSprite sprite, ScreenCoord screenCoord, SpriteLayer spriteLayer, CartCoord cartCoord) {
+    public SpriteInstance(OpenGlSprite sprite, SpriteLayer spriteLayer, CartCoord cartCoord) {
         this.sprite = sprite;
-        this.screenCoord = screenCoord;
+        this.screenCoord = IsoUtil.calculateScreenCoord(cartCoord);
         this.spriteLayer = spriteLayer;
         this.cartCoord = cartCoord;
     }

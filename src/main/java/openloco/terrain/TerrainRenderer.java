@@ -128,8 +128,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
             for (int j = 0; j < terrain.getYMax(); j++) {
                 OpenGlSprite sprite = tiles.get(terrain.getTileType(i, j));
                 CartCoord cartCoord = new CartCoord(i * w, j * w, h *terrain.getTileHeight(i, j));
-                ScreenCoord screenCoord = IsoUtil.calculateScreenCoord(cartCoord);
-                spriteInstances.add(new SpriteInstance(sprite, screenCoord, SpriteLayer.TERRAIN, cartCoord));
+                spriteInstances.add(new SpriteInstance(sprite, SpriteLayer.TERRAIN, cartCoord));
 
                 if (j < terrain.getYMax()-1) {
                     int aW = terrain.getCornerHeight(i, j, Terrain.W);

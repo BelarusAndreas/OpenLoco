@@ -41,8 +41,7 @@ public class IndustryRenderer implements Renderer<IndustryInstance> {
             OpenGlSprite glSprite = OpenGlSprite.createFromRawSprite(sprite);
 
             CartCoord cartCoord = new CartCoord(buildingInstance.getX(), buildingInstance.getY(), previousZ);
-            ScreenCoord screenCoord = IsoUtil.calculateScreenCoord(cartCoord);
-            spriteInstances.add(new SpriteInstance(glSprite, screenCoord, SpriteLayer.BUILDING, cartCoord));
+            spriteInstances.add(new SpriteInstance(glSprite, SpriteLayer.BUILDING, cartCoord));
 
             previousZ = buildingAsset.getSpriteHeight(i);
         }
