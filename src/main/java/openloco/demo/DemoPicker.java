@@ -1,6 +1,7 @@
 package openloco.demo;
 
 import openloco.Assets;
+import openloco.app.LwjglNativeLoader;
 import openloco.datfiles.DatFileLoader;
 
 import java.io.IOException;
@@ -23,6 +24,9 @@ public class DemoPicker {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         final String DATA_DIR = System.getProperty("openloco.dataDir");
+
+        new LwjglNativeLoader().loadLibraries();
+
         Assets assets = new Assets();
         new DatFileLoader(assets, DATA_DIR).loadFiles();
 
