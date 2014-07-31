@@ -12,7 +12,7 @@ import openloco.graphics.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-public class LoadSprite extends BaseDemo {
+public class LoadSpriteDemo extends BaseDemo {
 
     private List<OpenGlSprite> sprites = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class LoadSprite extends BaseDemo {
     private Vehicle vehicle;
     private boolean rotating = true;
 
-    public LoadSprite(Assets assets) {
+    public LoadSpriteDemo(Assets assets) {
         this.assets = assets;
     }
 

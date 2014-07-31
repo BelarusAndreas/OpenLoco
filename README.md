@@ -18,7 +18,7 @@ Firstly, we're using all the original locomotion graphics, so if you haven't alr
 you have it installed, you need to set a command line option to give openloco the path to the ObjData within your
 locomotion installation directory:
 
-    java -jar openloco-0.0.1-SNAPSHOT.jar -Dopenloco.dataDir=path/to/locomotion/ObjData
+    java -Dopenloco.dataDir=path/to/locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar LoadSpriteDemo
 
 Again - you'll need Java 8 installed in order to run the jar.
 
