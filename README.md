@@ -30,3 +30,13 @@ to somewhere on your machine):
     -Djava.library.path=path/to/lwjgl/native/$platform
 
 Enjoy!
+
+Available Demos
+---------------
+
+There's a number of demo apps available currently. Namely:
+ - LoadSpriteDemo - loads the sprites for the HST and displays them
+ - TerrainDemo - displays some terrain
+ - TrackDemo - displays some track layout
+ - NashornScriptDemo - runs the specified javascript within the init method of a BaseDemo to allow dynamic testing of new features.
+Each can be run by giving the appropriate class name as a command line argument.
