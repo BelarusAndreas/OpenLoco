@@ -25,6 +25,13 @@ public class DemoPicker {
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         final String DATA_DIR = System.getProperty("openloco.dataDir");
 
+        if (DATA_DIR == null) {
+            printUsage();
+            System.out.println("\nPlease specify openloco.dataDir.\n");
+            System.exit(0);
+        }
+
+
         new LwjglNativeLoader().loadLibraries();
 
         Assets assets = new Assets();
@@ -35,6 +42,11 @@ public class DemoPicker {
             BaseDemo demo = klass.getConstructor(Assets.class).newInstance(assets);
             demo.run();
         }
+    }
+
+    private static void printUsage() {
+        System.out.println();
+        System.out.println("Usage: java -Dopenloco.dataDir=path/to/locomotion/ObjData -jar openloco.jar demoToRun");
     }
 
 }
