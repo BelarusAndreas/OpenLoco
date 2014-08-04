@@ -26,9 +26,15 @@ public class NashornScriptDemo extends BaseDemo {
     private int height = 36;
 
     public NashornScriptDemo(Assets assets) throws IOException {
+        String initScript = System.getProperty("openloco.initScript");
+
+        if (initScript == null) {
+            System.out.println("\nPlease specify path to init script to run as -Dopenloco.initScript=path/to/initScript.js\n");
+            System.exit(0);
+        }
+
         this.assets = assets;
         watchService = FileSystems.getDefault().newWatchService();
-        String initScript = System.getProperty("openloco.initScript");
         Path path = Paths.get(initScript).getParent();
         path.register(watchService, new WatchEvent.Kind[]{StandardWatchEventKinds.ENTRY_MODIFY}, SensitivityWatchEventModifier.HIGH);
     }
