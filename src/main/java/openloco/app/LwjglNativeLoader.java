@@ -7,7 +7,7 @@ import java.io.*;
 
 public class LwjglNativeLoader {
 
-    public static final Logger LOG = LoggerFactory.getLogger(LwjglNativeLoader.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(LwjglNativeLoader.class);
 
     public static enum Platform {
         OSX("liblwjgl.jnilib", "openal.dylib"),
@@ -49,7 +49,7 @@ public class LwjglNativeLoader {
             loadedPath = extractLibrary(library, name);
             System.setProperty("org.lwjgl.librarypath", loadedPath.getParentFile().getAbsolutePath());
         } catch (IOException e) {
-            LOG.warn("Could not find library " + library +
+            LOGGER.warn("Could not find library " + library +
                     " as resource, trying fallback lookup through System.loadLibrary");
             System.loadLibrary(library);
         }
@@ -106,7 +106,7 @@ public class LwjglNativeLoader {
             while ((cnt = in.read(buf)) >= 1) {
                 out.write(buf, 0, cnt);
             }
-            LOG.info("Saved libfile: " + file.getAbsoluteFile());
+            LOGGER.info("Saved libfile: " + file.getAbsoluteFile());
             return file;
         } finally {
             if (in != null) {

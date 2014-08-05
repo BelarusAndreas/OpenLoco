@@ -20,7 +20,7 @@ import java.util.*;
 
 public class DatFileLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatFileLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatFileLoader.class);
 
     private final Assets assets;
     private final String DATA_DIR;
@@ -31,11 +31,11 @@ public class DatFileLoader {
     }
 
     public void loadFiles() throws IOException {
-        logger.info("Loading assets from {}...", DATA_DIR);
+        LOGGER.info("Loading assets from {}...", DATA_DIR);
         Files.list(new File(DATA_DIR).toPath())
                 .filter((p) -> p.toString().toLowerCase().endsWith(".dat"))
                 .forEach(this::load);
-        logger.info("Finished loading assets.");
+        LOGGER.info("Finished loading assets.");
     }
 
     private void load(Path path) {
@@ -44,7 +44,7 @@ public class DatFileLoader {
             bytes = Files.readAllBytes(path);
         }
         catch (IOException ioe) {
-            logger.error("Failed to load file: {}", path);
+            LOGGER.error("Failed to load file: {}", path);
             return;
         }
 
@@ -79,7 +79,7 @@ public class DatFileLoader {
                 chunk = DatFileUtil.descramble(bytes, pointer, length);
             }
             else {
-                logger.error("Unsupported chunk type for {} ({}): {} ", path, objectClass, chunkType);
+                LOGGER.error("Unsupported chunk type for {} ({}): {} ", path, objectClass, chunkType);
                 break;
             }
 
@@ -149,7 +149,7 @@ public class DatFileLoader {
             }
         }
         catch (IOException ioe) {
-            logger.error("IOException whilst loading object '{}' of class {}: ", name, objectClass, ioe);
+            LOGGER.error("IOException whilst loading object '{}' of class {}: ", name, objectClass, ioe);
         }
     }
 

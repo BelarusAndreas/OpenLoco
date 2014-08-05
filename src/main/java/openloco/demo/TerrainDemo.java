@@ -15,7 +15,7 @@ import java.util.List;
 
 public class TerrainDemo extends BaseDemo {
 
-    private static final Logger logger = LoggerFactory.getLogger(TerrainDemo.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TerrainDemo.class);
 
     private final Assets assets;
 
@@ -69,17 +69,17 @@ public class TerrainDemo extends BaseDemo {
             if (Mouse.getEventButton() == 0) {
                 float x = Mouse.getEventX() - (0.5f*getScreenWidth() + getXOffset());
                 float y = (0.5f*getScreenHeight() - getYOffset()) - (Mouse.getEventY());
-                logger.debug("Click: ({}, {})", x, y);
+                LOGGER.debug("Click: ({}, {})", x, y);
 
                 int tileX = (int)Math.floor(IsoUtil.cartX(x, y)/ Tile.WIDTH);
                 int tileY = (int)Math.floor(IsoUtil.cartY(x, y)/ Tile.WIDTH);
-                logger.debug("Tile pos: ({}, {})", tileX, tileY);
+                LOGGER.debug("Tile pos: ({}, {})", tileX, tileY);
 
                 clickX = Tile.WIDTH *tileX;
                 clickY = Tile.WIDTH *tileY;
 
 
-                logger.debug("Cart pos: ({}, {})", clickX, clickY);
+                LOGGER.debug("Cart pos: ({}, {})", clickX, clickY);
             }
         }
     }
