@@ -54,10 +54,8 @@ public class NashornScriptDemo extends BaseDemo {
             engine.eval(new FileReader(initScript), bindings);
             engine.eval("init();", bindings);
             System.out.println("Called init");
-        } catch (ScriptException e) {
-            JOptionPane.showMessageDialog(null, "ScriptException whilst running script:\n\n" + e.getMessage(), "ScriptException", JOptionPane.ERROR_MESSAGE);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Exception whilst running script:\n\n" + e.getMessage(), "Script Exception", JOptionPane.ERROR_MESSAGE);
         }
     }
 
