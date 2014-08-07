@@ -6,6 +6,8 @@ import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
 import openloco.graphics.Tile;
 import org.lwjgl.input.Keyboard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.script.*;
 import javax.swing.*;
@@ -24,6 +26,8 @@ public class NashornScriptDemo extends BaseDemo {
 
     private int width = 36;
     private int height = 36;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NashornScriptDemo.class);
 
     public NashornScriptDemo(Assets assets) throws IOException {
         String initScript = System.getProperty("openloco.initScript");
@@ -53,8 +57,9 @@ public class NashornScriptDemo extends BaseDemo {
             String initScript = System.getProperty("openloco.initScript");
             engine.eval(new FileReader(initScript), bindings);
             engine.eval("init();", bindings);
-            System.out.println("Called init");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            LOGGER.error("Caught exception whilst running init script", e);
             JOptionPane.showMessageDialog(null, "Exception whilst running script:\n\n" + e.getMessage(), "Script Exception", JOptionPane.ERROR_MESSAGE);
         }
     }
