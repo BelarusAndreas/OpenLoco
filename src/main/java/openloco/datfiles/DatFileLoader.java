@@ -496,8 +496,8 @@ public class DatFileLoader {
         }
 
         long[] aux3 = in.loadAuxVarCount(1, 2);
-        long[][] buildingSprites = in.loadAuxArrayVarCount(2, industryVars.getNumBuildings(), 1);
-        long[] aux5 = in.loadAux(industryVars.getNumAux5(), 1);
+        long[][] buildingSprites = in.loadAuxArrayVarCount(2, industryVars.getNumBuildingTypes(), 1);
+        long[] buildingInstances = in.loadAux(industryVars.getNumBuildingInstances(), 1);
 
         List<UseObject> produces = in.readUseObjectList(2, ObjectClass.CARGOES);
         List<UseObject> accepts = in.readUseObjectList(3, ObjectClass.CARGOES);
@@ -505,7 +505,7 @@ public class DatFileLoader {
 
         Sprites sprites = loadSprites(in);
 
-        return new IndustryAsset(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, spriteHeights, animationFlags, aux2, aux3, buildingSprites, aux5, produces, accepts, fences, sprites);
+        return new IndustryAsset(name, industryVars, description, templatedName, prefixDescription, closingDownMessage, productionUpMessage, productionDownMessage, singular, plural, spriteHeights, animationFlags, aux2, aux3, buildingSprites, buildingInstances, produces, accepts, fences, sprites);
     }
 
     private static Fence loadFence(String name, DatFileInputStream in) throws IOException {
@@ -520,9 +520,9 @@ public class DatFileLoader {
     private static IndustryVars loadIndustryVars(DatFileInputStream in) throws IOException {
         in.skipBytes(30);
         byte numSprites = in.readByte();
-        byte numBuildings = in.readByte();
+        byte numBuildingTypes = in.readByte();
         in.skipBytes(157);
-        byte numAux5 = in.readByte();
+        byte numBuildingInstances = in.readByte();
         in.skipBytes(12);
         int firstYear = in.readUShort();
         int lastYear = in.readUShort();
@@ -532,7 +532,7 @@ public class DatFileLoader {
         in.skipBytes(18);
         EnumSet<IndustryVars.IndustryFlag> industryFlags = in.readBitField(4, IndustryVars.IndustryFlag.class);
         in.skipBytes(12);
-        return new IndustryVars(numSprites, numBuildings, numAux5, firstYear, lastYear, costInd, costFactor, industryFlags);
+        return new IndustryVars(numSprites, numBuildingTypes, numBuildingInstances, firstYear, lastYear, costInd, costFactor, industryFlags);
     }
 
     private static void dumpSprites(String dataDir, String name, Sprites sprites) throws IOException {

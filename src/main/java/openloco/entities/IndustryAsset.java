@@ -18,13 +18,13 @@ public class IndustryAsset {
     private final long[][] aux2;
     private final long[] aux3;
     private final long[][] buildingSprites;
-    private final long[] aux5;
+    private final long[] buildingInstances;
     private final List<UseObject> produces;
     private final List<UseObject> accepts;
     private final List<UseObject> fences;
     private final Sprites sprites;
 
-    public IndustryAsset(String name, IndustryVars industryVars, MultiLangString description, MultiLangString templatedName, MultiLangString prefixDescription, MultiLangString closingDownMessage, MultiLangString productionUpMessage, MultiLangString productionDownMessage, MultiLangString singular, MultiLangString plural, long[] spriteHeights, long[] animationFlags, long[][] aux2, long[] aux3, long[][] buildingSprites, long[] aux5, List<UseObject> produces, List<UseObject> accepts, List<UseObject> fences, Sprites sprites) {
+    public IndustryAsset(String name, IndustryVars industryVars, MultiLangString description, MultiLangString templatedName, MultiLangString prefixDescription, MultiLangString closingDownMessage, MultiLangString productionUpMessage, MultiLangString productionDownMessage, MultiLangString singular, MultiLangString plural, long[] spriteHeights, long[] animationFlags, long[][] aux2, long[] aux3, long[][] buildingSprites, long[] buildingInstances, List<UseObject> produces, List<UseObject> accepts, List<UseObject> fences, Sprites sprites) {
         this.name = name;
         this.industryVars = industryVars;
         this.description = description;
@@ -40,7 +40,7 @@ public class IndustryAsset {
         this.aux2 = aux2;
         this.aux3 = aux3;
         this.buildingSprites = buildingSprites;
-        this.aux5 = aux5;
+        this.buildingInstances = buildingInstances;
         this.produces = produces;
         this.accepts = accepts;
         this.fences = fences;
@@ -99,8 +99,8 @@ public class IndustryAsset {
         return aux3;
     }
 
-    public long[] getAux5() {
-        return aux5;
+    public long[] getBuildingInstances() {
+        return buildingInstances;
     }
 
     public List<UseObject> getProduces() {
@@ -120,7 +120,7 @@ public class IndustryAsset {
     }
 
     public int getBuildingCount() {
-        return industryVars.getNumBuildings();
+        return industryVars.getNumBuildingTypes();
     }
 
     public BuildingAsset getBuilding(int index) {
