@@ -35,8 +35,8 @@ public class IndustryRenderer implements Renderer<IndustryInstance> {
 
         int previousZ = 0;
 
-        for (int i=0; i< buildingAsset.getSpriteCount(); i++) {
-            int spriteOffset = 4* buildingAsset.getSpriteOffset(i);
+        for (int i=0; i<buildingAsset.getSpriteCount(); i++) {
+            int spriteOffset = 4 * buildingAsset.getSpriteOffset(i) + buildingInstance.getRotation();
             Sprites.RawSprite sprite = industryAsset.getSprites().get(spriteOffset);
             OpenGlSprite glSprite = OpenGlSprite.createFromRawSprite(sprite);
 
