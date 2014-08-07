@@ -23,4 +23,26 @@ public class CartCoord {
     public int getZ() {
         return z;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CartCoord cartCoord = (CartCoord) o;
+
+        if (x != cartCoord.x) return false;
+        if (y != cartCoord.y) return false;
+        if (z != cartCoord.z) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        return result;
+    }
 }
