@@ -2,14 +2,10 @@ package openloco.terrain;
 
 import openloco.Assets;
 import openloco.Palette;
-import openloco.entities.CliffFace;
-import openloco.entities.Ground;
-import openloco.entities.Sprites;
+import openloco.entities.*;
 import openloco.graphics.OpenGlSprite;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TerrainSprites {
 
@@ -47,6 +43,15 @@ public class TerrainSprites {
                 cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
                 cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeBottom(sprite)));
             }
+        }
+    }
+
+    public TerrainSprites(IndustryAsset industryAsset) {
+        int offset = 4 * industryAsset.getAnimationFlags().length;
+
+        for (int i=offset; i<offset+15; i++) {
+            Sprites.RawSprite sprite = industryAsset.getSprites().get(i);
+            tiles.add(OpenGlSprite.createFromRawSprite(sprite));
         }
     }
 

@@ -30,6 +30,10 @@ public class TerrainRenderer implements Renderer<Terrain> {
         return sprites.get(index * CliffSpriteType.values().length + spriteType.ordinal());
     }
 
+    public void addTerrainSprites(String groundType, TerrainSprites terrainSprites) {
+        this.terrainSprites.put(groundType, terrainSprites);
+    }
+
     @Override
     public List<SpriteInstance> render(Terrain terrain) {
         List<SpriteInstance> spriteInstances = new ArrayList<>();
@@ -40,7 +44,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
 
                 if (!terrainSprites.containsKey(groundType)) {
                     Ground ground = assets.getGround(groundType);
-                    terrainSprites.put(groundType, new TerrainSprites(assets, ground));
+                    addTerrainSprites(groundType, new TerrainSprites(assets, ground));
                 }
 
                 TerrainSprites currentTerrainSprites = terrainSprites.get(groundType);
