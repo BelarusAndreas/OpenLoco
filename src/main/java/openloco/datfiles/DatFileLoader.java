@@ -216,10 +216,11 @@ public class DatFileLoader {
     private static GroundVars loadGroundVars(DatFileInputStream in) throws IOException {
         in.skipBytes(2);
         byte costInd = in.readByte();
-        in.skipBytes(5);
+        byte numberOfVariations = in.readByte();
+        in.skipBytes(4);
         short costFactor = in.readSShort();
         in.skipBytes(20);
-        return new GroundVars(costInd, costFactor);
+        return new GroundVars(costInd, numberOfVariations, costFactor);
     }
 
     private static Ground loadGround(String name, DatFileInputStream dataInputStream) throws IOException {
