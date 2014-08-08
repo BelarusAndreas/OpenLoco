@@ -3,10 +3,9 @@ package openloco.terrain;
 public class Terrain {
 
     private int[] tileHeights;
-
     private int[] tileTypes;
-
     private int[] cornerHeight;
+    private String[] groundTypes;
 
     private int xMax;
     private int yMax;
@@ -19,9 +18,11 @@ public class Terrain {
     public Terrain(int xMax, int yMax) {
         this.xMax = xMax;
         this.yMax = yMax;
-        tileHeights = new int[xMax*yMax];
-        tileTypes = new int[xMax*yMax];
-        cornerHeight = new int[4 * xMax * yMax];
+        int tileCount = xMax*yMax;
+        tileHeights = new int[tileCount];
+        tileTypes = new int[tileCount];
+        cornerHeight = new int[4 * tileCount];
+        groundTypes = new String[tileCount];
     }
 
     private int tileIndex(int i, int j) {
@@ -69,5 +70,16 @@ public class Terrain {
         int tileIndex = tileIndex(i, j);
         tileHeights[tileIndex] = height;
         computeCornerHeight(tileIndex);
+    }
+
+    public String getGroundType(int i, int j) {
+        int tileIndex = tileIndex(i, j);
+        String groundType = groundTypes[tileIndex];
+        return groundType == null ? "GRASS1  " : groundType;
+    }
+
+    public void setGroundType(int i, int j, String groundType) {
+        int tileIndex = tileIndex(i, j);
+        groundTypes[tileIndex] = groundType;
     }
 }

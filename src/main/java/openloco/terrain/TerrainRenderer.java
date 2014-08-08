@@ -1,24 +1,18 @@
 package openloco.terrain;
 
 import openloco.Assets;
-import openloco.Palette;
-import openloco.entities.CliffFace;
 import openloco.entities.Ground;
-import openloco.entities.Sprites;
 import openloco.graphics.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TerrainRenderer implements Renderer<Terrain> {
 
-    private final List<OpenGlSprite> tiles = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSw = new ArrayList<>();
-    private final List<OpenGlSprite> cliffSpritesSe = new ArrayList<>();
-
     private static final int w = Tile.WIDTH;
     private static final int h = Tile.HEIGHT_STEP;
+
+    private final Assets assets;
+    private final Map<String, TerrainSprites> terrainSprites = new HashMap<>();
 
     private enum CliffSpriteType {
         UNCLIPPED,
@@ -29,95 +23,11 @@ public class TerrainRenderer implements Renderer<Terrain> {
     }
 
     public TerrainRenderer(Assets assets) {
-        Ground ground = assets.getGround("GRASS1  ");
-        for (int i=385; i<400; i++) {
-            Sprites.RawSprite sprite = ground.getSprites().get(i);
-            tiles.add(OpenGlSprite.createFromRawSprite(sprite));
-        }
-
-        CliffFace cliffFace = assets.getCliffFace(ground.getCliff().getObjectReference());
-        for (int i=0; i<64; i++) {
-            Sprites.RawSprite sprite = cliffFace.getSprites().get(i);
-            OpenGlSprite openGlSprite = OpenGlSprite.createFromRawSprite(sprite);
-            if ((i%32) < 16) {
-                cliffSpritesSw.add(openGlSprite);
-                cliffSpritesSw.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeTop(sprite)));
-                cliffSpritesSw.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
-                cliffSpritesSw.add(OpenGlSprite.createFromRawSprite(maskDiagonalNwSeBottom(sprite)));
-                cliffSpritesSw.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
-            }
-            else {
-                cliffSpritesSe.add(openGlSprite);
-                cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskTop(sprite)));
-                cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeTop(sprite)));
-                cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskBottom(sprite)));
-                cliffSpritesSe.add(OpenGlSprite.createFromRawSprite(maskDiagonalSwNeBottom(sprite)));
-            }
-        }
+        this.assets = assets;
     }
 
     private OpenGlSprite getCliffSprite(List<OpenGlSprite> sprites, int index, CliffSpriteType spriteType) {
         return sprites.get(index * CliffSpriteType.values().length + spriteType.ordinal());
-    }
-
-    private Sprites.RawSprite maskTop(Sprites.RawSprite sprite) {
-        int from = 0;
-        int middle = sprite.getHeader().getHeight()/2;
-        int to = middle * sprite.getHeader().getWidth();
-        return maskRange(sprite, from, to);
-    }
-
-    private Sprites.RawSprite maskBottom(Sprites.RawSprite sprite) {
-        int middle = sprite.getHeader().getHeight()/2;
-        int from = middle * sprite.getHeader().getWidth();
-        int to = sprite.getPixels().length;
-        return maskRange(sprite, from, to);
-    }
-
-    private Sprites.RawSprite maskDiagonalNwSeTop(Sprites.RawSprite sprite) {
-        Sprites.SpriteHeader header = sprite.getHeader();
-        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
-        for (int i=0; i<header.getHeight(); i++) {
-            int offset = i*header.getWidth();
-            Arrays.fill(maskedPixels, offset+i+1, offset+header.getWidth(), Palette.BACKGROUND);
-        }
-        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
-    }
-
-    private Sprites.RawSprite maskDiagonalNwSeBottom(Sprites.RawSprite sprite) {
-        Sprites.SpriteHeader header = sprite.getHeader();
-        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
-        for (int i=0; i<header.getHeight(); i++) {
-            int offset = i*header.getWidth();
-            Arrays.fill(maskedPixels, offset, offset+i, Palette.BACKGROUND);
-        }
-        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
-    }
-
-    private Sprites.RawSprite maskDiagonalSwNeTop(Sprites.RawSprite sprite) {
-        Sprites.SpriteHeader header = sprite.getHeader();
-        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
-        for (int i=0; i<header.getHeight(); i++) {
-            int offset = i*header.getWidth();
-            Arrays.fill(maskedPixels, offset, offset+header.getWidth()-i-1, Palette.BACKGROUND);
-        }
-        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
-    }
-
-    private Sprites.RawSprite maskDiagonalSwNeBottom(Sprites.RawSprite sprite) {
-        Sprites.SpriteHeader header = sprite.getHeader();
-        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
-        for (int i=0; i<header.getHeight(); i++) {
-            int offset = i*header.getWidth();
-            Arrays.fill(maskedPixels, offset+header.getWidth()-i, offset+header.getWidth(), Palette.BACKGROUND);
-        }
-        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
-    }
-
-    private Sprites.RawSprite maskRange(Sprites.RawSprite sprite, int from, int to) {
-        int[] maskedPixels = Arrays.copyOf(sprite.getPixels(), sprite.getPixels().length);
-        Arrays.fill(maskedPixels, from, to, Palette.BACKGROUND);
-        return new Sprites.RawSprite(sprite.getHeader(), maskedPixels);
     }
 
     @Override
@@ -126,7 +36,16 @@ public class TerrainRenderer implements Renderer<Terrain> {
 
         for (int i=0; i<terrain.getXMax(); i++) {
             for (int j = 0; j < terrain.getYMax(); j++) {
-                OpenGlSprite sprite = tiles.get(terrain.getTileType(i, j));
+                String groundType = terrain.getGroundType(i, j);
+
+                if (!terrainSprites.containsKey(groundType)) {
+                    Ground ground = assets.getGround(groundType);
+                    terrainSprites.put(groundType, new TerrainSprites(assets, ground));
+                }
+
+                TerrainSprites currentTerrainSprites = terrainSprites.get(groundType);
+
+                OpenGlSprite sprite = currentTerrainSprites.getTileType(terrain.getTileType(i, j));
                 CartCoord cartCoord = new CartCoord(i * w, j * w, h *terrain.getTileHeight(i, j));
                 spriteInstances.add(new SpriteInstance(sprite, SpriteLayer.TERRAIN, cartCoord));
 
@@ -136,7 +55,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
                     int bN = terrain.getCornerHeight(i, j + 1, Terrain.N);
                     int bE = terrain.getCornerHeight(i, j + 1, Terrain.E);
 
-                    renderCliffs(spriteInstances, i, j + 1, aW, aS, bN, bE, 2, cliffSpritesSw);
+                    renderCliffs(spriteInstances, i, j + 1, aW, aS, bN, bE, 2, currentTerrainSprites.getCliffSpritesSw());
                 }
 
                 if (i < terrain.getXMax()-1) {
@@ -145,7 +64,7 @@ public class TerrainRenderer implements Renderer<Terrain> {
                     int bW = terrain.getCornerHeight(i + 1, j, Terrain.W);
                     int bN = terrain.getCornerHeight(i + 1, j, Terrain.N);
 
-                    renderCliffs(spriteInstances, i + 1, j, aS, aE, bW, bN, -2, cliffSpritesSe);
+                    renderCliffs(spriteInstances, i + 1, j, aS, aE, bW, bN, -2, currentTerrainSprites.getCliffSpritesSe());
                 }
             }
         }
