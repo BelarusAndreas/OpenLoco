@@ -22,28 +22,30 @@ public class TerrainDemo extends BaseDemo {
     private TerrainRenderer renderer;
     private Terrain terrain;
 
-    private int width = 9;
-    private int height = 9;
+    private static final int WIDTH = 9;
+    private static final int HEIGHT = 9;
+
     private List<SpriteInstance> spriteInstances;
 
     private float clickX = 0;
     private float clickY = 0;
 
     public TerrainDemo(Assets assets) {
+        super(WIDTH, HEIGHT);
         this.assets = assets;
     }
 
     @Override
     protected void init() {
         renderer = new TerrainRenderer(assets);
-        terrain = new Terrain(width, height);
+        terrain = new Terrain(WIDTH, HEIGHT);
 
-        terrain.setTileType(width/2, height/2, 5);
-        terrain.setTileType(width/2, height/2+1, 5);
-        terrain.setTileType(width/2+1, height/2, 5);
-        terrain.setTileType(width/2+2, height/2, 12);
-        terrain.setTileType(width/2+3, height/2, 8);
-        terrain.setTileHeights(width/2, height/2, 2);
+        terrain.setTileType(WIDTH/2, HEIGHT/2, 5);
+        terrain.setTileType(WIDTH/2, HEIGHT/2+1, 5);
+        terrain.setTileType(WIDTH/2+1, HEIGHT/2, 5);
+        terrain.setTileType(WIDTH/2+2, HEIGHT/2, 12);
+        terrain.setTileType(WIDTH/2+3, HEIGHT/2, 8);
+        terrain.setTileHeights(WIDTH/2, HEIGHT/2, 2);
 
         spriteInstances = renderer.render(terrain);
     }
@@ -51,16 +53,6 @@ public class TerrainDemo extends BaseDemo {
     @Override
     protected List<SpriteInstance> getSprites() {
         return spriteInstances;
-    }
-
-    @Override
-    protected float getXOffset() {
-        return -IsoUtil.isoX(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
-    }
-
-    @Override
-    protected float getYOffset() {
-        return -IsoUtil.isoY(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
     }
 
     @Override
@@ -77,7 +69,6 @@ public class TerrainDemo extends BaseDemo {
 
                 clickX = Tile.WIDTH *tileX;
                 clickY = Tile.WIDTH *tileY;
-
 
                 LOGGER.debug("Cart pos: ({}, {})", clickX, clickY);
             }

@@ -1,7 +1,10 @@
 package openloco.demo;
 
+import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
+import openloco.graphics.Tile;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -15,6 +18,18 @@ public abstract class BaseDemo {
     private long renderTime = 0;
 
     private String title;
+
+    private int focusX;
+    private int focusY;
+    private int mouseDownFocusX = -1;
+    private int mouseDownFocusY = -1;
+    private int mouseDownX = -1;
+    private int mouseDownY = -1;
+
+    public BaseDemo(int xTiles, int yTiles) {
+        focusX = Tile.WIDTH * xTiles / 2;
+        focusY = Tile.WIDTH * yTiles / 2;
+    }
 
     private void initLwjglDisplay() {
         try {
@@ -89,6 +104,16 @@ public abstract class BaseDemo {
         if (Display.wasResized()) {
             initOpenGL();
         }
+
+        if (Mouse.isButtonDown(1)) {
+            if (!isTerrainDragging()) {
+                beginTerrainDragging();
+            }
+            updateTerrainDragging();
+        }
+        else if (isTerrainDragging()) {
+            endTerrainDragging();
+        }
     }
 
     private void renderInternal() {
@@ -139,15 +164,42 @@ public abstract class BaseDemo {
         GL11.glPopMatrix();
     }
 
+    private boolean isTerrainDragging() {
+        return mouseDownX != -1;
+    }
+
+    private void beginTerrainDragging() {
+        mouseDownX = Mouse.getX();
+        mouseDownY = Mouse.getY();
+        mouseDownFocusX = focusX;
+        mouseDownFocusY = focusY;
+    }
+
+    private void updateTerrainDragging() {
+        int dx = (mouseDownX - Mouse.getX());
+        int dy = -(mouseDownY - Mouse.getY());
+
+        float cdx = IsoUtil.cartX(dx, dy);
+        float cdy = IsoUtil.cartY(dx, dy);
+
+        focusX = mouseDownFocusX + (int)cdx;
+        focusY = mouseDownFocusY + (int)cdy;
+    }
+
+    private void endTerrainDragging() {
+        mouseDownX = -1;
+        mouseDownY = -1;
+    }
+
     protected List<SpriteInstance> getSprites() {
         return Collections.emptyList();
     }
 
     protected float getXOffset() {
-        return 0.0f;
+        return -IsoUtil.isoX(focusX, focusY, 0);
     }
 
     protected float getYOffset() {
-        return 0.0f;
+        return -IsoUtil.isoY(focusX, focusY, 0);
     }
 }

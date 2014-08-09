@@ -17,13 +17,15 @@ public class LoadSpriteDemo extends BaseDemo {
     private List<OpenGlSprite> sprites = new ArrayList<>();
 
     private OpenGlSprite grassSprite;
-
     private Assets assets;
     private int spriteIndex = 0;
     private Vehicle vehicle;
     private boolean rotating = true;
 
+    private static final int TILE_COUNT = 9;
+
     public LoadSpriteDemo(Assets assets) {
+        super(TILE_COUNT, TILE_COUNT);
         this.assets = assets;
     }
 
@@ -51,9 +53,7 @@ public class LoadSpriteDemo extends BaseDemo {
         GL11.glPushMatrix();
         GL11.glTranslatef(getScreenWidth()/2.0f, getScreenHeight()/2.0f, 0f);
 
-        int tileCount = 9;
-
-        GL11.glTranslatef(-IsoUtil.isoX(Tile.WIDTH * tileCount / 2, Tile.WIDTH * tileCount / 2, 0), -IsoUtil.isoY(Tile.WIDTH * tileCount / 2, Tile.WIDTH * tileCount / 2, 0), 0f);
+        GL11.glTranslatef(-IsoUtil.isoX(Tile.WIDTH * TILE_COUNT / 2, Tile.WIDTH * TILE_COUNT / 2, 0), -IsoUtil.isoY(Tile.WIDTH * TILE_COUNT / 2, Tile.WIDTH * TILE_COUNT / 2, 0), 0f);
 
         GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_REPLACE);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -61,8 +61,8 @@ public class LoadSpriteDemo extends BaseDemo {
         GL11.glEnable(GL11.GL_BLEND);
 
         GL11.glPushMatrix();
-        for (int i=0; i<tileCount; i++) {
-            for (int j=0; j<tileCount; j++) {
+        for (int i=0; i< TILE_COUNT; i++) {
+            for (int j=0; j< TILE_COUNT; j++) {
                 grassSprite.draw(IsoUtil.calculateScreenCoord(new CartCoord(i*Tile.WIDTH, j*Tile.WIDTH, 0)));
             }
         }
@@ -75,10 +75,10 @@ public class LoadSpriteDemo extends BaseDemo {
         GL11.glColor4f(0.7f, 0.7f, 0.7f, 0.1f);
         GL11.glBegin(GL11.GL_LINES);
 
-        for (int i=0; i<=tileCount; i++) {
+        for (int i=0; i<= TILE_COUNT; i++) {
             int a = 0;
             int b = i * Tile.WIDTH;
-            int c = tileCount * Tile.WIDTH;
+            int c = TILE_COUNT * Tile.WIDTH;
 
             GL11.glVertex2f(IsoUtil.isoX(a, b, 0), IsoUtil.isoY(a, b, 0));
             GL11.glVertex2f(IsoUtil.isoX(c, b, 0), IsoUtil.isoY(c, b, 0));

@@ -2,17 +2,13 @@ package openloco.demo;
 
 import com.sun.nio.file.SensitivityWatchEventModifier;
 import openloco.Assets;
-import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
-import openloco.graphics.Tile;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.script.*;
 import javax.swing.*;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.*;
@@ -25,20 +21,13 @@ public class NashornScriptDemo extends BaseDemo {
     private List<SpriteInstance> spriteInstances;
     private WatchService watchService;
 
-    private int width = 36;
-    private int height = 36;
+    private static int WIDTH = 36;
+    private static int HEIGHT = 36;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NashornScriptDemo.class);
 
-    private int focusX = Tile.WIDTH * width / 2;
-    private int focusY = Tile.WIDTH * height / 2;
-    private int mouseDownFocusX = -1;
-    private int mouseDownFocusY = -1;
-
-    private int mouseDownX = -1;
-    private int mouseDownY = -1;
-
     public NashornScriptDemo(Assets assets) throws IOException {
+        super(WIDTH, HEIGHT);
         String initScript = System.getProperty("openloco.initScript");
 
         if (initScript == null) {
@@ -60,8 +49,8 @@ public class NashornScriptDemo extends BaseDemo {
             bindings.put("assets", assets);
             this.spriteInstances = new ArrayList<>();
             bindings.put("spriteInstances", spriteInstances);
-            bindings.put("width", width);
-            bindings.put("height", height);
+            bindings.put("width", WIDTH);
+            bindings.put("height", HEIGHT);
 
             String initScript = System.getProperty("openloco.initScript");
             engine.eval(new FileReader(initScript), bindings);
@@ -82,28 +71,6 @@ public class NashornScriptDemo extends BaseDemo {
             }
         }
 
-        if (Mouse.isButtonDown(1)) {
-            if (mouseDownX == -1) {
-                mouseDownX = Mouse.getX();
-                mouseDownY = Mouse.getY();
-                mouseDownFocusX = focusX;
-                mouseDownFocusY = focusY;
-            }
-
-            int dx = (mouseDownX - Mouse.getX());
-            int dy = -(mouseDownY - Mouse.getY());
-
-            float cdx = IsoUtil.cartX(dx, dy);
-            float cdy = IsoUtil.cartY(dx, dy);
-
-            focusX = mouseDownFocusX + (int)cdx;
-            focusY = mouseDownFocusY + (int)cdy;
-        }
-        else if (mouseDownX != -1) {
-            mouseDownX = -1;
-            mouseDownY = -1;
-        }
-
         WatchKey watchKey = watchService.poll();
         if (watchKey != null) {
             boolean changed = false;
@@ -120,16 +87,6 @@ public class NashornScriptDemo extends BaseDemo {
     @Override
     protected List<SpriteInstance> getSprites() {
         return spriteInstances;
-    }
-
-    @Override
-    protected float getXOffset() {
-        return -IsoUtil.isoX(focusX, focusY, 0);
-    }
-
-    @Override
-    protected float getYOffset() {
-        return -IsoUtil.isoY(focusX, focusY, 0);
     }
 
     @Override

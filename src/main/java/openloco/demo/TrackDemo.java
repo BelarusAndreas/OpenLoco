@@ -14,19 +14,20 @@ public class TrackDemo extends BaseDemo {
 
     private final Assets assets;
 
-    private int width = 36;
-    private int height = 36;
+    private static final int WIDTH = 36;
+    private static final int HEIGHT = 36;
 
     private List<SpriteInstance> spriteInstances;
 
     public TrackDemo(Assets assets) {
+        super(WIDTH, HEIGHT);
         this.assets = assets;
     }
 
     @Override
     protected void init() {
         TerrainRenderer terrainRenderer = new TerrainRenderer(assets);
-        Terrain terrain = new Terrain(width, height);
+        Terrain terrain = new Terrain(WIDTH, HEIGHT);
 
         spriteInstances = terrainRenderer.render(terrain);
 
@@ -83,13 +84,4 @@ public class TrackDemo extends BaseDemo {
         return spriteInstances;
     }
 
-    @Override
-    protected float getXOffset() {
-        return -IsoUtil.isoX(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
-    }
-
-    @Override
-    protected float getYOffset() {
-        return -IsoUtil.isoY(Tile.WIDTH * width / 2, Tile.WIDTH * height / 2, 0);
-    }
 }
