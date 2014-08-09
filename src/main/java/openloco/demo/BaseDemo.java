@@ -7,44 +7,9 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public abstract class BaseDemo {
-
-    public static final class ChainComparator<T> implements Comparator<T> {
-
-        private final Comparator<T>[] comparators;
-
-        @SafeVarargs
-        public ChainComparator(Comparator<T>... comparators) {
-            this.comparators = comparators;
-        }
-
-        @Override
-        public int compare(T o1, T o2) {
-            int result = 0;
-            for (Comparator<T> c: comparators) {
-                result = c.compare(o1, o2);
-                if (result != 0) {
-                    break;
-                }
-            }
-            return result;
-        }
-    }
-
-    private static final Comparator<SpriteInstance> COMPARE_LAYERS = (s, t)  -> s.getSpriteLayer().compareTo(t.getSpriteLayer());
-
-    private static final Comparator<SpriteInstance> COMPARE_Z_INDEX = (s, t) -> s.getCartCoord().getZ() - t.getCartCoord().getZ();
-
-    private static final Comparator<SpriteInstance> COMPARE_CART_X = (s, t) -> s.getCartCoord().getX() - t.getCartCoord().getX();
-
-    private static final Comparator<SpriteInstance> COMPARE_CART_Y = (s, t) -> s.getCartCoord().getY() - t.getCartCoord().getY();
-
-    @SuppressWarnings("unchecked")
-    public static final Comparator<SpriteInstance>  SPRITE_DEPTH_COMPARATOR = new ChainComparator<>(COMPARE_CART_X, COMPARE_CART_Y, COMPARE_Z_INDEX, COMPARE_LAYERS);
-
 
     private int frameCount = 0;
     private long renderTime = 0;
@@ -165,7 +130,7 @@ public abstract class BaseDemo {
 
         List<SpriteInstance> sprites = getSprites();
 
-        Collections.sort(sprites, SPRITE_DEPTH_COMPARATOR);
+        Collections.sort(sprites, SpriteInstance.SPRITE_DEPTH_COMPARATOR);
 
         for (SpriteInstance sprite: sprites) {
             sprite.getSprite().draw(sprite.getScreenCoord());
