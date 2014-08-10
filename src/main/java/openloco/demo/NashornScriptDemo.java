@@ -51,6 +51,7 @@ public class NashornScriptDemo extends BaseDemo {
             bindings.put("spriteInstances", spriteInstances);
             bindings.put("width", WIDTH);
             bindings.put("height", HEIGHT);
+            bindings.put("demo", this);
 
             String initScript = System.getProperty("openloco.initScript");
             engine.eval(new FileReader(initScript), bindings);

@@ -3,6 +3,7 @@ package openloco.demo;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
 import openloco.graphics.Tile;
+import openloco.ui.UiComponent;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -10,6 +11,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class BaseDemo {
@@ -25,6 +27,8 @@ public abstract class BaseDemo {
     private int mouseDownFocusY = -1;
     private int mouseDownX = -1;
     private int mouseDownY = -1;
+
+    private List<UiComponent> uiComponents = new LinkedList<>();
 
     public BaseDemo(int xTiles, int yTiles) {
         focusX = Tile.WIDTH * xTiles / 2;
@@ -140,6 +144,7 @@ public abstract class BaseDemo {
 
     protected void render() {
         drawSprites();
+        drawUi();
     }
 
     private void drawSprites() {
@@ -162,6 +167,23 @@ public abstract class BaseDemo {
         }
 
         GL11.glPopMatrix();
+    }
+
+    private void drawUi() {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+        for (UiComponent uiComponent: uiComponents) {
+            uiComponent.render();
+        }
+    }
+
+    public void addUiComponent(UiComponent uiComponent) {
+        uiComponents.add(uiComponent);
+    }
+
+    public void clearUiComponents() {
+        uiComponents.clear();
     }
 
     private boolean isTerrainDragging() {
