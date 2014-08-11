@@ -29,6 +29,7 @@ public class Panel implements UiComponent {
         Color top = isInset? shadow : highlight;
         Color bottom = isInset? highlight : shadow;
 
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y, 0);
 
