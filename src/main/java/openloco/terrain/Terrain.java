@@ -66,7 +66,7 @@ public class Terrain {
         return cornerHeight[4*tileIndex + corner];
     }
 
-    public void setTileHeights(int i, int j, int height) {
+    public void setTileHeight(int i, int j, int height) {
         int tileIndex = tileIndex(i, j);
         tileHeights[tileIndex] = height;
         computeCornerHeight(tileIndex);

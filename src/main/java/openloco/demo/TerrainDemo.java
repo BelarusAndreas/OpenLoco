@@ -45,7 +45,7 @@ public class TerrainDemo extends BaseDemo {
         terrain.setTileType(WIDTH/2+1, HEIGHT/2, 5);
         terrain.setTileType(WIDTH/2+2, HEIGHT/2, 12);
         terrain.setTileType(WIDTH/2+3, HEIGHT/2, 8);
-        terrain.setTileHeights(WIDTH/2, HEIGHT/2, 2);
+        terrain.setTileHeight(WIDTH / 2, HEIGHT / 2, 2);
 
         spriteInstances = renderer.render(terrain);
     }
