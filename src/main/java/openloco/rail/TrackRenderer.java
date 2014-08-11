@@ -5,6 +5,7 @@ import openloco.Assets;
 import openloco.entities.Bridge;
 import openloco.entities.Track;
 import openloco.graphics.*;
+import openloco.terrain.Terrain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,11 @@ import static openloco.rail.BridgeTileType.*;
 public class TrackRenderer implements Renderer<TrackNetwork>{
 
     private final Assets assets;
+    private final Terrain terrain;
 
-    public TrackRenderer(Assets assets) {
+    public TrackRenderer(Assets assets, Terrain terrain) {
         this.assets = assets;
+        this.terrain = terrain;
     }
 
     @Override
@@ -238,13 +241,15 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
     }
 
     private void drawBridgeTiles(List<SpriteInstance> sprites, TrackNode node, int[][][] allOffsets, BridgeTileType[][] allBridgeTileTypes) {
-        int[][] offsets = allOffsets[node.getRotation()];
-        BridgeTileType[] bridgeTileTypes = allBridgeTileTypes[node.getRotation()];
+        if (node.getZ() > terrain.getTileHeight(node.getX(), node.getY())) {
+            int[][] offsets = allOffsets[node.getRotation()];
+            BridgeTileType[] bridgeTileTypes = allBridgeTileTypes[node.getRotation()];
 
-        Bridge bridge = assets.getBridge(node.getBridgeType());
+            Bridge bridge = assets.getBridge(node.getBridgeType());
 
-        for (int i=0; i<offsets.length; i++) {
-            drawBridgeTile(sprites, bridge, node, offsets[i], bridgeTileTypes[i]);
+            for (int i = 0; i < offsets.length; i++) {
+                drawBridgeTile(sprites, bridge, node, offsets[i], bridgeTileTypes[i]);
+            }
         }
     }
 
@@ -265,7 +270,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
             outputBridgeSprite(sprites, bridge, baseSprite, x, y, z-Tile.HEIGHT_STEP);
         }
 
-        for (int h=trackNode.getZ()-2; h>=0; h--) {
+        for (int h=trackNode.getZ()-2; h>=terrain.getTileHeight(trackNode.getX(), trackNode.getY()); h--) {
             for (int supportSprite: supports) {
                 outputBridgeSprite(sprites, bridge, supportSprite, x, y, h*Tile.HEIGHT_STEP);
             }

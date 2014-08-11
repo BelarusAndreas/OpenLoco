@@ -74,7 +74,7 @@ public class TrackDemo extends BaseDemo {
         trackLayer.addStraight();
         network.addAll(trackLayer.getNodes());
 
-        TrackRenderer trackRenderer = new TrackRenderer(assets);
+        TrackRenderer trackRenderer = new TrackRenderer(assets, terrain);
 
         spriteInstances.addAll(trackRenderer.render(network));
     }
