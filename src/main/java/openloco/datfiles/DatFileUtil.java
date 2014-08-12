@@ -3,6 +3,7 @@ package openloco.datfiles;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class DatFileUtil {
@@ -20,30 +21,57 @@ class DatFileUtil {
     }
 
     public static byte[] rleDecode(byte[] input, int offset, long length) {
-        List<Byte> buffer = new ArrayList<>();
+        int decodedLength = calculateRleLength(input, offset, length);
+
+        int decodedOffset = 0;
+        byte[] decoded = new byte[decodedLength];
         while (length > 0) {
             byte rle = input[offset++];
-            int run = Math.abs(rle)+1;
+            length--;
+
+            if (rle < 0) {
+                //run is 1-rle as rle is < 0
+                int run = 1-rle;
+                //set this run to a particular value
+                byte value = input[offset++];
+                Arrays.fill(decoded, decodedOffset, decodedOffset+run, value);
+                length--;
+                decodedOffset += run;
+            }
+            else {
+                int run = 1+rle;
+                //copy this run from the input
+                System.arraycopy(input, offset, decoded, decodedOffset, run);
+                length-=run;
+                offset+=run;
+                decodedOffset += run;
+            }
+        }
+        return decoded;
+    }
+
+    private static int calculateRleLength(byte[] input, int offset, long length) {
+        int decodedLength = 0;
+        while (length > 0) {
+            byte rle = input[offset++];
             length--;
 
             if (rle < 0) {
                 //set this run to a particular value
-                byte value = input[offset++];
-                for (int i=0; i<run; i++) {
-                    buffer.add(value);
-                }
+                int run = 1-rle;
+                offset++;
                 length--;
+                decodedLength += run;
             }
             else {
                 //copy this run from the input
-                for (int i=0; i<run; i++) {
-                    byte value = input[offset++];
-                    buffer.add(value);
-                }
-                length-=run;
+                int run = rle + 1;
+                decodedLength+= run;
+                length-= run;
+                offset+= run;
             }
         }
-        return toArray(buffer);
+        return decodedLength;
     }
 
     public static byte[] descramble(byte[] input, int pointer, long length) {
