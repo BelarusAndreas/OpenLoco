@@ -1,7 +1,7 @@
 package openloco.industry;
 
-import openloco.Assets;
-import openloco.entities.IndustryAsset;
+import openloco.assets.Assets;
+import openloco.assets.IndustryAsset;
 import openloco.graphics.CartCoord;
 import openloco.graphics.Tile;
 

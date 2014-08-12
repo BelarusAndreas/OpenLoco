@@ -1,9 +1,9 @@
 package openloco.rail;
 
-import openloco.Assets;
+import openloco.assets.Assets;
 
-import openloco.entities.Bridge;
-import openloco.entities.Track;
+import openloco.assets.Bridge;
+import openloco.assets.Track;
 import openloco.graphics.*;
 import openloco.terrain.Terrain;
 

@@ -1,7 +1,7 @@
 package openloco.datfiles;
 
-import openloco.*;
-import openloco.entities.*;
+import openloco.assets.*;
+import openloco.graphics.Palette;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,9 +1,9 @@
 package openloco.industry;
 
-import openloco.Assets;
-import openloco.entities.BuildingAsset;
-import openloco.entities.IndustryAsset;
-import openloco.entities.Sprites;
+import openloco.assets.Assets;
+import openloco.assets.BuildingAsset;
+import openloco.assets.IndustryAsset;
+import openloco.assets.Sprites;
 import openloco.graphics.*;
 
 import java.util.ArrayList;

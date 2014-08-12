@@ -1,6 +1,6 @@
 package openloco.demo;
 
-import openloco.Assets;
+import openloco.assets.Assets;
 import openloco.graphics.IsoUtil;
 import openloco.graphics.SpriteInstance;
 import openloco.graphics.Tile;

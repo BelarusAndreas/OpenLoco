@@ -1,6 +1,6 @@
 package openloco.demo;
 
-import openloco.Assets;
+import openloco.assets.Assets;
 import openloco.app.LwjglNativeLoader;
 import openloco.datfiles.DatFileLoader;
 

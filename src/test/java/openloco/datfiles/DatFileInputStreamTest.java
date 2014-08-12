@@ -1,8 +1,8 @@
 package openloco.datfiles;
 
-import openloco.entities.IndustryVars;
-import openloco.entities.ObjectClass;
-import openloco.entities.UseObject;
+import openloco.assets.IndustryVars;
+import openloco.assets.ObjectClass;
+import openloco.assets.UseObject;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;

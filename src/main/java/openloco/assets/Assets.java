@@ -1,6 +1,4 @@
-package openloco;
-
-import openloco.entities.*;
+package openloco.assets;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package openloco.entities;
+package openloco.assets;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

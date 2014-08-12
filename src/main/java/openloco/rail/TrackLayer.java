@@ -1,6 +1,6 @@
 package openloco.rail;
 
-import openloco.entities.Track;
+import openloco.assets.Track;
 
 import java.util.ArrayList;
 import java.util.List;

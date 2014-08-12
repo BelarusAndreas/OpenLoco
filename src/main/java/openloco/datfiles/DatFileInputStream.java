@@ -1,8 +1,8 @@
 package openloco.datfiles;
 
-import openloco.entities.MultiLangString;
-import openloco.entities.ObjectClass;
-import openloco.entities.UseObject;
+import openloco.assets.MultiLangString;
+import openloco.assets.ObjectClass;
+import openloco.assets.UseObject;
 
 import java.io.DataInputStream;
 import java.io.IOException;

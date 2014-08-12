@@ -1,4 +1,4 @@
-package openloco.entities;
+package openloco.assets;
 
 public class GroundVars {
 

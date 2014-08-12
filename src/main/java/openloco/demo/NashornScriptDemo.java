@@ -1,7 +1,7 @@
 package openloco.demo;
 
 import com.sun.nio.file.SensitivityWatchEventModifier;
-import openloco.Assets;
+import openloco.assets.Assets;
 import openloco.graphics.SpriteInstance;
 import org.lwjgl.input.Keyboard;
 import org.slf4j.Logger;

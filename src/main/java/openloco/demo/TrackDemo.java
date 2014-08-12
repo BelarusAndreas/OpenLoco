@@ -1,9 +1,7 @@
 package openloco.demo;
 
-import openloco.Assets;
-import openloco.graphics.IsoUtil;
+import openloco.assets.Assets;
 import openloco.graphics.SpriteInstance;
-import openloco.graphics.Tile;
 import openloco.rail.*;
 import openloco.terrain.Terrain;
 import openloco.terrain.TerrainRenderer;

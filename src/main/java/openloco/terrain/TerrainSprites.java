@@ -1,8 +1,8 @@
 package openloco.terrain;
 
-import openloco.Assets;
-import openloco.Palette;
-import openloco.entities.*;
+import openloco.assets.Assets;
+import openloco.graphics.Palette;
+import openloco.assets.*;
 import openloco.graphics.OpenGlSprite;
 
 import java.util.*;

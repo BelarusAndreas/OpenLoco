@@ -1,7 +1,7 @@
 package openloco.terrain;
 
-import openloco.Assets;
-import openloco.entities.Ground;
+import openloco.assets.Assets;
+import openloco.assets.Ground;
 import openloco.graphics.*;
 
 import java.util.*;

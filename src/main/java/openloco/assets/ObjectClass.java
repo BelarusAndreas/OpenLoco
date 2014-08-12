@@ -1,4 +1,4 @@
-package openloco.entities;
+package openloco.assets;
 
 public enum ObjectClass {
     INTERFACES,                 // 0x00

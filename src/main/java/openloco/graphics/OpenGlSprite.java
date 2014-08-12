@@ -1,7 +1,6 @@
 package openloco.graphics;
 
-import openloco.Palette;
-import openloco.entities.Sprites;
+import openloco.assets.Sprites;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 

@@ -1,4 +1,4 @@
-package openloco;
+package openloco.graphics;
 
 import java.util.Arrays;
 

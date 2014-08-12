@@ -3,11 +3,11 @@ package openloco.demo;
 import java.util.ArrayList;
 import java.util.List;
 
-import openloco.Assets;
-import openloco.entities.Ground;
-import openloco.entities.Vehicle;
-import openloco.entities.Sprites;
-import openloco.entities.VehicleSpriteVar;
+import openloco.assets.Assets;
+import openloco.assets.Ground;
+import openloco.assets.Vehicle;
+import openloco.assets.Sprites;
+import openloco.assets.VehicleSpriteVar;
 import openloco.graphics.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
