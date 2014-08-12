@@ -1,5 +1,7 @@
 package openloco.entities;
 
+import com.google.common.base.Objects;
+
 import java.util.List;
 
 public class Vehicle {
@@ -49,4 +51,11 @@ public class Vehicle {
         return sprites;
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("name", name)
+                .add("description", description)
+                .toString();
+    }
 }
