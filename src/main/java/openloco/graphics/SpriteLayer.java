@@ -5,6 +5,8 @@ public enum SpriteLayer {
     BALLAST,
     SLEEPERS,
     RAILS,
+    BOGEYS,
+    VEHICLES,
     BRIDGE,
     BUILDING
 }

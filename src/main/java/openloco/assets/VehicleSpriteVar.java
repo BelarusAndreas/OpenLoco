@@ -63,9 +63,13 @@ public class VehicleSpriteVar {
         return spriteNum;
     }
 
+    public boolean isSymmetrical() {
+        return flags.contains(VehicleSpriteFlag.IS_SYMMETRICAL);
+    }
+
     public static enum VehicleSpriteFlag {
         HAS_SPRITES,
-        unknown1,
+        IS_SYMMETRICAL,
         unknown2,
         unknown3,
         unknown4,

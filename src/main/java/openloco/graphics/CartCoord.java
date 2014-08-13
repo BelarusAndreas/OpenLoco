@@ -24,6 +24,10 @@ public class CartCoord {
         return z;
     }
 
+    public CartCoord plus(int xDelta, int yDelta, int zDelta) {
+        return new CartCoord(x+xDelta, y+yDelta, z+zDelta);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,5 +48,10 @@ public class CartCoord {
         result = 31 * result + y;
         result = 31 * result + z;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ", " + z + ")";
     }
 }

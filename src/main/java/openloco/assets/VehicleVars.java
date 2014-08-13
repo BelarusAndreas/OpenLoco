@@ -6,14 +6,19 @@ import java.util.List;
 public class VehicleVars {
 
     public enum VehicleFlag {
-        unknown1, unknown2, unknown3, unknown4, unknown5, unknown6,
+        unknown1, // is loco
+        unknown2, // invert second loco?
+        unknown3, // loco only at head of train?
+        unknown4,
+        unknown5,
+        unknown6, // power car in middle
         RACKRAIL,
         unknown7, unknown8,
         ANYTRACK,
         unknown9,
         CANCOUPLE,
         DUALHEAD,
-        unknown10,
+        unknown10, //makes chuffing noises
         REFITTABLE,
         NOANNOUNCE
     }

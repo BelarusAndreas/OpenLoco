@@ -51,6 +51,10 @@ public class Vehicle {
         return sprites;
     }
 
+    public boolean isDualHead() {
+        return getVars().getVehicleFlags().contains(VehicleVars.VehicleFlag.DUALHEAD);
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
