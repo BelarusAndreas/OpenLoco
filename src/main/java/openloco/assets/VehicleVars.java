@@ -28,6 +28,7 @@ public class VehicleVars {
     private short runCostFact;
     private byte colourType;
     private byte numCompat;
+    private final List<VehicleHunk> vehicleHunks;
     private List<VehicleSpriteVar> vehSprites;
     private int power;
     private int speed;
@@ -44,7 +45,7 @@ public class VehicleVars {
 
     public VehicleVars(byte vehicleClass, byte vehicleType, byte numMods, byte costInd, short costFact,
                        byte reliability, byte runCostInd, short runCostFact, byte colourType, byte numCompat,
-                       List<VehicleSpriteVar> vehSprites, int power, int speed, int rackSpeed, int weight,
+                       List<VehicleHunk> vehicleHunks, List<VehicleSpriteVar> vehSprites, int power, int speed, int rackSpeed, int weight,
                        EnumSet<VehicleFlag> vehicleFlags, byte visFxHeight, byte visFxType, byte wakeFxType,
                        int designed, int obsolete, byte startsndtype, byte numSnd) {
 
@@ -58,6 +59,7 @@ public class VehicleVars {
         this.runCostFact = runCostFact;
         this.colourType = colourType;
         this.numCompat = numCompat;
+        this.vehicleHunks = vehicleHunks;
         this.vehSprites = vehSprites;
         this.power = power;
         this.speed = speed;
@@ -111,6 +113,10 @@ public class VehicleVars {
 
     public byte getNumCompat() {
         return numCompat;
+    }
+
+    public List<VehicleHunk> getVehicleHunks() {
+        return vehicleHunks;
     }
 
     public List<VehicleSpriteVar> getVehSprites() {

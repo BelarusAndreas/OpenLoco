@@ -323,6 +323,16 @@ public class DatFileLoader {
         return new Company(name, companyVars, ceoName, companyName, sprites);
     }
 
+    private static VehicleHunk loadVehicleHunk(DatFileInputStream in) throws IOException {
+        byte length = in.readByte();
+        byte vehunk2 = in.readByte();
+        byte vehunk3 = in.readByte();
+        byte vehunk4 = in.readByte();
+        byte spriteIndex = in.readByte();
+        byte vehunk6 = in.readByte();
+        return new VehicleHunk(length, vehunk2, vehunk3, vehunk4, spriteIndex, vehunk6);
+    }
+
     private static VehicleSpriteVar loadVehicleSpriteVar(DatFileInputStream in) throws IOException {
         byte levelSpriteCount = in.readByte();
         byte upDownSpriteCount = in.readByte();
@@ -352,7 +362,10 @@ public class DatFileLoader {
         byte colourType = in.readByte();
         byte numCompat = in.readByte();
         in.skipBytes(20);
-        in.skipBytes(24); //vehunk
+        List<VehicleHunk> vehicleHunks = new ArrayList<>();
+        for (int i=0; i<4; i++) {
+            vehicleHunks.add(loadVehicleHunk(in));
+        }
         List<VehicleSpriteVar> vehSprites = new ArrayList<>();
         for (int i=0; i<4; i++) {
             vehSprites.add(loadVehicleSpriteVar(in));
@@ -378,7 +391,7 @@ public class DatFileLoader {
         in.skipBytes(3);
 
         return new VehicleVars(vehicleClass, vehicleType, numMods, costInd, costFact, reliability, runCostInd,
-                runCostFact, colourType, numCompat, vehSprites, power, speed, rackSpeed, weight, vehicleFlags,
+                runCostFact, colourType, numCompat, vehicleHunks, vehSprites, power, speed, rackSpeed, weight, vehicleFlags,
                 visFxHeight, visFxType, wakeFxType, designed, obsolete, startsndtype, numSnd);
     }
 
