@@ -43,6 +43,7 @@ public class NashornScriptDemo extends BaseDemo {
 
     @Override
     protected void init() {
+        LOGGER.info("---- Initialising NashornScriptDemo ----------------");
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         try {
             Bindings bindings = engine.createBindings();
