@@ -12,7 +12,7 @@ public class SpriteInstance {
     private static final Comparator<SpriteInstance> COMPARE_CART_Y = (s, t) -> s.getCartCoord().getY() - t.getCartCoord().getY();
 
     @SuppressWarnings("unchecked")
-    public static final Comparator<SpriteInstance>  SPRITE_DEPTH_COMPARATOR = new ChainComparator<>(COMPARE_CART_X, COMPARE_CART_Y, COMPARE_Z_INDEX, COMPARE_LAYERS);
+    public static final Comparator<SpriteInstance>  SPRITE_DEPTH_COMPARATOR = new ChainComparator<>(COMPARE_CART_X, COMPARE_Z_INDEX, COMPARE_CART_Y, COMPARE_LAYERS);
 
     private final OpenGlSprite sprite;
     private final ScreenCoord screenCoord;
