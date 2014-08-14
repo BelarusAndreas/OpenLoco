@@ -6,25 +6,26 @@ import java.util.List;
 public class VehicleVars {
 
     public enum VehicleFlag {
-        unknown1, // is loco
-        unknown2, // invert second loco?
+        IS_LOCO, // is loco
+        INVERT_SECOND_LOCO, // invert second loco?
         unknown3, // loco only at head of train?
         unknown4,
         unknown5,
-        unknown6, // power car in middle
+        REQUIRES_DRIVING_CAR, // power car in middle
         RACKRAIL,
         unknown7, unknown8,
         ANYTRACK,
         unknown9,
         CANCOUPLE,
         DUALHEAD,
-        unknown10, //makes chuffing noises
+        IS_STEAM, //makes chuffing noises
         REFITTABLE,
         NOANNOUNCE
     }
 
     private byte vehicleClass;
     private byte vehicleType;
+    private final byte numVehicleUnits;
     private byte numMods;
     private byte costInd;
     private short costFact;
@@ -33,8 +34,8 @@ public class VehicleVars {
     private short runCostFact;
     private byte colourType;
     private byte numCompat;
-    private final List<VehicleHunk> vehicleHunks;
-    private List<VehicleSpriteVar> vehSprites;
+    private final List<VehicleUnit> vehicleUnits;
+    private final List<VehicleUnitSpriteDetails> vehicleUnitSpriteDetails;
     private int power;
     private int speed;
     private int rackSpeed;
@@ -48,14 +49,15 @@ public class VehicleVars {
     private byte startsndtype;
     private byte numSnd;
 
-    public VehicleVars(byte vehicleClass, byte vehicleType, byte numMods, byte costInd, short costFact,
+    public VehicleVars(byte vehicleClass, byte vehicleType, byte numVehicleUnits, byte numMods, byte costInd, short costFact,
                        byte reliability, byte runCostInd, short runCostFact, byte colourType, byte numCompat,
-                       List<VehicleHunk> vehicleHunks, List<VehicleSpriteVar> vehSprites, int power, int speed, int rackSpeed, int weight,
+                       List<VehicleUnit> vehicleUnits, List<VehicleUnitSpriteDetails> vehicleUnitSpriteDetails, int power, int speed, int rackSpeed, int weight,
                        EnumSet<VehicleFlag> vehicleFlags, byte visFxHeight, byte visFxType, byte wakeFxType,
                        int designed, int obsolete, byte startsndtype, byte numSnd) {
 
         this.vehicleClass = vehicleClass;
         this.vehicleType = vehicleType;
+        this.numVehicleUnits = numVehicleUnits;
         this.numMods = numMods;
         this.costInd = costInd;
         this.costFact = costFact;
@@ -64,8 +66,8 @@ public class VehicleVars {
         this.runCostFact = runCostFact;
         this.colourType = colourType;
         this.numCompat = numCompat;
-        this.vehicleHunks = vehicleHunks;
-        this.vehSprites = vehSprites;
+        this.vehicleUnits = vehicleUnits;
+        this.vehicleUnitSpriteDetails = vehicleUnitSpriteDetails;
         this.power = power;
         this.speed = speed;
         this.rackSpeed = rackSpeed;
@@ -86,6 +88,10 @@ public class VehicleVars {
 
     public byte getVehicleType() {
         return vehicleType;
+    }
+
+    public byte getNumVehicleUnits() {
+        return numVehicleUnits;
     }
 
     public byte getNumMods() {
@@ -120,12 +126,12 @@ public class VehicleVars {
         return numCompat;
     }
 
-    public List<VehicleHunk> getVehicleHunks() {
-        return vehicleHunks;
+    public List<VehicleUnit> getVehicleUnits() {
+        return vehicleUnits;
     }
 
-    public List<VehicleSpriteVar> getVehSprites() {
-        return vehSprites;
+    public List<VehicleUnitSpriteDetails> getVehicleUnitSpriteDetails() {
+        return vehicleUnitSpriteDetails;
     }
 
     public int getPower() {

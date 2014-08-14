@@ -3,7 +3,7 @@ package openloco.rail;
 import openloco.assets.Assets;
 import openloco.assets.Sprites;
 import openloco.assets.Vehicle;
-import openloco.assets.VehicleSpriteVar;
+import openloco.assets.VehicleUnitSpriteDetails;
 import openloco.graphics.*;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class TrainRenderer implements Renderer<Train> {
         for (int i=0; i<train.getRailVehicles().size(); i++) {
             RailVehicle railVehicle = train.getRailVehicles().get(i);
             Vehicle vehicleAsset = railVehicle.getVehicleAsset();
-            VehicleSpriteVar vehSpriteVar = vehicleAsset.getVars().getVehSprites().get(0);
+            VehicleUnitSpriteDetails vehSpriteVar = vehicleAsset.getVars().getVehicleUnitSpriteDetails().get(0);
 
             sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus(0, vehSpriteVar.getBogeyPos()/8, 0)));
             sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus(0, BOGEY_FUDGE_FACTOR -vehSpriteVar.getBogeyPos()/8, 0)));
@@ -41,7 +41,7 @@ public class TrainRenderer implements Renderer<Train> {
         return sprites;
     }
 
-    private SpriteInstance drawBogeyAt(RailVehicle railVehicle, VehicleSpriteVar vehSpriteVar, CartCoord bogey1Loc) {
+    private SpriteInstance drawBogeyAt(RailVehicle railVehicle, VehicleUnitSpriteDetails vehSpriteVar, CartCoord bogey1Loc) {
         int bogeySpriteIndex = vehicleSpriteAtlas.getBogeySpriteIndex(vehSpriteVar, railVehicle.getDirection());
         Sprites.RawSprite bogeyRawSprite = railVehicle.getVehicleAsset().getSprites().get(bogeySpriteIndex);
         return new SpriteInstance(OpenGlSprite.createFromRawSprite(bogeyRawSprite), SpriteLayer.VEHICLES, bogey1Loc);

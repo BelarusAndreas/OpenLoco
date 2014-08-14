@@ -323,17 +323,17 @@ public class DatFileLoader {
         return new Company(name, companyVars, ceoName, companyName, sprites);
     }
 
-    private static VehicleHunk loadVehicleHunk(DatFileInputStream in) throws IOException {
+    private static VehicleUnit loadVehicleUnit(DatFileInputStream in) throws IOException {
         byte length = in.readByte();
-        byte vehunk2 = in.readByte();
-        byte vehunk3 = in.readByte();
-        byte vehunk4 = in.readByte();
-        byte spriteIndex = in.readByte();
-        byte vehunk6 = in.readByte();
-        return new VehicleHunk(length, vehunk2, vehunk3, vehunk4, spriteIndex, vehunk6);
+        byte rearBogiePosition = in.readByte();
+        byte frontBogeyIndex = in.readByte();
+        byte rearBogeyIndex = in.readByte();
+        byte spriteDetailsIndex = in.readByte();
+        byte effectPosition = in.readByte();
+        return new VehicleUnit(length, rearBogiePosition, frontBogeyIndex, rearBogeyIndex, spriteDetailsIndex, effectPosition);
     }
 
-    private static VehicleSpriteVar loadVehicleSpriteVar(DatFileInputStream in) throws IOException {
+    private static VehicleUnitSpriteDetails loadVehicleUnitSpriteDetails(DatFileInputStream in) throws IOException {
         byte levelSpriteCount = in.readByte();
         byte upDownSpriteCount = in.readByte();
         byte frames = in.readByte();
@@ -341,18 +341,19 @@ public class DatFileLoader {
         byte numUnits = in.readByte();
         byte tiltCount = in.readByte();
         byte bogeyPos = in.readByte();
-        EnumSet<VehicleSpriteVar.VehicleSpriteFlag> flags = in.readBitField(1, VehicleSpriteVar.VehicleSpriteFlag.class);
+        EnumSet<VehicleUnitSpriteDetails.VehicleSpriteFlag> flags = in.readBitField(1, VehicleUnitSpriteDetails.VehicleSpriteFlag.class);
         in.skipBytes(6);
         byte spriteNum = in.readByte();
         in.skipBytes(15);
-        return new VehicleSpriteVar(levelSpriteCount, upDownSpriteCount, frames, vehType, numUnits, tiltCount, bogeyPos, flags, spriteNum);
+        return new VehicleUnitSpriteDetails(levelSpriteCount, upDownSpriteCount, frames, vehType, numUnits, tiltCount, bogeyPos, flags, spriteNum);
     }
 
     private static VehicleVars loadVehicleVars(DatFileInputStream in) throws IOException {
         in.skipBytes(2);
         byte vehicleClass = in.readByte();
         byte vehicleType = in.readByte();
-        in.skipBytes(2);
+        byte numVehicleUnits = in.readByte();
+        in.skipBytes(1);
         byte numMods = in.readByte();
         byte costInd = in.readByte();
         short costFact = in.readSShort();
@@ -362,13 +363,13 @@ public class DatFileLoader {
         byte colourType = in.readByte();
         byte numCompat = in.readByte();
         in.skipBytes(20);
-        List<VehicleHunk> vehicleHunks = new ArrayList<>();
+        List<VehicleUnit> vehicleUnits = new ArrayList<>();
         for (int i=0; i<4; i++) {
-            vehicleHunks.add(loadVehicleHunk(in));
+            vehicleUnits.add(loadVehicleUnit(in));
         }
-        List<VehicleSpriteVar> vehSprites = new ArrayList<>();
+        List<VehicleUnitSpriteDetails> vehicleUnitSpriteDetails = new ArrayList<>();
         for (int i=0; i<4; i++) {
-            vehSprites.add(loadVehicleSpriteVar(in));
+            vehicleUnitSpriteDetails.add(loadVehicleUnitSpriteDetails(in));
         }
         in.skipBytes(36);
         int power = in.readUShort();
@@ -390,8 +391,8 @@ public class DatFileLoader {
         byte numSnd = in.readByte();
         in.skipBytes(3);
 
-        return new VehicleVars(vehicleClass, vehicleType, numMods, costInd, costFact, reliability, runCostInd,
-                runCostFact, colourType, numCompat, vehicleHunks, vehSprites, power, speed, rackSpeed, weight, vehicleFlags,
+        return new VehicleVars(vehicleClass, vehicleType, numVehicleUnits, numMods, costInd, costFact, reliability, runCostInd,
+                runCostFact, colourType, numCompat, vehicleUnits, vehicleUnitSpriteDetails, power, speed, rackSpeed, weight, vehicleFlags,
                 visFxHeight, visFxType, wakeFxType, designed, obsolete, startsndtype, numSnd);
     }
 

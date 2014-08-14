@@ -1,8 +1,8 @@
 package openloco.rail;
 
 import openloco.assets.Vehicle;
-import openloco.assets.VehicleHunk;
-import openloco.assets.VehicleSpriteVar;
+import openloco.assets.VehicleUnit;
+import openloco.assets.VehicleUnitSpriteDetails;
 import openloco.graphics.CartCoord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +46,7 @@ public class Train {
             RailVehicle vehicle = consist.get(i);
             Vehicle vehicleAsset = vehicle.getVehicleAsset();
 
-            VehicleHunk hunk = vehicleAsset.getVars().getVehicleHunks().get(0);
-
-            VehicleSpriteVar spriteDetails = vehicleAsset.getVars().getVehSprites().get(0);
+            VehicleUnitSpriteDetails spriteDetails = vehicleAsset.getVars().getVehicleUnitSpriteDetails().get(0);
             int halfLength = (int)Math.floor((float)spriteDetails.getBogeyPos()/4.0f) + COUPLING_PADDING;
             LOGGER.debug("Setting location of vehicle {} ({}) to {} (halfLength {})", i, vehicleAsset, cartCoord, halfLength);
             cartCoord = cartCoord.plus(0, halfLength, 0);

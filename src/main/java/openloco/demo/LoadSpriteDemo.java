@@ -7,7 +7,7 @@ import openloco.assets.Assets;
 import openloco.assets.Ground;
 import openloco.assets.Vehicle;
 import openloco.assets.Sprites;
-import openloco.assets.VehicleSpriteVar;
+import openloco.assets.VehicleUnitSpriteDetails;
 import openloco.graphics.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -117,7 +117,7 @@ public class LoadSpriteDemo extends BaseDemo {
             }
         }
 
-        VehicleSpriteVar spriteVar = vehicle.getVars().getVehSprites().get(0);
+        VehicleUnitSpriteDetails spriteVar = vehicle.getVars().getVehicleUnitSpriteDetails().get(0);
         int frameOffset = 0;
         if (rotating) {
             frameOffset = spriteVar.getFrames() > 1 ? spriteVar.getFrames() + spriteVar.getTiltCount() : spriteVar.getTiltCount();

@@ -1,36 +1,36 @@
 package openloco.rail;
 
-import openloco.assets.VehicleSpriteVar;
+import openloco.assets.VehicleUnitSpriteDetails;
 
 public class VehicleSpriteAtlas {
 
-    public int getFlatSpriteIndex(VehicleSpriteVar vehicleSpriteVar, int direction) {
-        return direction*vehicleSpriteVar.getLevelSpriteCount()/360;
+    public int getFlatSpriteIndex(VehicleUnitSpriteDetails vehicleUnitSpriteDetails, int direction) {
+        return direction* vehicleUnitSpriteDetails.getLevelSpriteCount()/360;
     }
 
-    public int getBogeySpriteIndex(VehicleSpriteVar vehicleSpriteVar, int direction) {
-        return getLevelSpriteCount(vehicleSpriteVar) + getUpDownSpriteCount(vehicleSpriteVar) + getHalfSlopeSpriteCount(vehicleSpriteVar);
+    public int getBogeySpriteIndex(VehicleUnitSpriteDetails vehicleUnitSpriteDetails, int direction) {
+        return getLevelSpriteCount(vehicleUnitSpriteDetails) + getUpDownSpriteCount(vehicleUnitSpriteDetails) + getHalfSlopeSpriteCount(vehicleUnitSpriteDetails);
     }
 
-    private int getLevelSpriteCount(VehicleSpriteVar vehicleSpriteVar) {
-        int levelSpriteCount = vehicleSpriteVar.getLevelSpriteCount() * vehicleSpriteVar.getFrames();
-        if (vehicleSpriteVar.isSymmetrical()) {
+    private int getLevelSpriteCount(VehicleUnitSpriteDetails vehicleUnitSpriteDetails) {
+        int levelSpriteCount = vehicleUnitSpriteDetails.getLevelSpriteCount() * vehicleUnitSpriteDetails.getFrames();
+        if (vehicleUnitSpriteDetails.isSymmetrical()) {
             levelSpriteCount/=2;
         }
         return levelSpriteCount;
     }
 
-    private int getUpDownSpriteCount(VehicleSpriteVar vehicleSpriteVar) {
-        int upDownSpriteCount = 2 * vehicleSpriteVar.getUpDownSpriteCount() * vehicleSpriteVar.getFrames();
-        if (vehicleSpriteVar.isSymmetrical()) {
+    private int getUpDownSpriteCount(VehicleUnitSpriteDetails vehicleUnitSpriteDetails) {
+        int upDownSpriteCount = 2 * vehicleUnitSpriteDetails.getUpDownSpriteCount() * vehicleUnitSpriteDetails.getFrames();
+        if (vehicleUnitSpriteDetails.isSymmetrical()) {
             upDownSpriteCount/=2;
         }
         return upDownSpriteCount;
     }
 
-    private int getHalfSlopeSpriteCount(VehicleSpriteVar vehicleSpriteVar) {
+    private int getHalfSlopeSpriteCount(VehicleUnitSpriteDetails vehicleUnitSpriteDetails) {
         int halfSlopeCount = 8;
-        if (vehicleSpriteVar.isSymmetrical()) {
+        if (vehicleUnitSpriteDetails.isSymmetrical()) {
             halfSlopeCount/=2;
         }
         return halfSlopeCount;

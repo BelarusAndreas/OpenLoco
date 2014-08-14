@@ -2,7 +2,7 @@ package openloco.assets;
 
 import java.util.EnumSet;
 
-public class VehicleSpriteVar {
+public class VehicleUnitSpriteDetails {
 
     private final byte levelSpriteCount;
     private final byte upDownSpriteCount;
@@ -14,8 +14,8 @@ public class VehicleSpriteVar {
     private final EnumSet<VehicleSpriteFlag> flags;
     private final byte spriteNum;
 
-    public VehicleSpriteVar(byte levelSpriteCount, byte upDownSpriteCount, byte frames, byte vehType, byte numUnits,
-                            byte tiltCount, byte bogeyPos, EnumSet<VehicleSpriteFlag> flags, byte spriteNum) {
+    public VehicleUnitSpriteDetails(byte levelSpriteCount, byte upDownSpriteCount, byte frames, byte vehType, byte numUnits,
+                                    byte tiltCount, byte bogeyPos, EnumSet<VehicleSpriteFlag> flags, byte spriteNum) {
         this.levelSpriteCount = levelSpriteCount;
         this.upDownSpriteCount = upDownSpriteCount;
         this.frames = frames;
