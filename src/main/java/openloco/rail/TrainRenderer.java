@@ -1,17 +1,16 @@
 package openloco.rail;
 
-import openloco.assets.Assets;
-import openloco.assets.Sprites;
-import openloco.assets.Vehicle;
-import openloco.assets.VehicleUnitSpriteDetails;
+import openloco.assets.*;
 import openloco.graphics.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TrainRenderer implements Renderer<Train> {
 
-    private static final int BOGEY_FUDGE_FACTOR = -5;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrainRenderer.class);
 
     private final Assets assets;
     private final VehicleSpriteAtlas vehicleSpriteAtlas;
@@ -28,10 +27,24 @@ public class TrainRenderer implements Renderer<Train> {
         for (int i=0; i<train.getRailVehicles().size(); i++) {
             RailVehicle railVehicle = train.getRailVehicles().get(i);
             Vehicle vehicleAsset = railVehicle.getVehicleAsset();
-            VehicleUnitSpriteDetails vehSpriteVar = vehicleAsset.getVars().getVehicleUnitSpriteDetails().get(0);
+            VehicleUnit vehicleUnit = vehicleAsset.getVars().getVehicleUnits().get(0);
 
-            sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus(0, vehSpriteVar.getBogeyPos()/8, 0)));
-            sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus(0, BOGEY_FUDGE_FACTOR -vehSpriteVar.getBogeyPos()/8, 0)));
+            VehicleUnitSpriteDetails vehSpriteVar = vehicleAsset.getVars().getVehicleUnitSpriteDetails().get(vehicleUnit.getSpriteDetailsIndex());
+
+            double angle = Math.PI * railVehicle.getDirection() / 180;
+            double xFactor = -Math.sin(angle);
+            double yFactor = Math.cos(angle);
+
+            if (vehicleUnit.hasFrontBogey()) {
+                double bogeyScale = (vehSpriteVar.getBogeyPos() - vehicleUnit.getLength()) / 4.0;
+                LOGGER.debug("Outputting front bogey at offset ({}, {})", (int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale));
+                sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale)-2, 0)));
+            }
+            if (vehicleUnit.hasRearBogey()) {
+                double bogeyScale = (-vehSpriteVar.getBogeyPos() + vehicleUnit.getRearBogeyPosition()) / 4.0;
+                LOGGER.debug("Outputting rear bogey at offset ({}, {})", (int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale));
+                sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale)-2, 0)));
+            }
 
             int spriteIndex = vehicleSpriteAtlas.getFlatSpriteIndex(vehSpriteVar, railVehicle.getDirection());
             Sprites.RawSprite rawSprite = vehicleAsset.getSprites().get(spriteIndex);

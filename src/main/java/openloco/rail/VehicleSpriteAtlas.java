@@ -5,10 +5,19 @@ import openloco.assets.VehicleUnitSpriteDetails;
 public class VehicleSpriteAtlas {
 
     public int getFlatSpriteIndex(VehicleUnitSpriteDetails vehicleUnitSpriteDetails, int direction) {
-        return direction* vehicleUnitSpriteDetails.getLevelSpriteCount()/360;
+        if (vehicleUnitSpriteDetails.isSymmetrical()) {
+            direction %= 180;
+        }
+
+        double slice = 360.0/vehicleUnitSpriteDetails.getLevelSpriteCount();
+
+        return (int)Math.floor((((double)(direction%360) + 0.5*slice) / slice));
     }
 
     public int getBogeySpriteIndex(VehicleUnitSpriteDetails vehicleUnitSpriteDetails, int direction) {
+        if (vehicleUnitSpriteDetails.isSymmetrical()) {
+            direction %= 180;
+        }
         return getLevelSpriteCount(vehicleUnitSpriteDetails) + getUpDownSpriteCount(vehicleUnitSpriteDetails) + getHalfSlopeSpriteCount(vehicleUnitSpriteDetails);
     }
 

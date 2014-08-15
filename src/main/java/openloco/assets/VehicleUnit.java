@@ -42,4 +42,11 @@ public class VehicleUnit {
         return effectPosition;
     }
 
+    public boolean hasFrontBogey() {
+        return frontBogeyIndex != 255;
+    }
+
+    public boolean hasRearBogey() {
+        return rearBogeyIndex != 255;
+    }
 }
