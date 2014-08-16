@@ -38,12 +38,12 @@ public class TrainRenderer implements Renderer<Train> {
             if (vehicleUnit.hasFrontBogey()) {
                 double bogeyScale = (vehSpriteVar.getBogeyPos() - vehicleUnit.getLength()) / 4.0;
                 LOGGER.debug("Outputting front bogey at offset ({}, {})", (int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale));
-                sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale)-2, 0)));
+                sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale), 0)));
             }
             if (vehicleUnit.hasRearBogey()) {
                 double bogeyScale = (-vehSpriteVar.getBogeyPos() + vehicleUnit.getRearBogeyPosition()) / 4.0;
                 LOGGER.debug("Outputting rear bogey at offset ({}, {})", (int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale));
-                sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale)-2, 0)));
+                sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale), 0)));
             }
 
             int spriteIndex = vehicleSpriteAtlas.getFlatSpriteIndex(vehSpriteVar, railVehicle.getDirection());

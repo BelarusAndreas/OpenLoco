@@ -7,20 +7,20 @@ public class VehicleUnitSpriteDetails {
     private final byte levelSpriteCount;
     private final byte upDownSpriteCount;
     private final byte frames;
-    private final byte vehType;
-    private final byte numUnits;
+    private final byte cargoLoadingStates; // number of frames between full and empty
+    private final byte cargoLoadingFrames; // total number of cargo frames (empty to full for each cargo)
     private final byte tiltCount;
     private final byte bogeyPos;
     private final EnumSet<VehicleSpriteFlag> flags;
     private final byte spriteNum;
 
-    public VehicleUnitSpriteDetails(byte levelSpriteCount, byte upDownSpriteCount, byte frames, byte vehType, byte numUnits,
+    public VehicleUnitSpriteDetails(byte levelSpriteCount, byte upDownSpriteCount, byte frames, byte cargoLoadingStates, byte cargoLoadingFrames,
                                     byte tiltCount, byte bogeyPos, EnumSet<VehicleSpriteFlag> flags, byte spriteNum) {
         this.levelSpriteCount = levelSpriteCount;
         this.upDownSpriteCount = upDownSpriteCount;
         this.frames = frames;
-        this.vehType = vehType;
-        this.numUnits = numUnits;
+        this.cargoLoadingStates = cargoLoadingStates;
+        this.cargoLoadingFrames = cargoLoadingFrames;
         this.tiltCount = tiltCount;
         this.bogeyPos = bogeyPos;
         this.flags = flags;
@@ -39,12 +39,12 @@ public class VehicleUnitSpriteDetails {
         return frames;
     }
 
-    public byte getVehType() {
-        return vehType;
+    public byte getCargoLoadingStates() {
+        return cargoLoadingStates;
     }
 
-    public byte getNumUnits() {
-        return numUnits;
+    public byte getCargoLoadingFrames() {
+        return cargoLoadingFrames;
     }
 
     public byte getTiltCount() {
