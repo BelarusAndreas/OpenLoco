@@ -43,10 +43,10 @@ public class VehicleUnit {
     }
 
     public boolean hasFrontBogey() {
-        return frontBogeyIndex != 255;
+        return frontBogeyIndex != -1;
     }
 
     public boolean hasRearBogey() {
-        return rearBogeyIndex != 255;
+        return rearBogeyIndex != -1;
     }
 }
