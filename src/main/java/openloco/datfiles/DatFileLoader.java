@@ -371,7 +371,10 @@ public class DatFileLoader {
         for (int i=0; i<4; i++) {
             vehicleUnitSpriteDetails.add(loadVehicleUnitSpriteDetails(in));
         }
-        in.skipBytes(36);
+        List<VehicleBogeySpriteDetails> vehicleBogeySpriteDetails = new ArrayList<>();
+        for (int i=0; i<2; i++) {
+            vehicleBogeySpriteDetails.add(loadVehicleBogeySpriteDetails(in));
+        }
         int power = in.readUShort();
         int speed = in.readUShort();
         int rackSpeed = in.readUShort();
@@ -394,6 +397,13 @@ public class DatFileLoader {
         return new VehicleVars(vehicleClass, vehicleType, numVehicleUnits, numMods, costInd, costFact, reliability, runCostInd,
                 runCostFact, colourType, numCompat, vehicleUnits, vehicleUnitSpriteDetails, power, speed, rackSpeed, weight, vehicleFlags,
                 visFxHeight, visFxType, wakeFxType, designed, obsolete, startsndtype, numSnd);
+    }
+
+    private static VehicleBogeySpriteDetails loadVehicleBogeySpriteDetails(DatFileInputStream in) throws IOException {
+        byte animFrames = in.readByte();
+        EnumSet<VehicleUnitSpriteDetails.VehicleSpriteFlag> flags = in.readBitField(1, VehicleUnitSpriteDetails.VehicleSpriteFlag.class);
+        in.skipBytes(16);
+        return new VehicleBogeySpriteDetails(animFrames, flags);
     }
 
     private static Company.CompanyVars loadCompanyVars(DatFileInputStream in) throws IOException {
