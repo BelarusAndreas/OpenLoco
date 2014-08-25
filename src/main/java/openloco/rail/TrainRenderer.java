@@ -27,35 +27,46 @@ public class TrainRenderer implements Renderer<Train> {
         for (int i=0; i<train.getRailVehicles().size(); i++) {
             RailVehicle railVehicle = train.getRailVehicles().get(i);
             Vehicle vehicleAsset = railVehicle.getVehicleAsset();
-            VehicleUnit vehicleUnit = vehicleAsset.getVars().getVehicleUnits().get(0);
+            VehicleUnit vehicleUnit = vehicleAsset.getVars().getVehicleUnits().get(railVehicle.getUnitIndex());
 
-            VehicleUnitSpriteDetails vehSpriteVar = vehicleAsset.getVars().getVehicleUnitSpriteDetails().get(vehicleUnit.getSpriteDetailsIndex());
+
+            int spriteDetailsIndex = vehicleUnit.getSpriteDetailsIndex();
+            boolean reversed = vehicleUnit.isSpriteDetailsReversed();
+
+            VehicleUnitSpriteDetails vehSpriteVar = vehicleAsset.getVars().getVehicleUnitSpriteDetails().get(spriteDetailsIndex);
 
             double angle = Math.PI * railVehicle.getDirection() / 180;
+
+            if (reversed) {
+                angle = (angle + Math.PI) % (2 * Math.PI);
+            }
+
             double xFactor = -Math.sin(angle);
             double yFactor = Math.cos(angle);
 
-            if (vehicleUnit.hasFrontBogey()) {
-                double bogeyScale = (vehSpriteVar.getBogeyPos() - vehicleUnit.getLength()) / 4.0;
-                LOGGER.debug("Outputting front bogey at offset ({}, {})", (int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale));
-                sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale), 0)));
-            }
-            if (vehicleUnit.hasRearBogey()) {
-                double bogeyScale = (-vehSpriteVar.getBogeyPos() + vehicleUnit.getRearBogeyPosition()) / 4.0;
-                LOGGER.debug("Outputting rear bogey at offset ({}, {})", (int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale));
-                sprites.add(drawBogeyAt(railVehicle, vehSpriteVar, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale), 0)));
-            }
+            if (!vehicleUnit.isSpacingOnly()) {
+                if (vehicleUnit.hasFrontBogey()) {
+                    double bogeyScale = (vehSpriteVar.getBogeyPos() - vehicleUnit.getLength()) / 4.0;
+                    LOGGER.debug("Outputting front bogey at offset ({}, {})", (int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale));
+                    sprites.add(drawBogeyAt(railVehicle, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale), 0)));
+                }
+                if (vehicleUnit.hasRearBogey()) {
+                    double bogeyScale = (-vehSpriteVar.getBogeyPos() + vehicleUnit.getRearBogeyPosition()) / 4.0;
+                    LOGGER.debug("Outputting rear bogey at offset ({}, {})", (int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale));
+                    sprites.add(drawBogeyAt(railVehicle, railVehicle.getLocation().plus((int)Math.round(xFactor*bogeyScale), (int)Math.round(yFactor*bogeyScale), 0)));
+                }
 
-            int spriteIndex = vehicleSpriteAtlas.getFlatSpriteIndex(vehSpriteVar, railVehicle.getDirection());
-            Sprites.RawSprite rawSprite = vehicleAsset.getSprites().get(spriteIndex);
-            sprites.add(new SpriteInstance(OpenGlSprite.createFromRawSprite(rawSprite), SpriteLayer.VEHICLES, railVehicle.getLocation().plus(0, 0, 2)));
+                int spriteIndex = vehicleSpriteAtlas.getFlatSpriteIndex(vehicleAsset, railVehicle.getUnitIndex(), railVehicle.getDirection());
+                Sprites.RawSprite rawSprite = vehicleAsset.getSprites().get(spriteIndex);
+                sprites.add(new SpriteInstance(OpenGlSprite.createFromRawSprite(rawSprite), SpriteLayer.VEHICLES, railVehicle.getLocation().plus(0, 0, 2)));
+            }
         }
 
         return sprites;
     }
 
-    private SpriteInstance drawBogeyAt(RailVehicle railVehicle, VehicleUnitSpriteDetails vehSpriteVar, CartCoord bogey1Loc) {
-        int bogeySpriteIndex = vehicleSpriteAtlas.getBogeySpriteIndex(vehSpriteVar, railVehicle.getDirection());
+    private SpriteInstance drawBogeyAt(RailVehicle railVehicle, CartCoord bogey1Loc) {
+        int bogeySpriteIndex = vehicleSpriteAtlas.getBogeySpriteIndex(railVehicle.getVehicleAsset(), 0, railVehicle.getDirection());
         Sprites.RawSprite bogeyRawSprite = railVehicle.getVehicleAsset().getSprites().get(bogeySpriteIndex);
         return new SpriteInstance(OpenGlSprite.createFromRawSprite(bogeyRawSprite), SpriteLayer.VEHICLES, bogey1Loc);
     }

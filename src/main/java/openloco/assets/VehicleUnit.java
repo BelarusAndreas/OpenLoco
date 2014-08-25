@@ -6,7 +6,9 @@ public class VehicleUnit {
     private final byte rearBogeyPosition;
     private final byte frontBogeyIndex;
     private final byte rearBogeyIndex;
-    private final byte spriteDetailsIndex;
+    private final boolean isSpriteDetailsReversed;
+    private final boolean isSpacingOnly;
+    private final int spriteDetailsIndex;
     private final byte effectPosition;
 
     public VehicleUnit(byte length, byte rearBogeyPosition, byte frontBogeyIndex, byte rearBogeyIndex, byte spriteDetailsIndex, byte effectPosition) {
@@ -14,7 +16,23 @@ public class VehicleUnit {
         this.rearBogeyPosition = rearBogeyPosition;
         this.frontBogeyIndex = frontBogeyIndex;
         this.rearBogeyIndex = rearBogeyIndex;
-        this.spriteDetailsIndex = spriteDetailsIndex;
+        if (spriteDetailsIndex < 0) {
+            if (spriteDetailsIndex > -5) {
+                this.spriteDetailsIndex = -(spriteDetailsIndex+1);
+                isSpriteDetailsReversed = false;
+                isSpacingOnly = true;
+            }
+            else {
+                this.spriteDetailsIndex = spriteDetailsIndex + 128;
+                isSpriteDetailsReversed = true;
+                isSpacingOnly = false;
+            }
+        }
+        else {
+            this.spriteDetailsIndex = spriteDetailsIndex;
+            isSpriteDetailsReversed = false;
+            isSpacingOnly = false;
+        }
         this.effectPosition = effectPosition;
     }
 
@@ -34,8 +52,16 @@ public class VehicleUnit {
         return rearBogeyIndex;
     }
 
-    public byte getSpriteDetailsIndex() {
+    public int getSpriteDetailsIndex() {
         return spriteDetailsIndex;
+    }
+
+    public boolean isSpriteDetailsReversed() {
+        return isSpriteDetailsReversed;
+    }
+
+    public boolean isSpacingOnly() {
+        return isSpacingOnly;
     }
 
     public byte getEffectPosition() {

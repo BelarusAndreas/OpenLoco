@@ -67,6 +67,10 @@ public class VehicleUnitSpriteDetails {
         return flags.contains(VehicleSpriteFlag.IS_SYMMETRICAL);
     }
 
+    public boolean hasSprites() {
+        return flags.contains(VehicleSpriteFlag.HAS_SPRITES);
+    }
+
     public static enum VehicleSpriteFlag {
         HAS_SPRITES,
         IS_SYMMETRICAL,

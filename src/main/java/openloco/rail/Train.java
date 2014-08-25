@@ -25,7 +25,7 @@ public class Train {
         else {
             consist.add(vehicle);
             if (vehicle.getVehicleAsset().isDualHead()) {
-                RailVehicle tail = new RailVehicle(vehicle.getVehicleAsset());
+                RailVehicle tail = new RailVehicle(vehicle.getVehicleAsset(), 0);
                 tail.setDirection(180);
                 consist.add(tail);
             }
@@ -45,9 +45,16 @@ public class Train {
         for (int i=0; i<consist.size(); i++) {
             RailVehicle vehicle = consist.get(i);
             Vehicle vehicleAsset = vehicle.getVehicleAsset();
+            VehicleUnit vehicleUnit = vehicleAsset.getVars().getVehicleUnits().get(vehicle.getUnitIndex());
+            VehicleUnitSpriteDetails spriteDetails = vehicleAsset.getVars().getVehicleUnitSpriteDetails().get(vehicleUnit.getSpriteDetailsIndex());
+            int halfLength;
+            if (vehicleUnit.isSpacingOnly()) {
+                halfLength = 0;
+            }
+            else {
+                halfLength = (int) Math.floor((float)(spriteDetails.getBogeyPos()-(vehicleUnit.getLength()/2-vehicleUnit.getRearBogeyPosition()/2))/ 4.0f) + COUPLING_PADDING;
+            }
 
-            VehicleUnitSpriteDetails spriteDetails = vehicleAsset.getVars().getVehicleUnitSpriteDetails().get(0);
-            int halfLength = (int)Math.floor((float)spriteDetails.getBogeyPos()/4.0f) + COUPLING_PADDING;
             LOGGER.debug("Setting location of vehicle {} ({}) to {} (halfLength {})", i, vehicleAsset, cartCoord, halfLength);
             cartCoord = cartCoord.plus(0, halfLength, 0);
             vehicle.setLocation(cartCoord);
