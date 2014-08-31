@@ -52,7 +52,7 @@ public class DatFileLoader {
 
         ObjectClass objectClass = ObjectClass.values()[(bytes[0] & 0x7f)];
         long objectSubClass = DatFileUtil.readUintLE(bytes, 1, 3);
-        String name = new String(bytes, 4, 8, Charset.defaultCharset());
+        String name = new String(bytes, 4, 8, Charset.defaultCharset()).trim();
 
         int pointer = 16;
 

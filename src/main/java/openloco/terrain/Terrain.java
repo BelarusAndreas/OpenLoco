@@ -75,7 +75,7 @@ public class Terrain {
     public String getGroundType(int i, int j) {
         int tileIndex = tileIndex(i, j);
         String groundType = groundTypes[tileIndex];
-        return groundType == null ? "GRASS1  " : groundType;
+        return groundType == null ? "GRASS1" : groundType;
     }
 
     public void setGroundType(int i, int j, String groundType) {

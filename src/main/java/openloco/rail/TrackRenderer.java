@@ -24,7 +24,7 @@ public class TrackRenderer implements Renderer<TrackNetwork>{
 
     @Override
     public List<SpriteInstance> render(TrackNetwork network) {
-        Track track = assets.getTrack("TRACKST ");
+        Track track = assets.getTrack("TRACKST");
 
         List<SpriteInstance> sprites = new ArrayList<>();
 

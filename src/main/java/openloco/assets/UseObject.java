@@ -7,7 +7,7 @@ public class UseObject {
 
     public UseObject(ObjectClass objectClass, String objectReference) {
         this.objectClass = objectClass;
-        this.objectReference = objectReference;
+        this.objectReference = objectReference.trim();
     }
 
     public ObjectClass getObjectClass() {

@@ -31,9 +31,9 @@ public class LoadSpriteDemo extends BaseDemo {
 
     @Override
     protected void init() {
-        vehicle = assets.getVehicle("HST     ");
+        vehicle = assets.getVehicle("HST");
         
-        Ground ground = assets.getGround("GRASS1  ");
+        Ground ground = assets.getGround("GRASS1");
         Sprites.RawSprite sprite = ground.getSprites().get(385);
         grassSprite = OpenGlSprite.createFromRawSprite(sprite);
 
