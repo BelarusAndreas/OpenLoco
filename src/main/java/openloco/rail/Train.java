@@ -4,6 +4,7 @@ import openloco.assets.Vehicle;
 import openloco.assets.VehicleUnit;
 import openloco.assets.VehicleUnitSpriteDetails;
 import openloco.graphics.CartCoord;
+import openloco.graphics.Tile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,11 @@ public class Train {
 
     public void setRoute(Route route) {
         this.route = route;
+    }
+
+    public void setHeadLocationToNode(TrackNode trackNode) {
+        CartCoord cc = new CartCoord(Tile.WIDTH*trackNode.getX(), Tile.WIDTH*trackNode.getY(), Tile.WIDTH*trackNode.getZ());
+        setHeadLocation(cc);
     }
 
     public void setHeadLocation(CartCoord cartCoord) {

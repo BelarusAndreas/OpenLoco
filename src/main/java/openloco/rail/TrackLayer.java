@@ -12,6 +12,8 @@ public class TrackLayer {
     private int currentZ;
     private Orientation orientation;
 
+    private TrackNode previousNode = null;
+
     private List<TrackNode> nodes = new ArrayList<>();
 
     public TrackLayer(int startX, int startY, int startZ, Orientation orientation) {
@@ -202,7 +204,12 @@ public class TrackLayer {
     }
 
     private void addNode(Track.TrackPiece pieceType, int rotation) {
-        nodes.add(new TrackNode(currentX, currentY, currentZ, pieceType, rotation));
+        TrackNode newNode = new TrackNode(currentX, currentY, currentZ, pieceType, rotation);
+        if (previousNode != null) {
+            previousNode.connectTo(newNode);
+        }
+        previousNode = newNode;
+        nodes.add(newNode);
     }
 
     public List<TrackNode> getNodes() {
