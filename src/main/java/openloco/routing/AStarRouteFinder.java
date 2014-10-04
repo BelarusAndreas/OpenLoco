@@ -52,11 +52,11 @@ public class AStarRouteFinder implements RouteFinder {
     }
 
     private Route reconstructPath(Map<TrackNode, TrackNode> cameFrom, TrackNode to) {
-        Deque<TrackNode> path = new LinkedList<>();
+        Deque<RouteNode> path = new LinkedList<>();
         TrackNode from = to;
 
         while (from != null) {
-            path.push(from);
+            path.push(new RouteNode(from));
             from = cameFrom.get(from);
         }
 
