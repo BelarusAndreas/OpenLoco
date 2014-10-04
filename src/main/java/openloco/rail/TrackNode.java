@@ -2,6 +2,7 @@ package openloco.rail;
 
 import com.google.common.base.Objects;
 import openloco.assets.Track;
+import openloco.graphics.CartCoord;
 import openloco.graphics.Tile;
 
 import java.util.HashSet;
@@ -76,5 +77,18 @@ public class TrackNode {
                 .add("pieceType", pieceType)
                 .add("rotation", rotation)
                 .toString();
+    }
+
+    public CartCoord getCartCoordAtPosition(int position, boolean forwards) {
+        if (pieceType == Track.TrackPiece.STRAIGHT) {
+            int offset = forwards ? position : Tile.WIDTH - position;
+            if (rotation == 0) {
+                return new CartCoord(Tile.WIDTH*x+16, Tile.WIDTH*y + offset, Tile.HEIGHT_STEP*z);
+            }
+            else if (rotation == 1) {
+                return new CartCoord(Tile.WIDTH*x + offset, Tile.WIDTH*y, Tile.HEIGHT_STEP*z);
+            }
+        }
+        throw new IllegalArgumentException("Cannot calculate position for orientation");
     }
 }

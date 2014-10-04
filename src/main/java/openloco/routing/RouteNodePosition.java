@@ -20,6 +20,10 @@ public class RouteNodePosition {
         return position;
     }
 
+    public CartCoord getCartCoord() {
+        return node.getCartCoordAtPosition(position);
+    }
+
     public RouteNodePosition moveAheadBy(int delta) {
         if (delta < 0) {
             throw new IllegalArgumentException("Negative delta specified - cannot move backwards along route!");

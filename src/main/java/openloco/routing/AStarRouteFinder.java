@@ -56,7 +56,7 @@ public class AStarRouteFinder implements RouteFinder {
         TrackNode from = to;
 
         while (from != null) {
-            path.push(new RouteNode(from));
+            path.push(new RouteNode(from, true));
             from = cameFrom.get(from);
         }
 

@@ -1,8 +1,7 @@
 package openloco.rail;
 
-import openloco.graphics.CartCoord;
-import openloco.graphics.Tile;
 import openloco.routing.Route;
+import openloco.routing.RouteNodePosition;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,23 +36,14 @@ public class Train {
 
     public void setRoute(Route route) {
         this.route = route;
-    }
+        RouteNodePosition position = route.getStart();
 
-    public void setHeadLocationToNode(TrackNode trackNode) {
-        CartCoord cc = new CartCoord(Tile.WIDTH*trackNode.getX(), Tile.WIDTH*trackNode.getY(), Tile.WIDTH*trackNode.getZ());
-        setHeadLocation(cc);
-    }
-
-    public void setHeadLocation(CartCoord cartCoord) {
-        LOGGER.debug("Setting head location to {}", cartCoord);
-        for (int i=0; i<consist.size(); i++) {
+        for (int i=consist.size()-1; i>=0; i--) {
             RailVehicle vehicle = consist.get(i);
             int halfLength = vehicle.getHalfLength();
-
-            LOGGER.debug("Setting location of vehicle {} ({}) to {} (halfLength {})", i, vehicle, cartCoord, halfLength);
-            cartCoord = cartCoord.plus(0, halfLength, 0);
-            vehicle.setLocation(cartCoord);
-            cartCoord = cartCoord.plus(0, halfLength, 0);
+            position = position.moveAheadBy(halfLength);
+            vehicle.setLocation(position.getCartCoord());
+            position = position.moveAheadBy(halfLength);
         }
     }
 

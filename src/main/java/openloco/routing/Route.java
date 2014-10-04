@@ -29,4 +29,8 @@ public class Route {
     List<RouteNode> getNodes() {
         return nodes;
     }
+
+    public RouteNodePosition getStart() {
+        return new RouteNodePosition(nodes.get(0), 0);
+    }
 }
