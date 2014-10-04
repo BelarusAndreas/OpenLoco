@@ -1,7 +1,6 @@
 package openloco.routing;
 
 import openloco.graphics.Tile;
-import openloco.rail.Route;
 import openloco.rail.TrackNetwork;
 import openloco.rail.TrackNode;
 

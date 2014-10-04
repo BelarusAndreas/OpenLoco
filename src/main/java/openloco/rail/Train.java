@@ -5,6 +5,8 @@ import openloco.assets.VehicleUnit;
 import openloco.assets.VehicleUnitSpriteDetails;
 import openloco.graphics.CartCoord;
 import openloco.graphics.Tile;
+import openloco.routing.Route;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
