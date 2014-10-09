@@ -207,6 +207,7 @@ public class TrackLayer {
         TrackNode newNode = new TrackNode(currentX, currentY, currentZ, pieceType, rotation);
         if (previousNode != null) {
             previousNode.connectTo(newNode);
+            newNode.connectFrom(previousNode);
         }
         previousNode = newNode;
         nodes.add(newNode);

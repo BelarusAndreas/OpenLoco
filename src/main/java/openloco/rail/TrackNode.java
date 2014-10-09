@@ -15,7 +15,8 @@ public class TrackNode {
     private final int z;
     private final Track.TrackPiece pieceType;
     private final int rotation;
-    private Set<TrackNode> neighbours = new HashSet<>();
+    private Set<TrackNode> connectedTo = new HashSet<>();
+    private Set<TrackNode> connectedFrom = new HashSet<>();
     private double length;
 
     public TrackNode(int x, int y, int z, Track.TrackPiece pieceType, int rotation) {
@@ -51,8 +52,12 @@ public class TrackNode {
         return "BRDGBRCK";
     }
 
-    public Set<TrackNode> getNeighbours() {
-        return neighbours;
+    public Set<TrackNode> getConnectedTo() {
+        return connectedTo;
+    }
+
+    public Set<TrackNode> getConnectedFrom() {
+        return connectedFrom;
     }
 
     public double getLength() {
@@ -60,12 +65,11 @@ public class TrackNode {
     }
 
     public void connectTo(TrackNode other) {
-        mutuallyConnect(other);
-        other.mutuallyConnect(this);
+        connectedTo.add(other);
     }
 
-    private void mutuallyConnect(TrackNode other) {
-        neighbours.add(other);
+    public void connectFrom(TrackNode other) {
+        connectedFrom.add(other);
     }
 
     @Override
