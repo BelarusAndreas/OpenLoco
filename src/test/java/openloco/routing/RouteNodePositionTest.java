@@ -25,7 +25,9 @@ public class RouteNodePositionTest {
         }
         trackNodes = trackLayer.getNodes();
 
-        route = new Route(trackNodes.stream().map(RouteNode::new).collect(Collectors.toList()));
+        route = new Route(trackNodes.stream()
+                                    .map((tn) -> new RouteNode(tn, true))
+                                    .collect(Collectors.toList()));
     }
 
     @Test(expected=IllegalArgumentException.class)
