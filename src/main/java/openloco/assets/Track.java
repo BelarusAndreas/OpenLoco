@@ -1,5 +1,7 @@
 package openloco.assets;
 
+import openloco.graphics.Tile;
+
 import java.util.EnumSet;
 import java.util.List;
 
@@ -59,22 +61,57 @@ public class Track {
     }
 
     public static enum TrackPiece {
-        DIAGONAL(1),
-        WIDECURVE(2),
-        MEDIUMCURVE(4),
-        SMALLCURVE(8),
-        TIGHTCURVE(10),
-        NORMALSLOPE(20),
-        STEEPSLOPE(40),
-        UNKNOWN(80),
-        SLOPEDCURVE(100),
-        SBEND(200),
-        STRAIGHT(0);
+        DIAGONAL(1, Tile.WIDTH),        // XXX
+        WIDECURVE(2, CurveType.WIDE.getSegmentLength()),
+        MEDIUMCURVE(4, CurveType.MEDIUM.getSegmentLength()),
+        SMALLCURVE(8, CurveType.SMALL.getSegmentLength()),
+        TIGHTCURVE(10, CurveType.TIGHT.getSegmentLength()),
+        NORMALSLOPE(20, Tile.WIDTH),    // XXX
+        STEEPSLOPE(40, Tile.WIDTH),    // XXX
+        UNKNOWN(80, Tile.WIDTH),    // XXX
+        SLOPEDCURVE(100, Tile.WIDTH),    // XXX
+        SBEND(200, Tile.WIDTH),    // XXX
+        STRAIGHT(0, Tile.WIDTH);
 
         private final int id;
+        private final double length;
 
-        private TrackPiece(int id) {
+        private TrackPiece(int id, double length) {
             this.id = id;
+            this.length = length;
+        }
+
+        public double getLength() {
+            return length;
+        }
+    }
+
+    public static enum CurveType {
+        WIDE(3.5, 8),
+        MEDIUM(1.5, 4),
+        SMALL(1, 4),
+        TIGHT(1, 4);
+
+        private final double radius;
+        private final int segments;
+        private final double segmentLength;
+
+        CurveType(double radius, int segments) {
+            this.radius = radius;
+            this.segments = segments;
+            this.segmentLength = Math.round(Tile.WIDTH * 2.0 * Math.PI * radius / (double)segments);
+        }
+
+        public double getRadius() {
+            return radius;
+        }
+
+        public int getSegments() {
+            return segments;
+        }
+
+        public double getSegmentLength() {
+            return segmentLength;
         }
     }
 

@@ -1,5 +1,6 @@
 package openloco.rail;
 
+import openloco.graphics.CartCoordRot;
 import openloco.routing.Route;
 import openloco.routing.RouteNodePosition;
 
@@ -42,7 +43,12 @@ public class Train {
             RailVehicle vehicle = consist.get(i);
             int halfLength = vehicle.getHalfLength();
             position = position.moveAheadBy(halfLength);
-            vehicle.setLocation(position.getCartCoord());
+            CartCoordRot pos = position.getCartCoord();
+            vehicle.setLocation(pos.getCartCoord());
+
+            int rot = (int)(Math.round(((360*pos.getRotZ()/(2*Math.PI)) + 360)) % 360);
+            vehicle.setDirection(rot);
+
             position = position.moveAheadBy(halfLength);
         }
     }

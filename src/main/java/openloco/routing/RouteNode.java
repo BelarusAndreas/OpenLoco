@@ -1,6 +1,6 @@
 package openloco.routing;
 
-import openloco.graphics.CartCoord;
+import openloco.graphics.CartCoordRot;
 import openloco.rail.TrackNode;
 
 public class RouteNode {
@@ -26,7 +26,7 @@ public class RouteNode {
         return next;
     }
 
-    public CartCoord getCartCoordAtPosition(int position) {
+    public CartCoordRot getCartCoordAtPosition(int position) {
         return node.getCartCoordAtPosition(position, forwards);
     }
 }

@@ -59,10 +59,7 @@ public class AStarRouteFinder implements RouteFinder {
 
     private void visitNeighbours(TrackNode to, Set<TrackNode> visitedNodes, Set<TrackNode> toVisitNodes, Map<TrackNode, DirectedNode> cameFrom, Map<TrackNode, Double> actualCostToNode, Map<TrackNode, Double> estimatedTotalCost, TrackNode current, Set<TrackNode> neighbours, boolean forwards) {
         for (TrackNode neighbour: neighbours) {
-            if (visitedNodes.contains(neighbour)) {
-                continue;
-            }
-            else {
+            if (!visitedNodes.contains(neighbour)) {
                 double tentativeActualCost = actualCostToNode.get(current) + current.getLength();
 
                 if (!toVisitNodes.contains(neighbour) || tentativeActualCost < actualCostToNode.get(neighbour)) {

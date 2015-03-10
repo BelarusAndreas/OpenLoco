@@ -1,6 +1,6 @@
 package openloco.routing;
 
-import openloco.graphics.CartCoord;
+import openloco.graphics.CartCoordRot;
 
 public class RouteNodePosition {
 
@@ -20,7 +20,7 @@ public class RouteNodePosition {
         return position;
     }
 
-    public CartCoord getCartCoord() {
+    public CartCoordRot getCartCoord() {
         return node.getCartCoordAtPosition(position);
     }
 
@@ -38,5 +38,4 @@ public class RouteNodePosition {
             return new RouteNodePosition(node, newPosition);
         }
     }
-
 }
