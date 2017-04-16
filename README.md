@@ -3,6 +3,9 @@ OpenLoco
 OpenLoco ist ein von [Tim Moran](https://github.com/mr-tim/openloco) mit Javascript entwickeltes Open-Source Remake von [Chris Sawyers Locomotion](https://de.wikipedia.org/wiki/Chris_Sawyer%E2%80%99s_Locomotion). Die hier dargestellte Seite, so wie auch der dargestellte und angebotene Quellcode, ist ein geklontes auf Deutsch übersetztes GitHub Projekt des o.g. Entwicklers Tim Moran. 
 
 
+----------
+
+
 Erstellen
 --------
 Wenn Sie den Code erstellen möchte, so ist dieses relativ einfach. Das einzigste was Sie dazu benötigen und installiert haben müssen ist:
@@ -10,16 +13,16 @@ Wenn Sie den Code erstellen möchte, so ist dieses relativ einfach. Das einzigst
  - [Maven](https://maven.apache.org/download.cgi)
  - [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
-Nach dem Sie Maven und JDK 8 installiert haben, sind Sie bereit das Projekt mit folgenden Code zu erstellen. 
+Nach dem Sie Maven und JDK 8 installiert haben, sind Sie bereit das Projekt zu erstellen. Dazu wechseln Sie bitte in Ihrer Befehlseingabeauforderung bzw. den Terminal zum Pfad in welchen Sie OpenLoco heruntergeladen und entpackt haben und führen folgenden Code aus:
 
     mvn package
 
-Mit diesen Befehl erstellen Sie eine einzelne ausführbare .jar Datei im Zielverzeichnis mit allen benötigten Abhängigkeiten, welche zum ausführen notwendig sind. Die an der .jar Datei angehangenen Ziffern stellen die aktuelle Versionsnummer dar.
+Mit diesen Befehl erstellen Sie eine einzelne ausführbare .jar Datei mit allen benötigten Abhängigkeiten im Zielverzeichnis, welche zum ausführen notwendig sind. Die an der .jar Datei angehangenen Ziffern stellen die aktuelle Versionsnummer von OpenLoco dar.
 
 Ausführen
 -------
 
-OpenLoco benötigt zum ausführen die Originalen Locomotion Grafiken aus dem "ObjData" Ordner. Sollten Sie "Chris Sawyers Locomotion" noch nicht besitzen, so erwerben Sie bitte vorab das Spiel. Sobald Sie Locomotion installiert haben, ist es erforderlich das Sie OpenLoco den Pfad zum Originalen Locomotion ObjData Ordner zuweisen. Dieses geschieht mit folgenden Befehl:
+OpenLoco benötigt zum ausführen die Originalen Locomotion Grafiken aus dem "ObjData" Ordner. Sollten Sie "Chris Sawyers Locomotion" noch nicht besitzen, so erwerben Sie bitte das Spiel. Chris Sawyers Locomotion können Sie u.a. bei Amazon, GOG, Steam oder einen anderen Anbieter Ihrer Wahl erwerben. Sobald Sie Locomotion installiert haben, ist es erforderlich das Sie OpenLoco den Pfad zum Originalen Locomotion ObjData Ordner zuweisen. Dieses geschieht mit folgenden Befehl:
 
     java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar LoadSpriteDemo
 
