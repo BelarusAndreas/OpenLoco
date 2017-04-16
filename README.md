@@ -1,42 +1,49 @@
-openloco
+OpenLoco
 ========
+OpenLoco ist ein von [Tim Moran](https://github.com/mr-tim/openloco) mit Javascript entwickeltes Open-Source Remake von [Chris Sawyers Locomotion](https://de.wikipedia.org/wiki/Chris_Sawyer%E2%80%99s_Locomotion). Die hier dargestellte Seite, so wie auch der dargestellte und angebotene Quellcode, ist ein geklontes auf Deutsch übersetztes GitHub Projekt des o.g. Entwicklers Tim Moran. 
 
-Building
+
+Erstellen
 --------
-If you want to build the code, it should be pretty straightforward - you'll need to install JDK 8 and Maven. Once you
-have, you should be able to build the project using the following:
+Wenn Sie den Code erstellen möchte, so ist dieses relativ einfach. Das einzigste was Sie dazu benötigen und installiert haben müssen ist:
+
+ - [Maven](https://maven.apache.org/download.cgi)
+ - [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+
+Nach dem Sie Maven und JDK 8 installiert haben, sind Sie bereit das Projekt mit folgenden Code zu erstellen. 
 
     mvn package
 
-That will create a single executable jar in the target directory that contains all the dependencies required to run the
-code, named with the current version number.
+Mit diesen Befehl erstellen Sie eine einzelne ausführbare .jar Datei im Zielverzeichnis mit allen benötigten Abhängigkeiten, welche zum ausführen notwendig sind. Die an der .jar Datei angehangenen Ziffern stellen die aktuelle Versionsnummer dar.
 
-Running
+Ausführen
 -------
 
-Firstly, we're using all the original locomotion graphics, so if you haven't already, go buy a copy of the game. Once
-you have it installed, you need to set a command line option to give openloco the path to the ObjData within your
-locomotion installation directory:
+OpenLoco benötigt zum ausführen die Originalen Locomotion Grafiken aus dem "ObjData" Ordner. Sollten Sie "Chris Sawyers Locomotion" noch nicht besitzen, so erwerben Sie bitte vorab das Spiel. Sobald Sie Locomotion installiert haben, ist es erforderlich das Sie OpenLoco den Pfad zum Originalen Locomotion ObjData Ordner zuweisen. Dieses geschieht mit folgenden Befehl:
 
-    java -Dopenloco.dataDir=path/to/locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar LoadSpriteDemo
+    java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar LoadSpriteDemo
 
-Again - you'll need Java 8 installed in order to run the jar.
+**Hinweis:** Sie benötigen JDK 8 um die .jar Datei ausführen zu können!
 
-When running the demos, the LWJGL 2.9.1 libs are need to be on the library path. This should happen automatically, but
-if it doesn't (or you're running on an unusual platform) you'll need to add them to the path manually using the
-following command line argument (assuming you've [downloaded the libraries](http://sourceforge.net/projects/java-game-lib/files/Official%20Releases/LWJGL%202.9.1/)
-to somewhere on your machine):
+Zum ausführen der Demos benötigen Sie die LWJGL 2.9.1 Libs. Dieses sollte normalerweise automatisch geschehen. Sollte die automatische Zuweisung nicht funktionieren (weil Sie ggfls. ein ungewöhnliches Betriebsystem/Plattform benutzen), so laden Sie bitte als erstes 
+[LWJGL 2.9.1 von Sourceforge.net herunter](http://sourceforge.net/projects/java-game-lib/files/Official%20Releases/LWJGL%202.9.1/) und weisen Sie mit nachfolgenden Befehl OpenLoco den Pfad zu LWJGL zu.
 
-    -Djava.library.path=path/to/lwjgl/native/$platform
+    -Djava.library.path=Pfad/Zu/lwjgl/native/$platform
 
-Enjoy!
+Viel Spaß mit OpenLoco!
 
-Available Demos
+Verfügbare Demos
 ---------------
+Derzeit stehen in eine Reihe von Demos zur Verfügung. Diese wären:
 
-There's a number of demo apps available currently. Namely:
- - LoadSpriteDemo - loads the sprites for the HST and displays them
- - TerrainDemo - displays some terrain
- - TrackDemo - displays some track layout
- - NashornScriptDemo - runs the specified javascript within the init method of a BaseDemo to allow dynamic testing of new features.
-Each can be run by giving the appropriate class name as a command line argument.
+ 1. ` java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar LoadSpriteDemo`
+Mit diesen Code können Sie sich die Sprites der HST Lok anzeigen lassen
+
+ 2. `java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar TerrainDemo`
+ Hiermit wird Ihnen das Terrain angezeigt
+ 
+ 3. `java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar TrackDemo`
+Mit diesen Code wird Ihnen ein Gleisbeispiel angezeigt
+
+ 4. `java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar NashornScriptDemo`
+Dieser Code führt den angegebenen Javascript innerhalb der init-Methode aus um damit eine Dynamische Basis Demo zu ermöglichen, mit welchen Sie neue Features ausprobieren können. Mit den Argumentieren weiterer Klassen in der Kommandozeile können Sie weitere Features hinzufügen.
