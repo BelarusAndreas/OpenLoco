@@ -22,14 +22,13 @@ Mit diesen Befehl erstellen Sie eine einzelne ausführbare .jar Datei mit allen 
 Ausführen
 -------
 
-OpenLoco benötigt zum ausführen die Originalen Locomotion Grafiken aus dem "ObjData" Ordner. Sollten Sie "Chris Sawyers Locomotion" noch nicht besitzen, so erwerben Sie bitte das Spiel. Chris Sawyers Locomotion können Sie u.a. bei Amazon, GOG, Steam oder einen anderen Anbieter Ihrer Wahl erwerben. Sobald Sie Locomotion installiert haben, ist es erforderlich das Sie OpenLoco den Pfad zum Originalen Locomotion ObjData Ordner zuweisen. Dieses geschieht mit folgenden Befehl:
+OpenLoco benötigt zum ausführen die Originalen Locomotion Grafiken aus dem "ObjData" Ordner. Sollten Sie "Chris Sawyers Locomotion" noch nicht besitzen, so erwerben Sie bitte das Spiel. Chris Sawyers Locomotion können Sie u.a. bei [Amazon](https://www.amazon.de/s/ref=nb_sb_noss_2?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&url=search-alias=aps&field-keywords=Chris%20Sawyers%20Locomotion), [GOG](https://www.gog.com/game/chris_sawyers_locomotion), [Steam](http://store.steampowered.com/app/356430/?l=german) oder einen anderen Anbieter Ihrer Wahl erwerben. Sobald Sie Locomotion installiert haben, ist es erforderlich das Sie OpenLoco den Pfad zum Originalen Locomotion ObjData Ordner zuweisen. Dieses geschieht mit folgenden Befehl:
 
     java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar LoadSpriteDemo
 
 **Hinweis:** Sie benötigen JDK 8 um die .jar Datei ausführen zu können!
 
-Zum ausführen der Demos benötigen Sie die LWJGL 2.9.1 Libs. Dieses sollte normalerweise automatisch geschehen. Sollte die automatische Zuweisung nicht funktionieren (weil Sie ggfls. ein ungewöhnliches Betriebsystem/Plattform benutzen), so laden Sie bitte als erstes 
-[LWJGL 2.9.1 von Sourceforge.net herunter](http://sourceforge.net/projects/java-game-lib/files/Official%20Releases/LWJGL%202.9.1/) und weisen Sie mit nachfolgenden Befehl OpenLoco den Pfad zu LWJGL zu.
+Zum ausführen der Demos benötigen Sie die LWJGL 2.9.1 Libs. Dieses sollte normalerweise automatisch geschehen. Sollte die automatische Zuweisung nicht funktionieren (weil Sie ggfls. ein ungewöhnliches Betriebsystem/Plattform benutzen), so laden Sie bitte als erstes [LWJGL 2.9.1 von Sourceforge.net](http://sourceforge.net/projects/java-game-lib/files/Official%20Releases/LWJGL%202.9.1/) herunter und weisen Sie OpenLoco anschließend den Pfad zu LWJGL mit folgenden Befehl zu:
 
     -Djava.library.path=Pfad/Zu/lwjgl/native/$platform
 
@@ -39,14 +38,18 @@ Verfügbare Demos
 ---------------
 Derzeit stehen in eine Reihe von Demos zur Verfügung. Diese wären:
 
- 1. ` java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar LoadSpriteDemo`
+ 1. `java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar LoadSpriteDemo`
+
 Mit diesen Code können Sie sich die Sprites der HST Lok anzeigen lassen
 
  2. `java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar TerrainDemo`
- Hiermit wird Ihnen das Terrain angezeigt
  
+Hiermit wird Ihnen das Terrain angezeigt 
+
  3. `java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar TrackDemo`
+
 Mit diesen Code wird Ihnen ein Gleisbeispiel angezeigt
 
  4. `java -Dopenloco.dataDir=Pfad/zu/Atari/Locomotion/ObjData -jar openloco-0.0.1-SNAPSHOT.jar NashornScriptDemo`
+
 Dieser Code führt den angegebenen Javascript innerhalb der init-Methode aus um damit eine Dynamische Basis Demo zu ermöglichen, mit welchen Sie neue Features ausprobieren können. Mit den Argumentieren weiterer Klassen in der Kommandozeile können Sie weitere Features hinzufügen.
